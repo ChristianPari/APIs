@@ -23,6 +23,7 @@ let dateRN = new Date(),
 
     },
     currentDate = `${dateRN.getDate()}${dateRN.getMonth()}${dateRN.getFullYear()}`,
+    dates = [currentDate],
     oldestDate = findDay7(),
     apiKey = `TXi5A7X2oAnW0kxjVcgqchorBJxAOkUdgo8Xtetp`;
 
@@ -48,6 +49,7 @@ window.onload = () => {
 
     intialElements();
     getAPOD();
+    getWeather();
 
 }
 
@@ -149,6 +151,9 @@ function getAPOD() {
 
 function getWeather() {
 
+    let date = `${dateInfo.day}${dateInfo.month}${dateInfo.year}`,
+        idx = dates.indexOf(date);
+
     let xhr = new XMLHttpRequest(),
         endpoint = `https://api.nasa.gov/insight_weather/?api_key=${apiKey}&feedtype=json&ver=1.0`;
 
@@ -156,8 +161,16 @@ function getWeather() {
 
     xhr.onload = () => {
 
-        let data = JSON.parse(xhr.responseText);
-        // getWeatherForDay(data);
+        let data = JSON.parse(xhr.responseText),
+            solKey = data.sol_keys[idx],
+            solData = data[solKey],
+            solHeading = createHeading({ text: `Sol ${solKey}`, class: `solHeadings` }),
+            solHigh = createHeading({ text: `High: ${Math.round(solData.AT.mx)}°C/ ${Math.round((solData.AT.mx * 9 / 5) + 32)}°F` }),
+            solLow = createHeading({ text: `Low: ${Math.round(solData.AT.mn)}°C/ ${Math.round((solData.AT.mn * 9 / 5) + 32)}°F` });
+
+        document.getElementById(`weatherDisplay`).appendChild(solHeading);
+        document.getElementById(`weatherDisplay`).appendChild(solHigh);
+        document.getElementById(`weatherDisplay`).appendChild(solLow);
 
     }
 
@@ -200,13 +213,15 @@ function modifyDate() {
         case `nextDay`:
 
             nextDay(curDay, curMonth, curYear);
-            // getWeather(curDay);
+            document.getElementById(`weatherDisplay`).innerHTML = ``;
+            getWeather();
 
             break;
 
         case `prevDay`:
             prevDay(curDay, curMonth, curYear);
-            // getWeather(curDay);
+            document.getElementById(`weatherDisplay`).innerHTML = ``;
+            getWeather();
 
             break;
 
@@ -308,12 +323,11 @@ function findDay7() {
         dayNum = currentDay,
         monthNum = currentMonth,
         yearNum = currentYear,
-        a = 0;
+        a = 1;
 
     checkLeapYear(yearNum);
 
     while (a < dateInfo.dayLimit) {
-        console.log(dayNum, monthNum, yearNum);
 
         if (dayNum > 1) {
             dayNum--;
@@ -330,6 +344,7 @@ function findDay7() {
 
         }
 
+        dates.unshift(`${dayNum}${monthNum}${yearNum}`);
         a++;
 
     }
