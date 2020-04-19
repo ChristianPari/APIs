@@ -9,25 +9,27 @@ LAYOUT:
 
 // GLOBAL VARIBALES
 let dateRN = new Date(),
-    currentDate = `${dateRN.getDate()}${dateRN.getMonth()}${dateRN.getFullYear()}`,
-    apiKey = `TXi5A7X2oAnW0kxjVcgqchorBJxAOkUdgo8Xtetp`,
     dateInfo = {
 
         year: dateRN.getFullYear(),
         month: dateRN.getMonth(),
-        day: dateRN.getDate(),
         monthsArr: [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`],
         daysByMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+        day: dateRN.getDate(),
+        dayLimit: 7,
 
         // VARIABLE FOR STORING THE `DATE AND DATE NOTE` AS KEY/VALUE PAIR
         storedData: {}
 
-    };
+    },
+    currentDate = `${dateRN.getDate()}${dateRN.getMonth()}${dateRN.getFullYear()}`,
+    oldestDate = findDay7(),
+    apiKey = `TXi5A7X2oAnW0kxjVcgqchorBJxAOkUdgo8Xtetp`;
 
 // VARIABLES FOR SELECT ELEMENT CHANGES
-let storedYear = dateInfo.year,
-    storedMonth = dateInfo.month,
-    storedDay = dateInfo.day;
+let storedYear = dateRN.getFullYear(),
+    storedMonth = dateRN.getMonth(),
+    storedDay = dateRN.getDate();
 
 
 // FUNCTIONS NEEDED
@@ -46,7 +48,6 @@ window.onload = () => {
 
     intialElements();
     getAPOD();
-    getWeather();
 
 }
 
@@ -131,6 +132,7 @@ function getAPOD() {
 
         if (data.media_type == `video`) {
 
+            // ADDED DEAFULT IMAGE INCASE THE NASA LINK IS A VIDEO
             document.body.style.backgroundImage = `url(sunset001.jpg)`;
 
         } else {
@@ -155,13 +157,14 @@ function getWeather() {
     xhr.onload = () => {
 
         let data = JSON.parse(xhr.responseText);
-
+        // getWeatherForDay(data);
 
     }
 
     xhr.send();
 
 }
+
 
 /* FUNCTIONS FOR BUTTONS ONCLICK:
     [*]CHANGE DATE: WILL USE THE SELECT ELEMENTS; HIDE OTHER BUTTONS UNTIL DATE IS SELECTED
@@ -197,26 +200,15 @@ function modifyDate() {
         case `nextDay`:
 
             nextDay(curDay, curMonth, curYear);
+            // getWeather(curDay);
 
             break;
 
         case `prevDay`:
-            prevDay(curDay, curMonth);
+            prevDay(curDay, curMonth, curYear);
+            // getWeather(curDay);
 
             break;
-
-    }
-
-    // checking for impossible dates
-    if (dateInfo.day > dateInfo.daysByMonth[dateInfo.month]) {
-
-        dateInfo.day = dateInfo.daysByMonth[dateInfo.month];
-
-    }
-
-    if (dateInfo.year <= 1) {
-
-        dateInfo.year = 1;
 
     }
 
@@ -249,9 +241,9 @@ function nextDay(curDay, curMonth, curYear) {
     } else {
 
         // need to minus 1 to account for the index of the months not starting at 1 but instead starting at 0; Jan = 0 not 1
-        if (curDay < dateInfo.daysByMonth[curMonth]) {
+        if (curDay - 1 < dateInfo.day) {
 
-            dateInfo.day++
+            dateInfo.day++;
 
         } else if (curDay == dateInfo.daysByMonth[curMonth] && curMonth != 11) { // at end of the month, but not the end of the year)
 
@@ -272,31 +264,77 @@ function nextDay(curDay, curMonth, curYear) {
 
 }
 
-function prevDay(curDay, curMonth) {
+function prevDay(curDay, curMonth, curYear) {
     // check for:
     //? what month are we in?
     //? are we on the first day of the month? if so, continue on to the next month
     //? is it january? b/c then we have to continue into the previous year
     //? if not on last day then continue decreasing through the month
 
-    if (curDay > 1) {
+    if (`${curDay}${curMonth}${curYear}` == oldestDate) {
 
-        dateInfo.day--;
+        return
 
-    } else if (curDay == 1 && curMonth != 0) { // at beginning of the month, but not the end of the year)
+    } else {
 
-        dateInfo.day = dateInfo.daysByMonth[curMonth - 1];
-        dateInfo.month--;
+        if (curDay > 1) {
 
-    } else if (curDay == 1 && curMonth == 0) { // at beginning of the month of december/ end of year
+            dateInfo.day--;
 
-        dateInfo.day = 31;
-        dateInfo.month = 12;
-        dateInfo.year--;
+        } else if (curDay == 1 && curMonth != 0) { // at beginning of the month, but not the end of the year)
 
-    } else { console.log(`Something went wrong, check code`); }
+            dateInfo.day = dateInfo.daysByMonth[curMonth - 1];
+            dateInfo.month--;
+
+        } else if (curDay == 1 && curMonth == 0) { // at beginning of the month of december/ end of year
+
+            dateInfo.day = 31;
+            dateInfo.month = 12;
+            dateInfo.year--;
+
+        } else { console.log(`Something went wrong, check code`); }
+
+    }
 
     getAPOD();
+
+}
+
+function findDay7() {
+
+    let currentDay = dateInfo.day,
+        currentMonth = dateInfo.month,
+        currentYear = dateInfo.year,
+        dayNum = currentDay,
+        monthNum = currentMonth,
+        yearNum = currentYear,
+        a = 0;
+
+    checkLeapYear(yearNum);
+
+    while (a < dateInfo.dayLimit) {
+        console.log(dayNum, monthNum, yearNum);
+
+        if (dayNum > 1) {
+            dayNum--;
+        } else if (dayNum == 1 && monthNum != 0) { // at beginning of the month, but not the end of the year)
+
+            dayNum = dateInfo.daysByMonth[monthNum];
+            monthNum--;
+
+        } else if (dayNum == 1 && monthNum == 0) { // at beginning of the month of december/ end of year
+
+            dayNum = 31;
+            monthNum = 12;
+            yearNum--;
+
+        }
+
+        a++;
+
+    }
+
+    return `${dayNum}${monthNum}${yearNum}`
 
 }
 
