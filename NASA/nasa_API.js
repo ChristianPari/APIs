@@ -100,6 +100,7 @@ function intialElements() {
     interactive.appendChild(hideMars);
     interactive.appendChild(nextDay);
     mainDiv.style.height = `105px`;
+    weatherDisplay.style.opacity = `0`;
     cancel.style.display = `none`;
     yearSelect.style.display = `none`;
     monthSelect.style.display = `none`;
@@ -164,9 +165,9 @@ function getWeather() {
         let data = JSON.parse(xhr.responseText),
             solKey = data.sol_keys[idx],
             solData = data[solKey],
-            solHeading = createHeading({ text: `Sol ${solKey}`, class: `solHeadings` }),
-            solHigh = createHeading({ text: `High: ${Math.round(solData.AT.mx)}°C/ ${Math.round((solData.AT.mx * 9 / 5) + 32)}°F` }),
-            solLow = createHeading({ text: `Low: ${Math.round(solData.AT.mn)}°C/ ${Math.round((solData.AT.mn * 9 / 5) + 32)}°F` });
+            solHeading = createHeading({ text: `Sol ${solKey}`, id: `solHeading` }),
+            solHigh = createHeading({ text: `High: ${Math.round(solData.AT.mx)}°C/${Math.round((solData.AT.mx * 9 / 5) + 32)}°F`, id: `solHigh` }),
+            solLow = createHeading({ text: `Low: ${Math.round(solData.AT.mn)}°C/ ${Math.round((solData.AT.mn * 9 / 5) + 32)}°F`, id: `solLow` });
 
         document.getElementById(`weatherDisplay`).appendChild(solHeading);
         document.getElementById(`weatherDisplay`).appendChild(solHigh);
@@ -356,7 +357,7 @@ function findDay7() {
 function cancelMethod() {
 
     document.getElementById(`changeBGButton`).style.display = `initial`;
-    if (document.getElementById(`mainDiv`).style.height == `400px`) { document.getElementById(`hideMarsButton`).style.display = `initial`; } else {
+    if (document.getElementById(`mainDiv`).style.height == `155px`) { document.getElementById(`hideMarsButton`).style.display = `initial`; } else {
 
         document.getElementById(`showMarsButton`).style.display = `initial`;
         document.getElementById(`weatherDisplay`).style.opacity = `0`;
@@ -384,7 +385,7 @@ function showMarsFunc() {
 
     document.getElementById(`showMarsButton`).style.display = `none`;
     document.getElementById(`hideMarsButton`).style.display = `initial`;
-    document.getElementById(`mainDiv`).style.height = `400px`;
+    document.getElementById(`mainDiv`).style.height = `155px`;
     document.getElementById(`mainDiv`).style.transition = `0.5s`;
     document.getElementById(`weatherDisplay`).style.transition = `opacity 0.5s`;
     document.getElementById(`weatherDisplay`).style.opacity = `1`;
