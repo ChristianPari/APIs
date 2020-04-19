@@ -10,20 +10,25 @@ LAYOUT:
 // GLOBAL VARIBALES
 let dateRN = new Date(),
     currentDate = `${dateRN.getDate()}${dateRN.getMonth()}${dateRN.getFullYear()}`,
-    apiKey = `TXi5A7X2oAnW0kxjVcgqchorBJxAOkUdgo8Xtetp`;
+    apiKey = `TXi5A7X2oAnW0kxjVcgqchorBJxAOkUdgo8Xtetp`,
+    dateInfo = {
 
-let dateInfo = {
+        year: dateRN.getFullYear(),
+        month: dateRN.getMonth(),
+        day: dateRN.getDate(),
+        monthsArr: [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`],
+        daysByMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 
-    year: dateRN.getFullYear(),
-    month: dateRN.getMonth(),
-    day: dateRN.getDate(),
-    monthsArr: [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`],
-    daysByMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+        // VARIABLE FOR STORING THE `DATE AND DATE NOTE` AS KEY/VALUE PAIR
+        storedData: {}
 
-    // VARIABLE FOR STORING THE `DATE AND DATE NOTE` AS KEY/VALUE PAIR
-    storedData: {}
+    };
 
-};
+// VARIABLES FOR SELECT ELEMENT CHANGES
+let storedYear = dateInfo.year,
+    storedMonth = dateInfo.month,
+    storedDay = dateInfo.day;
+
 
 // FUNCTIONS NEEDED
 // WINDOW ONLOAD
@@ -57,7 +62,7 @@ function intialElements() {
         weatherDiv = createDiv({ id: `weatherDiv` }),
         weatherDisplay = createDiv({ id: `weatherDisplay` });
 
-    let changeDate = createButton({ id: `changeDateButton`, text: `Change Date`, class: `buttons`, onClickFunc: changeDateFunc }),
+    let changeBG = createButton({ id: `changeBGButton`, text: `Pick A Date For New Background`, class: `buttons`, onClickFunc: changeBGFunc }),
         showMars = createButton({ id: `showMarsButton`, text: `Show Mars Weather`, class: `buttons`, onClickFunc: showMarsFunc }),
         hideMars = createButton({ id: `hideMarsButton`, text: `Hide Mars Weather`, class: `buttons`, onClickFunc: hideMarsFunc });
 
@@ -74,10 +79,6 @@ function intialElements() {
 
     let nextDay = createButton({ id: `nextDay`, class: `dateBtns`, text: `Day >`, onClickFunc: modifyDate }),
         prevDay = createButton({ id: `prevDay`, class: `dateBtns`, text: `< Day`, onClickFunc: modifyDate }),
-        nextMonth = createButton({ id: `nextMonth`, class: `dateBtns`, text: `Month >`, onClickFunc: modifyDate }),
-        prevMonth = createButton({ id: `prevMonth`, class: `dateBtns`, text: `< Month`, onClickFunc: modifyDate }),
-        nextYear = createButton({ id: `nextYear`, class: `dateBtns`, text: `Year >`, onClickFunc: modifyDate }),
-        prevYear = createButton({ id: `prevYear`, class: `dateBtns`, text: `< Year`, onClickFunc: modifyDate }),
         cancel = createButton({ id: `cancelButton`, text: `X`, onClickFunc: cancelMethod }),
         yearSelect = createSelect({ id: `yearSelect`, class: `calSelects`, defOp: `Select Year`, data: yearsArr, onchange: selectYear }),
         monthSelect = createSelect({ id: `monthSelect`, class: `calSelects`, defOp: `Select Month`, data: dateInfo.monthsArr, onchange: selectMonth });
@@ -87,25 +88,15 @@ function intialElements() {
     mainDiv.appendChild(interactive);
     mainDiv.appendChild(weatherDiv);
     weatherDiv.appendChild(weatherDisplay);
-    interactive.appendChild(changeDate);
+    interactive.appendChild(prevDay);
+    interactive.appendChild(changeBG);
     interactive.appendChild(yearSelect);
     interactive.appendChild(monthSelect);
-    interactive.appendChild(prevMonth);
-    interactive.appendChild(nextMonth);
-    interactive.appendChild(prevDay);
-    interactive.appendChild(nextDay);
-    interactive.appendChild(prevYear);
-    interactive.appendChild(nextYear);
     interactive.appendChild(cancel);
     interactive.appendChild(showMars);
     interactive.appendChild(hideMars);
-    mainDiv.style.height = `110px`;
-    nextMonth.style.display = `none`;
-    prevMonth.style.display = `none`;
-    nextDay.style.display = `none`;
-    prevDay.style.display = `none`;
-    nextYear.style.display = `none`;
-    prevYear.style.display = `none`;
+    interactive.appendChild(nextDay);
+    mainDiv.style.height = `105px`;
     cancel.style.display = `none`;
     yearSelect.style.display = `none`;
     monthSelect.style.display = `none`;
@@ -164,7 +155,7 @@ function getWeather() {
     xhr.onload = () => {
 
         let data = JSON.parse(xhr.responseText);
-        console.log(data);
+
 
     }
 
@@ -178,17 +169,13 @@ function getWeather() {
     []REVEAL NOTES: WILL WORK AS A TOGGLE TO SHOW OR HIDE THE NOTES SECTION; MAKE SCROLLABLE IN CSS ONCE DONE
 */
 
-function changeDateFunc() {
+function changeBGFunc() {
 
-    document.getElementById(`changeDateButton`).style.display = `none`;
+    document.getElementById(`changeBGButton`).style.display = `none`;
     document.getElementById(`showMarsButton`).style.display = `none`;
     document.getElementById(`hideMarsButton`).style.display = `none`;
-    document.getElementById(`nextMonth`).style.display = `initial`;
-    document.getElementById(`prevMonth`).style.display = `initial`;
-    document.getElementById(`nextDay`).style.display = `initial`;
-    document.getElementById(`prevDay`).style.display = `initial`;
-    document.getElementById(`nextYear`).style.display = `initial`;
-    document.getElementById(`prevYear`).style.display = `initial`;
+    document.getElementById(`nextDay`).style.display = `none`;
+    document.getElementById(`prevDay`).style.display = `none`;
     document.getElementById(`cancelButton`).style.display = `initial`;
     document.getElementById(`yearSelect`).style.display = `initial`;
     document.getElementById(`yearSelect`).value = ``;
@@ -215,34 +202,6 @@ function modifyDate() {
 
         case `prevDay`:
             prevDay(curDay, curMonth);
-
-            break;
-
-        case `nextMonth`:
-
-            nextMonth(curDay, curMonth, curYear);
-
-            break;
-
-        case `prevMonth`:
-
-            prevMonth(curMonth);
-
-            break;
-
-        case `nextYear`:
-
-            nextYear(curDay, curMonth, curYear);
-            // added the function call below to make Febuarys day length change accordingly
-            checkLeapYear(curYear + 1);
-
-            break;
-
-        case `prevYear`:
-
-            prevYear(curYear);
-            // added the function call below to make Febuarys day length change accordingly
-            checkLeapYear(curYear - 1);
 
             break;
 
@@ -305,11 +264,7 @@ function nextDay(curDay, curMonth, curYear) {
             dateInfo.month = 1;
             dateInfo.year++;
 
-        } else {
-
-            console.log(`Something went wrong, check code`);
-
-        }
+        } else { console.log(`Something went wrong, check code`); }
 
     }
 
@@ -339,104 +294,7 @@ function prevDay(curDay, curMonth) {
         dateInfo.month = 12;
         dateInfo.year--;
 
-    } else {
-
-        console.log(`Something went wrong, check code`);
-
-    }
-
-    getAPOD();
-
-}
-
-function nextMonth(curDay, curMonth, curYear) {
-    // check for:
-    //? is it deecember?
-    //? otherwise just continue through
-
-    if (`${curDay}${curMonth}${curYear}` == currentDate) {
-
-        return
-
-    } else {
-
-        if (curMonth < 11) {
-
-            dateInfo.month++;
-
-        } else if (curMonth == 11) {
-
-            dateInfo.month = 1;
-            dateInfo.year++;
-
-        } else {
-
-            console.log(`Something went wrong, check code`);
-
-        }
-
-    }
-
-    getAPOD();
-
-}
-
-function prevMonth(curMonth) {
-    // check for:
-    //? is it january?
-    //? otherwise just continue through
-    //? dont want to cause `fake dates` like Feb 31st
-
-    if (curMonth > 0) {
-
-        dateInfo.month--;
-
-    } else if (curMonth == 0) {
-
-        dateInfo.month = 12;
-        dateInfo.year--;
-
-    } else {
-
-        console.log(`Something went wrong, check code`);
-
-    }
-
-    getAPOD();
-
-}
-
-function nextYear(curDay, curMonth, curYear) {
-
-    if (`${curDay}${curMonth}${curYear}` == currentDate) {
-
-        return
-
-    } else {
-
-        if (curYear > 0) {
-
-            dateInfo.year++;
-
-        }
-
-    }
-
-    getAPOD();
-
-}
-
-function prevYear(curYear) {
-    // check for:
-    //? is it year 1?
-
-    if (curYear == 1) {
-        dateInfo.year = 1;
-    } else {
-
-        dateInfo.year--;
-
-    }
+    } else { console.log(`Something went wrong, check code`); }
 
     getAPOD();
 
@@ -444,32 +302,28 @@ function prevYear(curYear) {
 
 function cancelMethod() {
 
-    document.getElementById(`changeDateButton`).style.display = `initial`;
-    if (document.getElementById(`mainDiv`).style.height == `400px`) {
-
-        document.getElementById(`hideMarsButton`).style.display = `initial`;
-
-    } else {
+    document.getElementById(`changeBGButton`).style.display = `initial`;
+    if (document.getElementById(`mainDiv`).style.height == `400px`) { document.getElementById(`hideMarsButton`).style.display = `initial`; } else {
 
         document.getElementById(`showMarsButton`).style.display = `initial`;
         document.getElementById(`weatherDisplay`).style.opacity = `0`;
 
     }
-    document.getElementById(`nextMonth`).style.display = `none`;
-    document.getElementById(`prevMonth`).style.display = `none`;
-    document.getElementById(`nextDay`).style.display = `none`;
-    document.getElementById(`prevDay`).style.display = `none`;
-    document.getElementById(`nextYear`).style.display = `none`;
-    document.getElementById(`prevYear`).style.display = `none`;
+
+    document.getElementById(`nextDay`).style.display = `initial`;
+    document.getElementById(`prevDay`).style.display = `initial`;
     document.getElementById(`cancelButton`).style.display = `none`;
     document.getElementById(`yearSelect`).style.display = `none`;
     document.getElementById(`monthSelect`).style.display = `none`;
-    if (document.getElementById(`daySelect`) != null) {
+    if (document.getElementById(`daySelect`) != null) { document.getElementById(`daySelect`).style.display = `none`; }
 
-        document.getElementById(`daySelect`).style.display = `none`;
+    console.log(dateInfo.year, dateInfo.month, dateInfo.day);
+    console.log(storedYear, storedMonth, storedDay);
+    if (dateInfo.year != storedYear) { dateInfo.year = storedYear; }
 
-    }
+    if (dateInfo.month != storedMonth) { dateInfo.month = storedMonth; }
 
+    if (dateInfo.day != storedDay) { dateInfo.day = storedDay; }
 
 }
 
@@ -489,7 +343,7 @@ function hideMarsFunc() {
 
     document.getElementById(`showMarsButton`).style.display = `initial`;
     document.getElementById(`hideMarsButton`).style.display = `none`;
-    document.getElementById(`mainDiv`).style.height = `110px`;
+    document.getElementById(`mainDiv`).style.height = `105px`;
     document.getElementById(`mainDiv`).style.transition = `0.5s`;
     document.getElementById(`weatherDisplay`).style.transition = `opacity 0.1s`;
     document.getElementById(`weatherDisplay`).style.opacity = `0`;
@@ -532,9 +386,6 @@ function selectYear() {
 
     }
 
-    updateFront();
-    getAPOD();
-
 }
 
 function selectMonth() {
@@ -572,12 +423,9 @@ function selectMonth() {
         }
 
         document.getElementById(`interactive`).appendChild(daySelect);
-        document.getElementById(`interactive`).insertBefore(daySelect, document.getElementById(`prevMonth`));
+        document.getElementById(`interactive`).insertBefore(daySelect, document.getElementById(`cancelButton`));
 
     }
-
-    updateFront();
-    getAPOD();
 
 }
 
@@ -591,30 +439,18 @@ function selectDay() {
 
         this.style.display = `none`;
 
-        document.getElementById(`nextMonth`).style.display = `none`;
-        document.getElementById(`prevMonth`).style.display = `none`;
-        document.getElementById(`nextDay`).style.display = `none`;
-        document.getElementById(`prevDay`).style.display = `none`;
-        document.getElementById(`nextYear`).style.display = `none`;
-        document.getElementById(`prevYear`).style.display = `none`;
+        document.getElementById(`nextDay`).style.display = `initial`;
+        document.getElementById(`prevDay`).style.display = `initial`;
         document.getElementById(`cancelButton`).style.display = `none`;
-        document.getElementById(`changeDateButton`).style.display = `initial`;
+        document.getElementById(`changeBGButton`).style.display = `initial`;
         document.getElementById(`showMarsButton`).style.display = `initial`;
-
-        if (document.getElementById(`dateHead`) != null) {
-
-            let oldDate = document.getElementById(`dateHead`),
-                parentDiv = oldDate.parentNode,
-                newDate = createHeading({ text: `${dateInfo.monthsArr[dateInfo.month]} ${dateInfo.day}, ${dateInfo.year}`, size: 1 });
-            parentDiv.replaceChild(newDate, oldDate);
-            newDate.id = `dateHead`;
-
-        }
 
     }
 
-    updateFront();
     getAPOD();
+    dateInfo.day = storedDay;
+    dateInfo.month = storedMonth;
+    dateInfo.year = storedYear;
 
 }
 
