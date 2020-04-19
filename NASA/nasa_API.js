@@ -25,7 +25,7 @@ let dateRN = new Date(),
     currentDate = `${dateRN.getDate()}${dateRN.getMonth()}${dateRN.getFullYear()}`,
     dates = [currentDate],
     oldestDate = findDay7(),
-    apiKey = `TXi5A7X2oAnW0kxjVcgqchorBJxAOkUdgo8Xtetp`;
+    apiKey = `ADD API KEY`;
 
 // VARIABLES FOR SELECT ELEMENT CHANGES
 let storedYear = dateRN.getFullYear(),
