@@ -36,14 +36,6 @@ let storedYear = dateRN.getFullYear(),
 // FUNCTIONS NEEDED
 // WINDOW ONLOAD
 // XHRs FOR BOTH APIs APOD AND MARS WEATHER
-/* CREATE INITIAL ELEMENTS:
-    [*]HEADING TO BODY, 
-    [*]2 DIVS TO BODY, 
-    [*]BUTTONS: CHANGE DATE, MAKE A NOTE, SHOW NOTES, HIDE NOTES
-    [*]SELECTS: YEAR AND MONTH; THIS DATA WONT NEED CHANGING SO CREATE THEM HERE BUT DISPLAY BE SET TO NONE
-    [*]BUTTONS TO FIRST DIV
-    [*]SELECTS BE APPENDED
-*/
 
 window.onload = () => {
 
@@ -53,7 +45,7 @@ window.onload = () => {
 
 }
 
-
+// WINDOW ONLOAD FUNCTIONS
 function intialElements() {
 
     // CREATE DATE HEADING ELEMENT
@@ -65,6 +57,7 @@ function intialElements() {
         weatherDiv = createDiv({ id: `weatherDiv` }),
         weatherDisplay = createDiv({ id: `weatherDisplay` });
 
+    // CREATE BUTTONS
     let changeBG = createButton({ id: `changeBGButton`, text: `Pick A Date For New Background`, class: `buttons`, onClickFunc: changeBGFunc }),
         showMars = createButton({ id: `showMarsButton`, text: `Show Mars Weather`, class: `buttons`, onClickFunc: showMarsFunc }),
         hideMars = createButton({ id: `hideMarsButton`, text: `Hide Mars Weather`, class: `buttons`, onClickFunc: hideMarsFunc });
@@ -136,7 +129,7 @@ function getAPOD() {
         if (data.media_type == `video`) {
 
             // ADDED DEAFULT IMAGE INCASE THE NASA LINK IS A VIDEO
-            document.body.style.backgroundImage = `url(sunset001.jpg)`;
+            document.body.style.backgroundImage = `url(atmosphere.jpg)`;
 
         } else {
 
@@ -179,26 +172,46 @@ function getWeather() {
 
 }
 
+// FUNCTION TO FIND THE 7TH DAY PRIOR TO TODAY
+function findDay7() {
 
-/* FUNCTIONS FOR BUTTONS ONCLICK:
-    [*]CHANGE DATE: WILL USE THE SELECT ELEMENTS; HIDE OTHER BUTTONS UNTIL DATE IS SELECTED
-    []MAKE A NOTE: WILL CREATE A POPUP PROMPT FOR THE USER, THE DATE AND NOTE WILL BE SAVED TOGETHER IN THE SECOND DIV
-    []REVEAL NOTES: WILL WORK AS A TOGGLE TO SHOW OR HIDE THE NOTES SECTION; MAKE SCROLLABLE IN CSS ONCE DONE
-*/
+    let currentDay = dateInfo.day,
+        currentMonth = dateInfo.month,
+        currentYear = dateInfo.year,
+        dayNum = currentDay,
+        monthNum = currentMonth,
+        yearNum = currentYear,
+        a = 1;
 
-function changeBGFunc() {
+    checkLeapYear(yearNum);
 
-    document.getElementById(`changeBGButton`).style.display = `none`;
-    document.getElementById(`showMarsButton`).style.display = `none`;
-    document.getElementById(`hideMarsButton`).style.display = `none`;
-    document.getElementById(`nextDay`).style.display = `none`;
-    document.getElementById(`prevDay`).style.display = `none`;
-    document.getElementById(`cancelButton`).style.display = `initial`;
-    document.getElementById(`yearSelect`).style.display = `initial`;
-    document.getElementById(`yearSelect`).value = ``;
+    while (a < dateInfo.dayLimit) {
+
+        if (dayNum > 1) {
+            dayNum--;
+        } else if (dayNum == 1 && monthNum != 0) { // at beginning of the month, but not the end of the year)
+
+            dayNum = dateInfo.daysByMonth[monthNum];
+            monthNum--;
+
+        } else if (dayNum == 1 && monthNum == 0) { // at beginning of the month of december/ end of year
+
+            dayNum = 31;
+            monthNum = 12;
+            yearNum--;
+
+        }
+
+        dates.unshift(`${dayNum}${monthNum}${yearNum}`);
+        a++;
+
+    }
+
+    return `${dayNum}${monthNum}${yearNum}`
 
 }
 
+// FUNCTIONS FOR NEXT AND PREVIOUS DAY BUTTONS
 function modifyDate() {
 
     let id = this.id,
@@ -233,15 +246,6 @@ function modifyDate() {
 
 }
 
-function updateFront() {
-    let oldDate = document.getElementById(`dateHead`),
-        parentDiv = oldDate.parentNode,
-        newDate = createHeading({ text: `${dateInfo.monthsArr[dateInfo.month]} ${dateInfo.day}, ${dateInfo.year}`, size: 1 });
-    parentDiv.replaceChild(newDate, oldDate);
-    newDate.id = `dateHead`;
-}
-
-// SWITCH FUNCTIONS
 function nextDay(curDay, curMonth, curYear) {
     // check for:
     //? what month are we in? 
@@ -316,41 +320,25 @@ function prevDay(curDay, curMonth, curYear) {
 
 }
 
-function findDay7() {
+function updateFront() {
+    let oldDate = document.getElementById(`dateHead`),
+        parentDiv = oldDate.parentNode,
+        newDate = createHeading({ text: `${dateInfo.monthsArr[dateInfo.month]} ${dateInfo.day}, ${dateInfo.year}`, size: 1 });
+    parentDiv.replaceChild(newDate, oldDate);
+    newDate.id = `dateHead`;
+}
 
-    let currentDay = dateInfo.day,
-        currentMonth = dateInfo.month,
-        currentYear = dateInfo.year,
-        dayNum = currentDay,
-        monthNum = currentMonth,
-        yearNum = currentYear,
-        a = 1;
+// FUNCTIONS FOR CHANGING BACKGROUND VIA DATE SELECTION
+function changeBGFunc() {
 
-    checkLeapYear(yearNum);
-
-    while (a < dateInfo.dayLimit) {
-
-        if (dayNum > 1) {
-            dayNum--;
-        } else if (dayNum == 1 && monthNum != 0) { // at beginning of the month, but not the end of the year)
-
-            dayNum = dateInfo.daysByMonth[monthNum];
-            monthNum--;
-
-        } else if (dayNum == 1 && monthNum == 0) { // at beginning of the month of december/ end of year
-
-            dayNum = 31;
-            monthNum = 12;
-            yearNum--;
-
-        }
-
-        dates.unshift(`${dayNum}${monthNum}${yearNum}`);
-        a++;
-
-    }
-
-    return `${dayNum}${monthNum}${yearNum}`
+    document.getElementById(`changeBGButton`).style.display = `none`;
+    document.getElementById(`showMarsButton`).style.display = `none`;
+    document.getElementById(`hideMarsButton`).style.display = `none`;
+    document.getElementById(`nextDay`).style.display = `none`;
+    document.getElementById(`prevDay`).style.display = `none`;
+    document.getElementById(`cancelButton`).style.display = `initial`;
+    document.getElementById(`yearSelect`).style.display = `initial`;
+    document.getElementById(`yearSelect`).value = ``;
 
 }
 
@@ -371,36 +359,11 @@ function cancelMethod() {
     document.getElementById(`monthSelect`).style.display = `none`;
     if (document.getElementById(`daySelect`) != null) { document.getElementById(`daySelect`).style.display = `none`; }
 
-    console.log(dateInfo.year, dateInfo.month, dateInfo.day);
-    console.log(storedYear, storedMonth, storedDay);
     if (dateInfo.year != storedYear) { dateInfo.year = storedYear; }
 
     if (dateInfo.month != storedMonth) { dateInfo.month = storedMonth; }
 
     if (dateInfo.day != storedDay) { dateInfo.day = storedDay; }
-
-}
-
-function showMarsFunc() {
-
-    document.getElementById(`showMarsButton`).style.display = `none`;
-    document.getElementById(`hideMarsButton`).style.display = `initial`;
-    document.getElementById(`mainDiv`).style.height = `155px`;
-    document.getElementById(`mainDiv`).style.transition = `0.5s`;
-    document.getElementById(`weatherDisplay`).style.transition = `opacity 0.5s`;
-    document.getElementById(`weatherDisplay`).style.opacity = `1`;
-    document.getElementById(`weatherDisplay`).style.transitionDelay = `0.25s`;
-
-}
-
-function hideMarsFunc() {
-
-    document.getElementById(`showMarsButton`).style.display = `initial`;
-    document.getElementById(`hideMarsButton`).style.display = `none`;
-    document.getElementById(`mainDiv`).style.height = `105px`;
-    document.getElementById(`mainDiv`).style.transition = `0.5s`;
-    document.getElementById(`weatherDisplay`).style.transition = `opacity 0.1s`;
-    document.getElementById(`weatherDisplay`).style.opacity = `0`;
 
 }
 
@@ -505,6 +468,30 @@ function selectDay() {
     dateInfo.day = storedDay;
     dateInfo.month = storedMonth;
     dateInfo.year = storedYear;
+
+}
+
+// FUNCTIONS FOR SHOWING MARS WEATHER DETAILS
+function showMarsFunc() {
+
+    document.getElementById(`showMarsButton`).style.display = `none`;
+    document.getElementById(`hideMarsButton`).style.display = `initial`;
+    document.getElementById(`mainDiv`).style.height = `155px`;
+    document.getElementById(`mainDiv`).style.transition = `0.5s`;
+    document.getElementById(`weatherDisplay`).style.transition = `opacity 0.5s`;
+    document.getElementById(`weatherDisplay`).style.opacity = `1`;
+    document.getElementById(`weatherDisplay`).style.transitionDelay = `0.25s`;
+
+}
+
+function hideMarsFunc() {
+
+    document.getElementById(`showMarsButton`).style.display = `initial`;
+    document.getElementById(`hideMarsButton`).style.display = `none`;
+    document.getElementById(`mainDiv`).style.height = `105px`;
+    document.getElementById(`mainDiv`).style.transition = `0.5s`;
+    document.getElementById(`weatherDisplay`).style.transition = `opacity 0.1s`;
+    document.getElementById(`weatherDisplay`).style.opacity = `0`;
 
 }
 
