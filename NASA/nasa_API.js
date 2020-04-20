@@ -7,10 +7,7 @@ let dateRN = new Date(),
         monthsArr: [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`],
         daysByMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
         day: dateRN.getDate(),
-        dayLimit: 7,
-
-        // VARIABLE FOR STORING THE `DATE AND DATE NOTE` AS KEY/VALUE PAIR
-        storedData: {}
+        dayLimit: 7
 
     },
     currentDate = `${dateRN.getDate()}${dateRN.getMonth()}${dateRN.getFullYear()}`,
