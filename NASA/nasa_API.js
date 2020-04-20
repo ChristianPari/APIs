@@ -1,12 +1,3 @@
-/*
-LAYOUT:
-- Make day cut off be current date
-- Make background photo change via APOD API
-- Make a button to show Mars weather when clicked / make a button to hide Mars weather when clicked again
-*/
-
-
-
 // GLOBAL VARIBALES
 let dateRN = new Date(),
     dateInfo = {
