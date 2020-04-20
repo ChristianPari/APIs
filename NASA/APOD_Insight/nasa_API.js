@@ -106,7 +106,7 @@ function getAPOD() {
     }
 
     let xhr = new XMLHttpRequest(),
-        endpoint = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${dateInfo.year}-${month}-${day}`;
+        endpoint = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${dateInfo.year}-${month}-${day}&hd=true`;
 
     xhr.open('GET', endpoint, true);
 
