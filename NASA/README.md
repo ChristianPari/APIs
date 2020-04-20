@@ -1,1 +1,19 @@
-This is my first NASA API
+In this project I wanted to create a program that I could see someone actually using in the future. This lead me to think of creating a widget-like UI that allows the user to cycle through the last 7 days to view Mars Weather from those days, but also giving them a new backgroud on their webpage for each day. I used inspiration from another project located <a href="https://github.com/ChristianPari/Projects-2020/tree/master/Calendar_Navigation/Personal_Work/Version005">here</a>.
+
+In this project I used the following APIs:
+* Astronomy Picture of the Day https://api.nasa.gov/planetary/apod 
+* Mars Weather Service https://api.nasa.gov/insight_weather 
+
+This projects code begans by crceating GLOBAL VARIABLEs that I use for date manipulation. After creating a NEW INSTANCE of the DATE OBJECT, I created a OBJECT that holds multiple KEY/VALUE pairs for data like; year, month, day, but then also an ARRAY of month names, and ARRAY of dya lengths as each index for each month, followed by a day limit VARIABLE that I used to keep the date range between a week from the current date.
+
+The next big portion of this code handles the creation of the DOM and running the FUNCTION calls to GET the API data. I used a WINDOW ONLOAD FUNCTION to call the initial FUNCTIONs neccessary. DOM ELEMENTs created were multiple DIVs, a date HEADING, numerous BUTTONs and SELECTs. `ALL DOM ELEMENT CREATION WAS DONE WITHIN MY JS CODE` I used reusuable HTML FUNCTIONs that I created a while back (I transfer and use these FUNCTIONs in everyone of my projects, best advice I was ever given). After all ELEMENTs were created they were APPENDED to their respective PARENT NODES. Creating the FUNCTIONs for the APIs were tricky at first because I had to think of the best way to handle the data I was receiving since it had to all be maniuplated depending on the date that was being choosen by the user. So I created my XHR VARIABLEs and wihtin the ENDPOINTs for each API I placed VARIABLEs within them that would be altered depending on the date.
+
+Following these main FUNCTIONs I had to create the FUNCTIONs that would be ran throughout the program when the user would decide to alter something on the UI. Some neccessary FUNCTIONs included:
+* Finding the 7th day that would be previous to the current day, but also storing the dates becuase I would have to use them later for the Mars Weather aspect of the code.
+    - This FUNCTION consisted of using a WHILE LOOP that would run 7 times and would make sure that each date that was being checked previously was a real date if not then it would be altered where needed and then stored in a ARRAY for later.
+* Modifying the date via BUTTON ONCLICK.
+    - This FUNCTION actually used a SWITCH STATEMENT that depending on the CASE which was set to the ID for each BUTTON, would then call the FUNCTIONs neccessary for each BUTTON. This is also where the Mars Weather would be gathered for the day that was being switched to, the DIV holding this display data would clear and be refilled with new data from the API.
+* Updating the FRONT-END which in this case is just making sure to replace the date HEADING text with the newly selected date info.
+* FUNCTIONs for each SELECT ELEMENT that would be ran when the user is picking a new background to display. This was tough becuase I had to ensure that this wasn't altering any of my date data in the BACK-END but was able to ran through the APOD API effeectively without having to create a whole new XHR.
+
+The Mars Weather data I choose to store in its own DIV below the navigation div (used to display the BUTTONs and SELECTs) and instead of having this just be a static display where the data would just sit there and be updated each time. I created a simple animation using CSS that is used when the user chooses to 'show' or 'hide' the weather data. The animation is one of a growing and shrinking and then the data simply fades in via show and fades out via hide.
