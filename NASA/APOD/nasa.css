@@ -1,0 +1,57 @@
+body {
+    text-align: center;
+    font-family: monospace;
+    width: 100vw;
+    height: 100vh;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    overflow: hidden;
+}
+
+#imgDesc {
+    margin: auto;
+    width: 670px;
+    background-color: rgba(255, 255, 255, 0.39);
+    box-shadow: 0px 0px 5px 5px rgb(0, 0, 0);
+    border-radius: 20px;
+}
+
+#imgTitle {
+    font-size: 25px;
+    margin: unset;
+}
+
+#imgDate {
+    font-size: 20px;
+    margin: unset;
+}
+
+#imgExpl {
+    font-size: 20px;
+    font-weight: 900;
+    padding: 1px;
+}
+
+#startBtn {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    border-style: none;
+    background-color: rgba(255, 255, 255, 0.548);
+    box-shadow: 0px 0px 3px 3px rgb(0, 0, 0);
+}
+
+#yearSel,
+#monthSel,
+#daySel {
+    font-size: 145x;
+    font-family: monospace;
+    font-weight: 900;
+    border-radius: 5px;
+    border-style: none;
+    background-color: rgba(255, 255, 255, 0.548);
+    box-shadow: 0px 0px 3px 3px rgb(0, 0, 0);
+}
