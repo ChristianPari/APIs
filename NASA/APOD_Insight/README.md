@@ -4,7 +4,7 @@ In this project I used the following APIs:
 * Astronomy Picture of the Day https://api.nasa.gov/planetary/apod 
 * Mars Weather Service https://api.nasa.gov/insight_weather
 
-`THIS PROGRAM UTILIZIES A API KEY` PLEASE ADD YOUR API WHEN USING; can be found on line 16 of JS
+`THIS PROGRAM UTILIZIES A API KEY` PLEASE ADD YOUR KEY WHEN USING THIS CODE; can be found on line 16 of JS
 
 This projects code begans by crceating GLOBAL VARIABLEs that I use for date manipulation. After creating a NEW INSTANCE of the DATE OBJECT, I created a OBJECT that holds multiple KEY/VALUE pairs for data like; year, month, day, but then also an ARRAY of month names, and ARRAY of dya lengths as each index for each month, followed by a day limit VARIABLE that I used to keep the date range between a week from the current date.
 
