@@ -157,6 +157,13 @@ function yearSelectFunc() {
 
     }
 
+
+    if (document.getElementById(`monthSel`) != null) {
+
+        document.getElementById(`monthSel`).remove();
+
+    }
+
     let monthSel = createSelect({
         id: `monthSel`,
         defOp: `Select A Month`,
@@ -197,6 +204,12 @@ function monthSelectFunc() {
     } else if (dateSelected.year == currentYear && dateSelected.month == currentMonth + 1) {
 
         daysArr.splice(currentDay, daysArr.length);
+
+    }
+
+    if (document.getElementById(`daySel`) != null) {
+
+        document.getElementById(`daySel`).remove();
 
     }
 
