@@ -8,7 +8,7 @@ let dateSelected = {
     currentDay = new Date().getDate(),
     daysByMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
     body = document.body,
-    apiKey = `TXi5A7X2oAnW0kxjVcgqchorBJxAOkUdgo8Xtetp`;
+    apiKey = `ADD API KEY`;
 
 window.onload = () => {
 
@@ -94,39 +94,31 @@ function getAPOD() {
 
 function displayAPOD(data) {
 
-    if (data.code != undefined) {
+    if (data.media_type == `video`) {
 
-        alert(`Error Code: ${data.code}\nError Message: ${data.msg}`);
+        alert(`The media type was a video.\nA link to the video: "${data.url}"\nPlease copy and paste to your broswer search bar`);
 
     } else {
 
-        if (data.media_type == `video`) {
+        let imgDiv = document.getElementById(`imgDesc`);
 
-            alert(`The media type was a video.\nA link to the video: "${data.url}"\nPlease copy and paste to your broswer search bar`);
+        if (imgDiv.innerHTML != ``) {
 
-        } else {
-
-            let imgDiv = document.getElementById(`imgDesc`);
-
-            if (imgDiv.innerHTML != ``) {
-
-                imgDiv.innerHTML = ``;
-
-            }
-
-            body.style.backgroundImage = `url(${data.hdurl})`;
-
-            let imgDate = createHeading({ text: data.date, id: `imgDate` }),
-                imgTitle = createHeading({ text: data.title, id: `imgTitle` }),
-                explDiv = createDiv({ id: `explDiv` }),
-                imgExpl = createParagraph({ text: data.explanation, id: `imgExpl` });
-
-            imgDiv.appendChild(imgTitle);
-            imgDiv.appendChild(imgDate);
-            imgDiv.appendChild(explDiv);
-            explDiv.appendChild(imgExpl);
+            imgDiv.innerHTML = ``;
 
         }
+
+        body.style.backgroundImage = `url(${data.hdurl})`;
+
+        let imgDate = createHeading({ text: data.date, id: `imgDate` }),
+            imgTitle = createHeading({ text: data.title, id: `imgTitle` }),
+            explDiv = createDiv({ id: `explDiv` }),
+            imgExpl = createParagraph({ text: data.explanation, id: `imgExpl` });
+
+        imgDiv.appendChild(imgTitle);
+        imgDiv.appendChild(imgDate);
+        imgDiv.appendChild(explDiv);
+        explDiv.appendChild(imgExpl);
 
     }
 
