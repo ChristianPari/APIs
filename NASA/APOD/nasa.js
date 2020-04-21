@@ -1,25 +1,35 @@
-let dateInfo = {
+let dateSelected = {
         year: 0,
         month: 0,
         day: 0
     },
+    currentYear = new Date().getFullYear(),
+    currentMonth = new Date().getMonth(),
+    currentDay = new Date().getDate(),
+    daysByMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
     body = document.body,
     apiKey = `TXi5A7X2oAnW0kxjVcgqchorBJxAOkUdgo8Xtetp`;
 
 window.onload = () => {
 
-    // []make the first NASA request to get todays' picture
+    // [*]make the first NASA request to get todays' picture
+    // [*]create divs
+    // [*]1 holds buttons and selects
+    // [*]1 holds img explanation
+    // [*]have img become webpage background
     // [*]make the button element
     // [*]make the year select element
+
+    let interactive = createDiv({ id: `interactive` }),
+        descDiv = createDiv({ id: `imgDesc` });
 
     let startBtn = createButton({
         text: `Begin Selection`,
         id: `startBtn`,
         onClickFunc: startSequence
     });
-    body.appendChild(startBtn);
 
-    let yearNum = 2020,
+    let yearNum = currentYear,
         yearArr = [];
 
     while (yearNum > 1994) {
@@ -35,17 +45,36 @@ window.onload = () => {
         defOp: `Select A Year`,
         onChangeFunc: yearSelectFunc
     });
-    body.appendChild(yearSel);
+
+    body.appendChild(descDiv);
+    body.appendChild(interactive);
+    interactive.appendChild(startBtn);
+    interactive.appendChild(yearSel);
     yearSel.style.display = `none`;
+
+    getAPOD();
 
 }
 
 // API FUNCTION
 function getAPOD() {
 
-    const month = dateInfo.month < 10 ? `0${dateInfo.month}` : dateInfo.month,
-        day = dateInfo.day < 10 ? `0${dateInfo.day}` : dateInfo.day,
-        date = `${dateInfo.year}-${month}-${day}`;
+    let date = ``;
+
+    if (dateSelected.year == 0) {
+
+        let month = currentMonth + 1 < 10 ? `0${currentMonth + 1}` : currentMonth + 1,
+            day = currentDay < 10 ? `0${currentDay}` : currentDay;
+        date = `${currentYear}-${month}-${day}`;
+
+    } else {
+        console.log(dateSelected.year);
+
+        let month = dateSelected.month < 10 ? `0${dateSelected.month}` : dateSelected.month,
+            day = dateSelected.day < 10 ? `0${dateSelected.day}` : dateSelected.day;
+        date = `${dateSelected.year}-${month}-${day}`;
+
+    }
 
     let xhr = new XMLHttpRequest(),
         endpoint = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}&hd=true`;
@@ -69,6 +98,36 @@ function displayAPOD(data) {
 
         alert(`Error Code: ${data.code}\nError Message: ${data.msg}`);
 
+    } else {
+
+        if (data.media_type == `video`) {
+
+            alert(`The media type was a video.\nA link to the video: "${data.url}"\nPlease copy and paste to your broswer search bar`);
+
+        } else {
+
+            let imgDiv = document.getElementById(`imgDesc`);
+
+            if (imgDiv.innerHTML != ``) {
+
+                imgDiv.innerHTML = ``;
+
+            }
+
+            body.style.backgroundImage = `url(${data.hdurl})`;
+
+            let imgDate = createHeading({ text: data.date, id: `imgDate` }),
+                imgTitle = createHeading({ text: data.title, id: `imgTitle` }),
+                explDiv = createDiv({ id: `explDiv` }),
+                imgExpl = createParagraph({ text: data.explanation, id: `imgExpl` });
+
+            imgDiv.appendChild(imgTitle);
+            imgDiv.appendChild(imgDate);
+            imgDiv.appendChild(explDiv);
+            explDiv.appendChild(imgExpl);
+
+        }
+
     }
 
 };
@@ -91,17 +150,28 @@ function yearSelectFunc() {
     // create the month select
 
     let year = this.value;
-    dateInfo.year = year;
+    dateSelected.year = year;
     this.style.display = `none`;
 
-    let monthsArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        monthSel = createSelect({
-            id: `monthSel`,
-            defOp: `Select A Month`,
-            onChangeFunc: monthSelectFunc,
-            data: monthsArr
-        });
-    body.appendChild(monthSel);
+    let monthsArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+    if (year == `1995`) {
+
+        monthsArr.splice(0, 5);
+
+    } else if (year == currentYear) {
+
+        monthsArr.splice(currentMonth + 1, 12);
+
+    }
+
+    let monthSel = createSelect({
+        id: `monthSel`,
+        defOp: `Select A Month`,
+        onChangeFunc: monthSelectFunc,
+        data: monthsArr
+    });
+    document.getElementById(`interactive`).appendChild(monthSel);
 
 };
 
@@ -113,11 +183,12 @@ function monthSelectFunc() {
     // create the day select
 
     let month = this.value;
-    dateInfo.month = month;
+    dateSelected.month = month;
     this.style.display = `none`;
 
-    let daysByMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-        days = daysByMonth[month - 1],
+    checkLeapYear(dateSelected.year);
+
+    let days = daysByMonth[month - 1],
         daysArr = [];
 
     while (days >= 1) {
@@ -127,13 +198,23 @@ function monthSelectFunc() {
 
     };
 
+    if (dateSelected.year == 1995 && month == 6) {
+
+        daysArr.splice(0, 15);
+
+    } else if (dateSelected.year == currentYear && dateSelected.month == currentMonth + 1) {
+
+        daysArr.splice(currentDay, daysArr.length);
+
+    }
+
     let daySel = createSelect({
         id: `daySel`,
         defOp: `Select A Day`,
         onChangeFunc: daySelectFunc,
         data: daysArr
     });
-    body.appendChild(daySel);
+    document.getElementById(`interactive`).appendChild(daySel);
 
 };
 
@@ -141,13 +222,28 @@ function daySelectFunc() {
 
     this.style.display = `none`;
     let day = this.value;
-    dateInfo.day = day;
+    dateSelected.day = day;
     document.getElementById(`startBtn`).style.display = `initial`;
     document.getElementById(`yearSel`).value = ``;
+
 
     getAPOD();
 
 };
+
+function checkLeapYear(year) {
+
+    if (year % 4 == 0 || (year % 100 != 0 && year % 400 == 0)) {
+
+        daysByMonth[1] = 29;
+
+    } else {
+
+        daysByMonth[1] = 28;
+
+    }
+
+}
 
 // FUNCTIONS FOR CREATING HTML ELEMENTS
 function createDiv(divObj) { // id, class
@@ -258,3 +354,17 @@ function createSelect(selectObj) { // id, class, defOp, defOpID, data (used to c
     return select
 
 };
+
+function createParagraph(paraObj) { // text, class, id
+
+    let paragraph = document.createElement(`p`);
+
+    paragraph.innerHTML = paraObj.text != undefined ? paraObj.text : `>> No Text <<`;
+
+    paragraph.className = paraObj.class != undefined ? paraObj.class : ``;
+
+    paragraph.id = paraObj.id != undefined && document.getElementById(paraObj.id) == null ? paraObj.id : ``;
+
+    return paragraph
+
+}
