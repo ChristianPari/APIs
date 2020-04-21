@@ -18,7 +18,8 @@ let dateRN = new Date(),
 // VARIABLES FOR SELECT ELEMENT CHANGES
 let storedYear = dateRN.getFullYear(),
     storedMonth = dateRN.getMonth(),
-    storedDay = dateRN.getDate();
+    storedDay = dateRN.getDate(),
+    months = [];
 
 
 // FUNCTIONS NEEDED
@@ -52,7 +53,7 @@ function intialElements() {
 
     // CREATE YEAR AND MONTHS SELECTS
     // CREATE A LOOP TO GET `YEAR` SELECT DATA
-    let startYear = 2000,
+    let startYear = 1995,
         endYear = 2020,
         yearsArr = [];
 
@@ -64,8 +65,8 @@ function intialElements() {
     let nextDay = createButton({ id: `nextDay`, class: `dateBtns`, text: `Day >`, onClickFunc: modifyDate }),
         prevDay = createButton({ id: `prevDay`, class: `dateBtns`, text: `< Day`, onClickFunc: modifyDate }),
         cancel = createButton({ id: `cancelButton`, text: `X`, onClickFunc: cancelMethod }),
-        yearSelect = createSelect({ id: `yearSelect`, class: `calSelects`, defOp: `Select Year`, data: yearsArr, onchange: selectYear }),
-        monthSelect = createSelect({ id: `monthSelect`, class: `calSelects`, defOp: `Select Month`, data: dateInfo.monthsArr, onchange: selectMonth });
+        yearSelect = createSelect({ id: `yearSelect`, class: `calSelects`, defOp: `Select Year`, data: yearsArr, onchange: selectYear });
+    // monthSelect = createSelect({ id: `monthSelect`, class: `calSelects`, defOp: `Select Month`, data: dateInfo.monthsArr, onchange: selectMonth });
 
     document.body.appendChild(mainDiv);
     mainDiv.appendChild(dateDisplay);
@@ -75,7 +76,7 @@ function intialElements() {
     interactive.appendChild(prevDay);
     interactive.appendChild(changeBG);
     interactive.appendChild(yearSelect);
-    interactive.appendChild(monthSelect);
+    // interactive.appendChild(monthSelect);
     interactive.appendChild(cancel);
     interactive.appendChild(showMars);
     interactive.appendChild(hideMars);
@@ -84,7 +85,7 @@ function intialElements() {
     weatherDisplay.style.opacity = `0`;
     cancel.style.display = `none`;
     yearSelect.style.display = `none`;
-    monthSelect.style.display = `none`;
+    // monthSelect.style.display = `none`;
     hideMars.style.display = `none`;
 
 }
@@ -93,10 +94,10 @@ function getAPOD() {
 
     let month = ``,
         day = ``;
-    if (dateInfo.month < 10) {
-        month = `0${dateInfo.month}`;
+    if (dateInfo.month + 1 < 10) {
+        month = `0${dateInfo.month + 1}`;
     } else {
-        month = dateInfo.month;
+        month = dateInfo.month + 1;
     }
 
     if (dateInfo.day < 10) {
@@ -383,10 +384,28 @@ function selectYear() {
         return
     } else {
 
+
+        if (dateInfo.year == `1995`) {
+
+            months = dateInfo.monthsArr.slice(5, dateInfo.monthsArr.length);
+
+        } else if (dateInfo.year == new Date().getFullYear()) {
+
+            months = dateInfo.monthsArr.slice(0, new Date().getMonth() + 1);
+
+        } else {
+
+            months = [...dateInfo.monthsArr];
+
+        }
+
         checkLeapYear(dateInfo.year);
 
+        let monthSelect = createSelect({ id: `monthSelect`, class: `calSelects`, defOp: `Select Month`, data: months, onchange: selectMonth }),
+            parentDiv = document.getElementById(`cancelButton`).parentNode,
+            btnElm = document.getElementById(`cancelButton`);
+        parentDiv.insertBefore(monthSelect, btnElm);
         this.style.display = `none`;
-        document.getElementById(`monthSelect`).style.display = `initial`;
         document.getElementById(`monthSelect`).value = ``;
 
     }
@@ -410,6 +429,16 @@ function selectMonth() {
         while (startDay <= endDay) {
             daysArr.push(startDay);
             startDay++;
+        }
+
+        if (dateInfo.year == 1995 && dateInfo.month == 5) {
+
+            daysArr.splice(0, 15);
+
+        } else if (dateInfo.year == new Date().getFullYear() && dateInfo.month == new Date().getMonth()) {
+
+            daysArr.splice(new Date().getDate(), daysArr.length);
+
         }
 
         // CREATE DAY SELECT ELEMENT
