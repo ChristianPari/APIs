@@ -24,10 +24,15 @@ window.onload = () => {
         descDiv = createDiv({ id: `imgDesc` });
 
     let startBtn = createButton({
-        text: `Begin Selection`,
-        id: `startBtn`,
-        onClickFunc: startSequence
-    });
+            text: `Change Image via Date`,
+            id: `startBtn`,
+            onClickFunc: startSequence
+        }),
+        randomBtn = createButton({
+            text: `Click for Random APOD image`,
+            id: `randomBtn`,
+            onClickFunc: randomDate
+        });
 
     let yearNum = currentYear,
         yearArr = [];
@@ -48,6 +53,7 @@ window.onload = () => {
 
     body.appendChild(descDiv);
     body.appendChild(interactive);
+    interactive.appendChild(randomBtn);
     interactive.appendChild(startBtn);
     interactive.appendChild(yearSel);
     yearSel.style.display = `none`;
@@ -57,18 +63,21 @@ window.onload = () => {
 }
 
 // API FUNCTION
-function getAPOD() {
+function getAPOD(randomDate) {
 
     let date = ``;
 
-    if (dateSelected.year == 0) {
+    if (randomDate != null) {
+
+        date = randomDate;
+
+    } else if (dateSelected.year == 0) {
 
         let month = currentMonth + 1 < 10 ? `0${currentMonth + 1}` : currentMonth + 1,
             day = currentDay < 10 ? `0${currentDay}` : currentDay;
         date = `${currentYear}-${month}-${day}`;
 
     } else {
-        console.log(dateSelected.year);
 
         let month = dateSelected.month < 10 ? `0${dateSelected.month}` : dateSelected.month,
             day = dateSelected.day < 10 ? `0${dateSelected.day}` : dateSelected.day;
@@ -100,11 +109,19 @@ function displayAPOD(data) {
 
     } else {
 
-        let imgDiv = document.getElementById(`imgDesc`);
+        let imgDesc = document.getElementById(`imgDesc`);
 
-        if (imgDiv.innerHTML != ``) {
+        if (document.getElementById(`apodImg`) != null) {
 
-            imgDiv.innerHTML = ``;
+            document.getElementById(`apodImg`).remove();
+
+        }
+
+        let apodImg = createImage({ src: data.hdurl, alt: `APOD Image`, id: `apodImg` });
+
+        if (imgDesc.innerHTML != ``) {
+
+            imgDesc.innerHTML = ``;
 
         }
 
@@ -115,10 +132,12 @@ function displayAPOD(data) {
             explDiv = createDiv({ id: `explDiv` }),
             imgExpl = createParagraph({ text: data.explanation, id: `imgExpl` });
 
-        imgDiv.appendChild(imgTitle);
-        imgDiv.appendChild(imgDate);
-        imgDiv.appendChild(explDiv);
+        imgDesc.appendChild(imgTitle);
+        imgDesc.appendChild(imgDate);
+        imgDesc.appendChild(explDiv);
         explDiv.appendChild(imgExpl);
+        let interactive = document.getElementById(`interactive`);
+        body.insertBefore(apodImg, interactive);
 
     }
 
@@ -133,6 +152,70 @@ function startSequence() {
     document.getElementById(`yearSel`).style.display = `initial`;
 
 };
+
+function randomDate() {
+
+    let years = [],
+        months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        yearNum = currentYear;
+
+    while (yearNum > 1994) {
+
+        years.push(yearNum);
+        yearNum--;
+
+    };
+
+    let randomYearIdx = Math.floor(Math.random() * years.length),
+        randomYear = years[randomYearIdx];
+
+    if (randomYear == `1995`) {
+
+        months.splice(0, 5);
+
+    } else if (randomYear == currentYear) {
+
+        months.splice(currentMonth + 1, 12);
+
+    };
+
+
+    let randomMonthIdx = Math.floor(Math.random() * months.length),
+        randomMonth = months[randomMonthIdx];
+
+    checkLeapYear(randomYear);
+
+    let days = daysByMonth[randomMonth - 1],
+        daysArr = [];
+
+
+
+    while (days >= 1) {
+
+        daysArr.unshift(days);
+        days--;
+
+    };
+
+    if (randomYear == 1995 && randomMonth == 6) {
+
+        daysArr.splice(0, 15);
+
+    } else if (randomYear == currentYear && randomMonth == currentMonth + 1) {
+
+        daysArr.splice(currentDay, daysArr.length);
+
+    };
+
+
+    let randomDayIdx = Math.floor(Math.random() * daysArr.length),
+        randomDay = daysArr[randomDayIdx];
+
+    let randomDate = `${randomYear}-${randomMonth = randomMonth < 10 ? `0${randomMonth}` : randomMonth}-${randomDay = randomDay < 10 ? `0${randomDay}` : randomDay}`;
+
+    getAPOD(randomDate);
+
+}
 
 function yearSelectFunc() {
 
