@@ -1,8 +1,8 @@
 body {
     text-align: center;
     font-family: monospace;
-    width: 100vw;
-    height: 100vh;
+    width: auto;
+    height: auto;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -13,45 +13,62 @@ body {
 #imgDesc {
     margin: auto;
     width: 670px;
-    background-color: rgba(255, 255, 255, 0.39);
+    background-color: rgba(255, 255, 255, 0.651);
     box-shadow: 0px 0px 5px 5px rgb(0, 0, 0);
     border-radius: 20px;
 }
 
 #imgTitle {
-    font-size: 25px;
+    font-size: 20px;
     margin: unset;
 }
 
 #imgDate {
-    font-size: 20px;
+    font-size: 15px;
     margin: unset;
 }
 
 #imgExpl {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 900;
     padding: 1px;
 }
 
-#startBtn {
+#apodImg {
+    height: 325px;
+    width: auto;
+    border-style: solid;
+    border-color: white;
+    box-shadow: 0px 0px 5px 5px rgb(0, 0, 0);
+    border-radius: 20px;
+}
+
+#startBtn,
+#randomBtn {
     font-size: 15px;
+    font-family: monospace;
     font-weight: bold;
     color: rgb(0, 0, 0);
     border-radius: 5px;
     border-style: none;
     background-color: rgba(255, 255, 255, 0.548);
     box-shadow: 0px 0px 3px 3px rgb(0, 0, 0);
+    margin-left: 1%;
+    margin-right: 1%;
 }
 
 #yearSel,
 #monthSel,
 #daySel {
-    font-size: 145x;
+    font-size: 14px;
     font-family: monospace;
-    font-weight: 900;
+    font-weight: bold;
     border-radius: 5px;
     border-style: none;
     background-color: rgba(255, 255, 255, 0.548);
     box-shadow: 0px 0px 3px 3px rgb(0, 0, 0);
+}
+
+#interactive {
+    margin-top: 0.8%;
 }
