@@ -1,4 +1,4 @@
-This project was an in-class assingment which was then finished inDIVudally for homework. As a class we collaborated on choice of API, and how the user would be able to maniuplate the date selection so that data that corresponds to that date would be displayed on the DOM. `ALL HTML ELEMENTS WERE CREATED WITHIN MY JS via FUNCTIONS I MADE TO CREATE ELEMENTS` All CSS styling was inspired by me, this was not apart of the in-class collaborative portion.
+This project was an in-class assingment which was then finished indivudally for homework. As a class we collaborated on choice of API, and how the user would be able to maniuplate the date selection so that data that corresponds to that date would be displayed on the DOM. `ALL HTML ELEMENTS WERE CREATED WITHIN MY JS via FUNCTIONS I MADE TO CREATE ELEMENTS` All CSS styling was inspired by me, this was not apart of the in-class collaborative portion.
 
 API used:
 * Astronomy Picture of the Day https://api.nasa.gov/planetary/apod
