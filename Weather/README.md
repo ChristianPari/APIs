@@ -1,5 +1,6 @@
-April 23, 2020 
+First Weather API Project, started during class to go through and get an understanding of how to use the API and for help with creating code logic to sanitize user inputs so that errors wouldn't occur due to an invalid input. This is a simply webpage, has a title and then a user input box and search button. After the user inputs their desired location and clicks the button, the API request functions begins to run and checks that the user input is a possible valid input, otherwise will alert the user with a description of why their search didn't work and to retry, this also ends the API request so that the DOM isn't updated with 'undefined' data.
 
+April 23, 2020 
 6:00pm - 6:30pm
 Began work with first weather API. This posed challenging due to the desire to use user input directly to get a weather. Initially created a function for when the window loads via windows' onload property, this function created the beginning HTML elements that I wanted displayed to the DOM: webpage heading appended to the body, a main div that will serve as a container for all information aside from the webpage heading which was also appended to the body, another div that serves as a interactive section for the input box and a get weather button I also created and this div was appended to the main div. `ALL HTML ELEMENTS WERE CREATED VIA REUSEABLE HTML FUNCTIONS THAT I WROTE WHEN FIRST STARTING TO USE HTML AND JS TOGEHTER AND CAN BE FOUND AT THE BOTTOM OF MY JS` 
 
@@ -20,3 +21,9 @@ AS OF NOW THIS CODE DOES NOT TAKE INTO CONSIDERATION FOR ZIPCODE LIKE INPUTS THA
 April 24, 2020
 2:10pm - 2:15pm
 Made there be labels that are initially empty but once a location is searched for the weather appears next to the label, and ensured that if a new search is made that the previous data is deleted and the new info is assigned.
+
+2:15pm - 2:30pm
+Created if statments within the API request that if the code received isn't 200 (ok) then don't run the function that fills the DOM with weather data because it would be undefined because the searched location doesnt exist if the code isn't 200.
+
+2:30pm - 3:30pm
+Spent time testing and ensuring no errors would occur. Added CSS to help display look a little better, nothing crazy.
