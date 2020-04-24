@@ -4,13 +4,27 @@ window.onload = () => {
         title = createHeading({ text: `AnyWeather`, size: 1, id: `mainHead` }),
         mainDiv = createDiv({ id: `mainDiv` }),
         interactive = createDiv({ id: `interactive` }),
-        cityNameInput = createInput({ sCheck: true, placeholder: `City Name or Zipcode`, id: `cityInput` });
+        cityNameInput = createInput({ sCheck: true, placeholder: `City Name or Zipcode`, id: `cityInput` }),
+        location = createHeading({ text: `Location:`, size: 2, id: `location` }),
+        weatherInfoDiv = createDiv({ id: `weatherInfo` }),
+        humidity = createHeading({ text: `Humidity:`, size: 4, id: `humidity`, class: `conditions` }),
+        feelsLike = createHeading({ text: `Feels Like:`, size: 4, id: `feelsLike`, class: `conditions` }),
+        curTemp = createHeading({ text: `Current Temperature:`, size: 4, id: `curTenp`, class: `conditions` }),
+        maxT = createHeading({ text: `High:`, size: 4, id: `maxT`, class: `conditions` }),
+        minT = createHeading({ text: `Low:`, size: 4, id: `minT`, class: `conditions` });
 
     document.body.appendChild(title);
     document.body.appendChild(mainDiv);
     mainDiv.appendChild(interactive);
     interactive.appendChild(cityNameInput);
     interactive.appendChild(startBtn);
+    mainDiv.appendChild(location);
+    mainDiv.appendChild(weatherInfoDiv);
+    weatherInfoDiv.appendChild(curTemp);
+    weatherInfoDiv.appendChild(humidity);
+    weatherInfoDiv.appendChild(feelsLike);
+    weatherInfoDiv.appendChild(maxT);
+    weatherInfoDiv.appendChild(minT);
 
 };
 
@@ -66,21 +80,12 @@ function reqWeather() {
 
 function displayData(data) {
 
-    let location = createHeading({ text: data.name, size: 2, id: `location` }),
-        weatherInfoDiv = createDiv({ id: `weatherInfo` }),
-        humidity = createHeading({ text: `Humidity: ${Math.round(data.main.humidity)}%`, size: 4, id: `humidity`, class: `conditions` }),
-        feelsLike = createHeading({ text: `Feels Like: ${Math.round(data.main.feels_like)}°F`, size: 4, id: `feelsLike`, class: `conditions` }),
-        curTemp = createHeading({ text: `Current Temperature: ${Math.round(data.main.temp)}°F`, size: 4, id: `curTenp`, class: `conditions` }),
-        maxT = createHeading({ text: `High: ${Math.round(data.main.temp_max)}°F`, size: 4, id: `maxT`, class: `conditions` }),
-        minT = createHeading({ text: `Low: ${Math.round(data.main.temp_min)}°F`, size: 4, id: `maxT`, class: `conditions` });
-
-    document.getElementById(`mainDiv`).appendChild(location);
-    document.getElementById(`mainDiv`).appendChild(weatherInfoDiv);
-    weatherInfoDiv.appendChild(curTemp);
-    weatherInfoDiv.appendChild(humidity);
-    weatherInfoDiv.appendChild(feelsLike);
-    weatherInfoDiv.appendChild(maxT);
-    weatherInfoDiv.appendChild(minT);
+    document.getElementById(`location`).innerText = `Location: ${data.name}`;
+    document.getElementById(`humidity`).innerText = `Humidity: ${Math.round(data.main.humidity)}%`;
+    document.getElementById(`feelsLike`).innerText = `Feels Like: ${Math.round(data.main.feels_like)}°F`;
+    document.getElementById(`curTenp`).innerText = `Current Temperature: ${Math.round(data.main.temp)}°F`;
+    document.getElementById(`maxT`).innerText = `High: ${Math.round(data.main.temp_max)}°F`;
+    document.getElementById(`minT`).innerText = `Low: ${Math.round(data.main.temp_min)}°F`;
 
 }
 
