@@ -1,0 +1,25 @@
+body {
+    text-align: center;
+}
+
+#interactive {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    margin: auto;
+}
+
+#cityInput {
+    text-align: center;
+}
+
+#weatherInfo {
+    border-top: solid;
+    width: 50%;
+    margin: auto;
+    margin-top: 1%;
+}
+
+#location {
+    margin-top: 0.5%;
+}
