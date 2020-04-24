@@ -1,11 +1,17 @@
 window.onload = () => {
 
+    initialElms();
+
+};
+
+function initialElms() {
+
     let startBtn = createButton({ text: `Get Current Weather`, id: `startBtn`, onClickFunc: reqWeather }),
         title = createHeading({ text: `AnyWeather`, size: 1, id: `mainHead` }),
         mainDiv = createDiv({ id: `mainDiv` }),
         interactive = createDiv({ id: `interactive` }),
-        cityNameInput = createInput({ sCheck: true, placeholder: `City Name or Zipcode`, id: `cityInput` }),
-        location = createHeading({ text: `Location:`, size: 2, id: `location` }),
+        cityNameInput = createInput({ sCheck: true, placeholder: `City, Country Code or Zipcode`, id: `cityInput` }),
+        location = createHeading({ text: `Location`, size: 2, id: `location` }),
         weatherInfoDiv = createDiv({ id: `weatherInfo` }),
         humidity = createHeading({ text: `Humidity:`, size: 4, id: `humidity`, class: `conditions` }),
         feelsLike = createHeading({ text: `Feels Like:`, size: 4, id: `feelsLike`, class: `conditions` }),
@@ -18,15 +24,15 @@ window.onload = () => {
     mainDiv.appendChild(interactive);
     interactive.appendChild(cityNameInput);
     interactive.appendChild(startBtn);
-    mainDiv.appendChild(location);
     mainDiv.appendChild(weatherInfoDiv);
+    weatherInfoDiv.appendChild(location);
     weatherInfoDiv.appendChild(curTemp);
-    weatherInfoDiv.appendChild(humidity);
     weatherInfoDiv.appendChild(feelsLike);
+    weatherInfoDiv.appendChild(humidity);
     weatherInfoDiv.appendChild(maxT);
     weatherInfoDiv.appendChild(minT);
 
-};
+}
 
 function reqWeather() {
 
@@ -62,7 +68,7 @@ function reqWeather() {
     }
 
     const xhr = new XMLHttpRequest(),
-        apiKey = `c81d51bf76bfdeb0cf59fa68e2336eb5`,
+        apiKey = `ADD API KEY`,
         endpoint = `http://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&units=imperial${query}`;
 
     xhr.open('GET', endpoint);
@@ -70,6 +76,16 @@ function reqWeather() {
     xhr.onload = () => {
 
         const weatherData = JSON.parse(xhr.responseText);
+
+        if (weatherData.cod != 200) {
+
+            alert(`The location you are searching for cannot be found, please try again`);
+            document.body.innerHTML = ``;
+            initialElms();
+            return
+
+        }
+
         displayData(weatherData);
 
     };
@@ -80,7 +96,7 @@ function reqWeather() {
 
 function displayData(data) {
 
-    document.getElementById(`location`).innerText = `Location: ${data.name}`;
+    document.getElementById(`location`).innerText = `${data.name}`;
     document.getElementById(`humidity`).innerText = `Humidity: ${Math.round(data.main.humidity)}%`;
     document.getElementById(`feelsLike`).innerText = `Feels Like: ${Math.round(data.main.feels_like)}°F`;
     document.getElementById(`curTenp`).innerText = `Current Temperature: ${Math.round(data.main.temp)}°F`;
