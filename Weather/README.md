@@ -16,3 +16,7 @@ This last section took the most time due to having to work through all the possi
 All the error-like if statements end with a return statement so that the API is not requested. For the other two if's, the gatherd query variable is assigned to the endpoint within the open property of the request.
 
 AS OF NOW THIS CODE DOES NOT TAKE INTO CONSIDERATION FOR ZIPCODE LIKE INPUTS THAT DONT ACTUALLY EXIST, NOR DOES IT CLEAN THE DOM BEFORE GIVING THE INFORMATION FOR MULTIPLE LOCATIONS
+
+April 24, 2020
+2:10pm - 2:15pm
+Made there be labels that are initially empty but once a location is searched for the weather appears next to the label, and ensured that if a new search is made that the previous data is deleted and the new info is assigned.
