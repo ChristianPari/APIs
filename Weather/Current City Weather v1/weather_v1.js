@@ -1,4 +1,4 @@
-// GLOBAL VARIABLE
+// GLOBAL VARIABLES FOR BACKGROUND IMAGES
 let condtionImgs = {
     1: `https://hoodline.imgix.net/uploads/story/image/582979/istock__..featured_image_1..sunny_3.jpg.jpg?auto=format`,
     2: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
@@ -27,6 +27,8 @@ function initialElms() {
         cityNameInput = createInput({ sCheck: true, placeholder: `City, Country Code or Zipcode`, id: `cityInput` }),
         location = createHeading({ text: `Location`, size: 2, id: `location` }),
         weatherInfoDiv = createDiv({ id: `weatherInfo` }),
+        weatherCond = createDiv({ id: `conditionsDiv` }),
+        displayDiv = createDiv({ id: `conditionDisplay` }),
         humidity = createHeading({ text: `Humidity:`, size: 4, id: `humidity`, class: `conditions` }),
         feelsLike = createHeading({ text: `Feels Like:`, size: 4, id: `feelsLike`, class: `conditions` }),
         curTemp = createHeading({ text: `Current Temperature:`, size: 4, id: `curTenp`, class: `conditions` }),
@@ -42,13 +44,15 @@ function initialElms() {
     interactive.appendChild(startBtn);
     mainDiv.appendChild(weatherInfoDiv);
     weatherInfoDiv.appendChild(location);
-    weatherInfoDiv.appendChild(conditionsImg);
-    weatherInfoDiv.appendChild(conditionsDesc);
-    weatherInfoDiv.appendChild(curTemp);
-    weatherInfoDiv.appendChild(feelsLike);
-    weatherInfoDiv.appendChild(humidity);
-    weatherInfoDiv.appendChild(maxT);
-    weatherInfoDiv.appendChild(minT);
+    weatherInfoDiv.appendChild(displayDiv);
+    weatherInfoDiv.appendChild(weatherCond);
+    displayDiv.appendChild(conditionsImg);
+    displayDiv.appendChild(conditionsDesc);
+    weatherCond.appendChild(curTemp);
+    weatherCond.appendChild(feelsLike);
+    weatherCond.appendChild(humidity);
+    weatherCond.appendChild(maxT);
+    weatherCond.appendChild(minT);
     conditionsImg.style.display = `none`;
     conditionsDesc.style.display = `none`;
 
@@ -62,9 +66,9 @@ function reqWeather() {
         query;
 
 
-    if (userInput.length < 3 || userInput.length > 30) { // runs if isnt a valid length
+    if (userInput.length < 3 || userInput.length > 60) { // runs if isnt a valid length
 
-        alert(`Not a valid U.S. City or Zipcode, please try again!\n*Search must be between 3-30 characters*`);
+        alert(`Not a valid U.S. City or Zipcode, please try again!\n*Search must be between 3-60 characters*`);
         return
 
     } else if (nums.test(userInput) && aplha.test(userInput)) { // runs if input contains a mix of numbers and letters
