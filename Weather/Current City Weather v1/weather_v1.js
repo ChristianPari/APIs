@@ -17,7 +17,9 @@ function initialElms() {
         feelsLike = createHeading({ text: `Feels Like:`, size: 4, id: `feelsLike`, class: `conditions` }),
         curTemp = createHeading({ text: `Current Temperature:`, size: 4, id: `curTenp`, class: `conditions` }),
         maxT = createHeading({ text: `High:`, size: 4, id: `maxT`, class: `conditions` }),
-        minT = createHeading({ text: `Low:`, size: 4, id: `minT`, class: `conditions` });
+        minT = createHeading({ text: `Low:`, size: 4, id: `minT`, class: `conditions` }),
+        conditionsImg = createImage({ src: ``, alt: ``, id: `conditionsImg` }),
+        conditionsDesc = createHeading({ text: ``, size: 5, id: `conditionsDesc`, class: `conditions` });
 
     document.body.appendChild(title);
     document.body.appendChild(mainDiv);
@@ -26,11 +28,15 @@ function initialElms() {
     interactive.appendChild(startBtn);
     mainDiv.appendChild(weatherInfoDiv);
     weatherInfoDiv.appendChild(location);
+    weatherInfoDiv.appendChild(conditionsImg);
+    weatherInfoDiv.appendChild(conditionsDesc);
     weatherInfoDiv.appendChild(curTemp);
     weatherInfoDiv.appendChild(feelsLike);
     weatherInfoDiv.appendChild(humidity);
     weatherInfoDiv.appendChild(maxT);
     weatherInfoDiv.appendChild(minT);
+    conditionsImg.style.display = `none`;
+    conditionsDesc.style.display = `none`;
 
 }
 
@@ -102,6 +108,10 @@ function displayData(data) {
     document.getElementById(`curTenp`).innerText = `Current Temperature: ${Math.round(data.main.temp)}°F`;
     document.getElementById(`maxT`).innerText = `High: ${Math.round(data.main.temp_max)}°F`;
     document.getElementById(`minT`).innerText = `Low: ${Math.round(data.main.temp_min)}°F`;
+    document.getElementById(`conditionsImg`).src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+    document.getElementById(`conditionsImg`).style.display = `initial`;
+    document.getElementById(`conditionsDesc`).innerText = `${data.weather[0].description.toUpperCase()}`;
+    document.getElementById(`conditionsDesc`).style.display = `initial`;
 
 }
 
@@ -149,7 +159,7 @@ function createImage(imageObj) { // src, alt, id, class
 
     let image = document.createElement(`img`);
 
-    image.src = imageObj.src != undefined ? imageObj.src : `images/default.jpg`;
+    image.src = imageObj.src != undefined ? imageObj.src : ``;
 
     image.alt = imageObj.alt != undefined ? imageObj.alt : `image couldn't load; broke`;
 
