@@ -1,6 +1,6 @@
 First Weather API Project, started during class to go through and get an understanding of how to use the API and for help with creating code logic to sanitize user inputs so that errors wouldn't occur due to an invalid input. This is a simply webpage, has a title and then a user input box and search button. After the user inputs their desired location and clicks the button, the API request functions begins to run and checks that the user input is a possible valid input, otherwise will alert the user with a description of why their search didn't work and to retry, this also ends the API request so that the DOM isn't updated with 'undefined' data.
 
-April 23, 2020 
+<b>April 23, 2020 </b>
 6:00pm - 6:30pm
 Began work with first weather API. This posed challenging due to the desire to use user input directly to get a weather. Initially created a function for when the window loads via windows' onload property, this function created the beginning HTML elements that I wanted displayed to the DOM: webpage heading appended to the body, a main div that will serve as a container for all information aside from the webpage heading which was also appended to the body, another div that serves as a interactive section for the input box and a get weather button I also created and this div was appended to the main div. `ALL HTML ELEMENTS WERE CREATED VIA REUSEABLE HTML FUNCTIONS THAT I WROTE WHEN FIRST STARTING TO USE HTML AND JS TOGEHTER AND CAN BE FOUND AT THE BOTTOM OF MY JS` 
 
@@ -18,7 +18,7 @@ All the error-like if statements end with a return statement so that the API is 
 
 AS OF NOW THIS CODE DOES NOT TAKE INTO CONSIDERATION FOR ZIPCODE LIKE INPUTS THAT DONT ACTUALLY EXIST, NOR DOES IT CLEAN THE DOM BEFORE GIVING THE INFORMATION FOR MULTIPLE LOCATIONS
 
-April 24, 2020
+<b>April 24, 2020</b>
 2:10pm - 2:15pm
 Made there be labels that are initially empty but once a location is searched for the weather appears next to the label, and ensured that if a new search is made that the previous data is deleted and the new info is assigned.
 
@@ -27,3 +27,13 @@ Created if statments within the API request that if the code received isn't 200 
 
 2:30pm - 3:30pm
 Spent time testing and ensuring no errors would occur. Added CSS to help display look a little better, nothing crazy.
+
+<b>April 26, 2020</b>
+1:45pm - 2:15pm
+Was informed that there is weather condition icons through the API so I implemented an icon via a image element and a short weather description via a heading element within the weather information div, these are created and filled when the user searches for a location otherwise they don't appear on the DOM.
+
+2:20pm - 3:10pm
+Found a way to implement background changing to an image the corresponds to the weather conditions of that area. Assigned an image url to a key that's similar to the icon used to display the weather conditions in the API response within an object variable, then depending on the data received from the API, the function uses the string to assign the correct key and then pass the image url through as the divs' background image.
+
+3:30pm - 4:10pm
+Spent this time styling with CSS to just get everything on the DOM to look pleasant to the eye and to my liking.
