@@ -14,12 +14,33 @@ body {
 }
 
 #weatherInfo {
-    border-top: solid;
-    width: 50%;
+    border: solid;
+    width: 30%;
     margin: auto;
     margin-top: 1%;
+    display: flex;
+    flex-direction: column;
 }
 
 #location {
-    margin-top: 0.5%;
+    margin-top: unset;
+    margin-bottom: unset;
+}
+
+#conditionsImg {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    margin-top: unset;
+    margin-bottom: unset;
+}
+
+#conditionsDesc {
+    margin-top: unset;
+    margin-bottom: 3%;
+}
+
+#weatherInfo h4 {
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
