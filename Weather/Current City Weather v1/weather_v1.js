@@ -1,3 +1,17 @@
+// GLOBAL VARIABLE
+let condtionImgs = {
+    1: `https://hoodline.imgix.net/uploads/story/image/582979/istock__..featured_image_1..sunny_3.jpg.jpg?auto=format`,
+    2: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
+    3: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
+    4: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
+    9: `https://i.pinimg.com/originals/33/39/a5/3339a59d7b0697e11dc11a12f921abca.jpg`,
+    10: `https://i.pinimg.com/originals/33/39/a5/3339a59d7b0697e11dc11a12f921abca.jpg`,
+    11: `https://i2-prod.nottinghampost.com/incoming/article3008203.ece/ALTERNATES/s1200b/2_Thunderstorm-at-sunset.jpg`,
+    13: `https://www.wallpaperflare.com/static/861/598/512/winter-snow-dawn-footprints-wallpaper.jpg`,
+    50: `https://c1.wallpaperflare.com/preview/124/91/824/winding-road-railing-guard-rail.jpg`
+
+};
+
 window.onload = () => {
 
     initialElms();
@@ -38,7 +52,7 @@ function initialElms() {
     conditionsImg.style.display = `none`;
     conditionsDesc.style.display = `none`;
 
-}
+};
 
 function reqWeather() {
 
@@ -98,7 +112,7 @@ function reqWeather() {
 
     xhr.send();
 
-}
+};
 
 function displayData(data) {
 
@@ -112,8 +126,13 @@ function displayData(data) {
     document.getElementById(`conditionsImg`).style.display = `initial`;
     document.getElementById(`conditionsDesc`).innerText = `${data.weather[0].description.toUpperCase()}`;
     document.getElementById(`conditionsDesc`).style.display = `initial`;
+    if (Number(data.weather[0].icon.substr(0, 2) < 10)) {
+        document.getElementById(`weatherInfo`).style.backgroundImage = `url(${condtionImgs[data.weather[0].icon.substr(1, 1)]})`;
+    } else {
+        document.getElementById(`weatherInfo`).style.backgroundImage = `url(${condtionImgs[data.weather[0].icon.substr(0, 2)]})`;
+    }
 
-}
+};
 
 function createDiv(divObj) { // id, class
 
@@ -153,7 +172,7 @@ function createParagraph(paraObj) { // text, class, id
 
     return paragraph
 
-}
+};
 
 function createImage(imageObj) { // src, alt, id, class
 
@@ -254,4 +273,4 @@ function createInput(inputObj) { // id, class, sCheck, pHolder
 
     return input
 
-}
+};
