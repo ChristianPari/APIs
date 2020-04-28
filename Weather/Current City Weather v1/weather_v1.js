@@ -24,7 +24,7 @@ function initialElms() {
         title = createHeading({ text: `AnyWeather`, size: 1, id: `mainHead` }),
         mainDiv = createDiv({ id: `mainDiv` }),
         interactive = createDiv({ id: `interactive` }),
-        cityNameInput = createInput({ sCheck: true, placeholder: `City, Country Code or Zipcode`, id: `cityInput` }),
+        cityNameInput = createInput({ sCheck: true, pHolder: `City, Country Code or Zipcode`, id: `cityInput` }),
         location = createHeading({ text: `Location`, size: 2, id: `location` }),
         weatherInfoDiv = createDiv({ id: `weatherInfo` }),
         weatherCond = createDiv({ id: `conditionsDiv` }),
@@ -92,7 +92,7 @@ function reqWeather() {
     }
 
     const xhr = new XMLHttpRequest(),
-        apiKey = `ADD API KEY`,
+        apiKey = `c81d51bf76bfdeb0cf59fa68e2336eb5`,
         endpoint = `http://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&units=imperial${query}`;
 
     xhr.open('GET', endpoint);
@@ -271,7 +271,7 @@ function createInput(inputObj) { // id, class, sCheck, pHolder
 
     input.spellcheck = inputObj.sCheck != undefined ? inputObj.sCheck : true;
 
-    input.placeholder = inputObj.placeholder != undefined ? inputObj.placeholder : ``;
+    input.placeholder = inputObj.pHolder != undefined ? inputObj.pHolder : ``;
 
     input.className = inputObj.class != undefined ? inputObj.class : ``;
 
