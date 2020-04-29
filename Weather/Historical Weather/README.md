@@ -1,4 +1,4 @@
-<b>April 27, 2020</b>
+<b>April 28, 2020</b>
 5:30pm - 6:00pm
 Created the HTML and used script tags to source my JavaScript into the HTML file. I created 3 JS files for this project:
 1) A whole file of functions that are used to create HTML elements
@@ -22,5 +22,18 @@ Created the first function which is assigned to the window onload property, this
 * After it's creation function, I gave the input box a onkeyup property that is assigned to a function that sanitizes the users' input before making the submit button appear in the div.
 * Lastly, I appended the elements to their respective parent nodes.
 
-7:30pm - 8:00pm
-Created the XHR for what the user inputs. Created a new instance of XHR and assigned it to a variable (xhr), then assigned my endpoint to a variable named endpoint; both will be used in the xhr open property method to initialize the call. Then inside the onload function I simply parse the data that's retrived from the API and pass that parsed data as a argument into a function that filters the weather station data. `ORIGINALLY HAD ALL THE CODE WITHIN THE ONLOAD FUNCTION BUT IT GOT TOO LONG SO I CREATED A FUNCTION SPECIFICALLY FOR FILTERING THE STATIONS FOR THE USER`
+7:45pm - 8:00pm
+Created the XHR for what the user inputs. Created a new instance of XHR and assigned it to a variable (xhr), then assigned my endpoint to a variable named endpoint; both will be used in the xhr open property method to initialize the call. Then inside the onload function I simply parse the data that's retrived from the API and pass that parsed data as a argument into a function that filters the weather station data. `ORIGINALLY PLANNED ALL THE CODE TO BE WITHIN THE ONLOAD FUNCTION BUT IT GOT TOO LONG SO I CREATED A FUNCTION SPECIFICALLY FOR FILTERING THE STATIONS FOR THE USER`
+
+8:00PM - 8:45PM
+After looking through the API response data I knew that I would be working with an array of data. This arrays minimum length could be 0 which would mean that there were no weather stations found with the inputted name from the user and then there could be 1 or numerous locations with the name from the user. So I used if statements to work through the possibilites.
+* First 'if' is for an array length of 0 simply alert the user that there were no results and to try another name.
+* If length cameback 1 then there was only 1 station found so I wanted the user to be able to confirm this location so by using the confirm method to inform the user of the location, if they wish to proceed then click 'ok' and otherwise 'cancel'. I set this method to a variable and within an if statement I said if the variable is true (user clicked ok) then run the function that will actually run another API request for that specific station (different endpoint url), and if they clicked cancel then simply return and do nothing which allows the user to go back and change their input.
+* Then if the length cameback as more than 1 then this means more than one weather station was retrieved from the first API request and I wanted the user to be able to choose from these options so I created a new select element within this if statement and assigned the options the value of the station id that is needed for the second API request that actually retrieves the weather data for that station. I also created a cancel button so the user can go back and input a new location if none of the results were what they wanted.
+
+8:45pm - 9:00pm
+Created the cancel button on click function that simply just hides the weather station select object and the cancel button with a display property assigned the value of 'none'
+
+<b>April 29, 2020</b>
+6:00pm - 7:30pm
+Write about making display to the DOM.
