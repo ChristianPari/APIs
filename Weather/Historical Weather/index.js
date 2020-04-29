@@ -64,63 +64,71 @@ function stationReq() {
 
         console.log(wStations); // displays to the console an array of objects; each object represents a weather station that this API pulled from the user input
 
-        if (wStations.length == 0) {
-
-            alert(`No weather stations found with that search, please try another city in that area`);
-
-        } else if (wStations.length === 1) {
-
-            let okay = confirm(`You're search came back with ${wStations[0].name}, ${wStations[0].country}.\nClick 'Ok' if that is the desired location.\nClick 'Cancel' to make a new search.`);
-
-            if (okay) {
-
-                reqHistorical(wStations[0]);
-
-            } else {
-
-                return
-
-            }
-
-        } else {
-
-            if (document.getElementById(`stationSelect`) != null) {
-
-                document.getElementById(`stationSelect`).remove();
-
-            }
-
-            let stationSelect = createSelect({ id: `stationSelect`, defOp: `Select Weather Station`, onChangeFunc: ``, data: `` });
-
-            for (let a = 0; a < wStations.length - 1; a++) {
-
-                let option = document.createElement(`option`);
-
-                option.id = `${wStations[a].id}`;
-
-                option.innerHTML = `${wStations[a].name}, ${wStations[a].country}`;
-
-                option.value = `${wStations[a].id}`;
-
-                stationSelect.appendChild(option);
-
-            }
-
-            stationSelect.onchange = () => {
-
-                reqHistorical({ id: stationSelect.value });
-
-            }
-
-            document.getElementById(`uiDiv`).appendChild(stationSelect);
-
-        }
+        stationFilter(wStations);
 
     }
 
     xhr.send();
 
 }
+
+function stationFilter(wStations) {
+
+    if (wStations.length == 0) {
+
+        alert(`No weather stations found with that search, please try another city in that area`);
+
+    } else if (wStations.length === 1) {
+
+        let okay = confirm(`You're search came back with ${wStations[0].name}, ${wStations[0].country}.\nClick 'Ok' if that is the desired location.\nClick 'Cancel' to make a new search.`);
+
+        if (okay) { reqHistorical(wStations[0]); } else { return };
+
+    } else {
+
+        if (document.getElementById(`stationSelect`) != null) { document.getElementById(`stationSelect`).remove(); };
+
+        if (document.getElementById(`cancelButton`) != null) { document.getElementById(`cancelButton`).remove(); };
+
+        let stationSelect = createSelect({ id: `stationSelect`, defOp: `Select A Weather Station`, onChangeFunc: ``, data: `` }),
+            cancelButton = createButton({ id: `cancelButton`, text: `Cancel`, onClickFunc: cancelProcess });
+
+        for (let a = 0; a < wStations.length; a++) {
+
+            let option = document.createElement(`option`);
+
+            option.id = `${wStations[a].id}`;
+
+            option.innerHTML = `${wStations[a].name}, ${wStations[a].country}`;
+
+            option.value = `${wStations[a].id}`;
+
+            stationSelect.appendChild(option);
+
+        };
+
+        document.getElementById(`uiDiv`).appendChild(stationSelect);
+        document.getElementById(`uiDiv`).appendChild(cancelButton);
+        document.getElementById(`submitButton`).style.display = `none`;
+        document.getElementById(`cityInput`).style.display = `none`;
+        document.getElementById(`yearSelect`).style.display = `none`;
+
+        stationSelect.onchange = () => {
+
+            reqHistorical({ id: stationSelect.value });
+            document.getElementById(`stationSelect`).style.display = `none`;
+            document.getElementById(`cancelButton`).style.display = `none`;
+            document.getElementById(`submitButton`).style.display = `initial`;
+            document.getElementById(`cityInput`).style.display = `initial`;
+            document.getElementById(`yearSelect`).style.display = `initial`;
+
+        };
+
+
+    }
+
+}
+
 
 function reqHistorical(stationObj) {
 
@@ -154,5 +162,16 @@ function reqHistorical(stationObj) {
     };
 
     xhr.send();
+
+}
+
+function cancelProcess() {
+
+    document.getElementById(`stationSelect`).style.display = `none`;
+    document.getElementById(`cancelButton`).style.display = `none`;
+    document.getElementById(`submitButton`).style.display = `initial`;
+    document.getElementById(`cityInput`).style.display = `initial`;
+    document.getElementById(`yearSelect`).style.display = `initial`;
+
 
 }
