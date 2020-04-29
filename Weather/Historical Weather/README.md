@@ -21,3 +21,6 @@ Created the first function which is assigned to the window onload property, this
     * select elements (starts with year; then once changed continues to month and then day and stores data in a object within the date-selection.js file)
 * After it's creation function, I gave the input box a onkeyup property that is assigned to a function that sanitizes the users' input before making the submit button appear in the div.
 * Lastly, I appended the elements to their respective parent nodes.
+
+7:30pm - 8:00pm
+Created the XHR for what the user inputs. Created a new instance of XHR and assigned it to a variable (xhr), then assigned my endpoint to a variable named endpoint; both will be used in the xhr open property method to initialize the call. Then inside the onload function I simply parse the data that's retrived from the API and pass that parsed data as a argument into a function that filters the weather station data. `ORIGINALLY HAD ALL THE CODE WITHIN THE ONLOAD FUNCTION BUT IT GOT TOO LONG SO I CREATED A FUNCTION SPECIFICALLY FOR FILTERING THE STATIONS FOR THE USER`
