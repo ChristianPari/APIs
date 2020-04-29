@@ -1,4 +1,5 @@
-let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+let userProvidedDate = false,
+    daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
     monthNames = [`January`, `Feburary`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `Novemeber`, `December`];
 
 let dateInfo = {
@@ -110,6 +111,10 @@ function monthSelected() {
 
 function daySelected() {
 
+    userProvidedDate = true;
+
+    testUserSubmit();
+
     this.style.display = 'none';
 
     let day = this.value;
@@ -119,8 +124,6 @@ function daySelected() {
     document.getElementById('yearSelect').value = '';
     document.getElementById('yearSelect').style.display = 'initial';
 
-    console.log(`${dateInfo.year}-${dateInfo.month}-${dateInfo.day}`);
-
-    document.getElementById(`dateHead`).innerText = `You Have Selected\n${monthNames[dateInfo.month - 1]} ${dateInfo.day}, ${dateInfo.year}`;
+    document.getElementById(`dateHead`).innerHTML = `You Have Selected<br>${monthNames[dateInfo.month - 1]} ${dateInfo.day}, ${dateInfo.year}`;
 
 };
