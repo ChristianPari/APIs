@@ -111,7 +111,7 @@ function createSelect(selectObj) { // id, class, defOp, defOpID, data (used to c
 
         option.innerHTML = selectObj.data[a];
 
-        option.value = selectObj.data[a];
+        option.value = selectObj.optionID != undefined ? selectObj.optionID : selectObj.data[a];
 
         select.appendChild(option);
 
