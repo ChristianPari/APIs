@@ -92,7 +92,7 @@ function reqWeather() {
     }
 
     const xhr = new XMLHttpRequest(),
-        apiKey = `c81d51bf76bfdeb0cf59fa68e2336eb5`,
+        apiKey = `ADD API KEY`,
         endpoint = `http://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&units=imperial${query}`;
 
     xhr.open('GET', endpoint);
