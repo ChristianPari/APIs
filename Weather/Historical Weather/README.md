@@ -35,5 +35,18 @@ After looking through the API response data I knew that I would be working with 
 Created the cancel button on click function that simply just hides the weather station select object and the cancel button with a display property assigned the value of 'none'
 
 <b>April 29, 2020</b>
-6:00pm - 7:30pm
-Write about making display to the DOM.
+6:00pm - 7:45pm
+Created a function that takes in both the weather stations information object and the weather data object for that station as arguments, this function will be used to display the weather data to the DOM. I needed the station information object because I wanted access to the Name and Country of the user's choosen weather station, this way I could then display that to the DOM along with the weather data gathered from the API request. Within this function I created the following elements and appended them to the weather div I created in the onload property method at the beginning of the JS file.
+"ALL HEADING ELEMENTS"
+* Station Name and Country Code
+* Average Temperature
+* High Temperature
+* Low Temperature
+* Rainfall Total
+* Length of Sunshine in Hours
+* Wind Direction
+* Max Wind Speed
+* Max Wind Gusts
+* Snowfall Total
+* Snow Depth
+Although due to how this API responds; their data objects may come in with a value of null, if this is the case, I used a ternary operator method within the set text protion of my create heading functions that will assign a empty string as it's innerHTML value if the specified key has a value of null.
