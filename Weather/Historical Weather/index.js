@@ -184,8 +184,7 @@ function displayData(weatherData, stationObj) {
 
             if (weatherData[k] != null) {
 
-                let conditionName = k.substr(0, 1).toUpperCase() + k.substr(1, k.length),
-                    convertedData = convertData(k, weatherData[k]),
+                let convertedData = convertData(k, weatherData[k]),
                     element = createHeading({ text: `${convertedData}`, size: 4, id: ``, class: `conditions` });
 
                 stationDiv.appendChild(element);
