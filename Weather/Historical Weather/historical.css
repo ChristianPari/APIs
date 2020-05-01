@@ -1,10 +1,52 @@
+html {
+    scrollbar-width: none;
+}
+
 body {
     text-align: center;
+    background-color: teal;
 }
 
 #footer {
     position: fixed;
     bottom: 0;
+    background-color: rgb(1, 108, 108);
+    border-style: solid;
+    border-color: black;
     width: 100%;
-    margin-bottom: 0.5%;
+    margin-left: -8px;
+}
+
+#mainHead {
+    margin-top: unset;
+    margin-bottom: unset;
+    font-size: 40px;
+    text-shadow: 2px 1px rgb(255, 255, 255);
+}
+
+#uiDiv {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+#weatherDiv {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.stationDiv {
+    border-style: solid;
+    border-color: rgb(0, 255, 247);
+    margin: 1%;
+    padding: 1%;
+}
+
+.stationNames {
+    margin: 1%;
+}
+
+.conditions {
+    margin: 1%;
 }
