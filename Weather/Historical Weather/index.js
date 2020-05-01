@@ -1,4 +1,4 @@
-const apiKey = `ADD API KEY`;
+const apiKey = `UcUSKkeI`;
 
 // ALL MAIN HTML ELEMENTS WILL BE CREATED
 window.onload = () => {
@@ -8,10 +8,10 @@ window.onload = () => {
         dateHead = createHeading({ text: `Today's Date<br>${monthNames[dateInfo.month - 1]} ${dateInfo.day}, ${dateInfo.year}`, id: `dateHead`, size: 3 }),
         uiDiv = createDiv({ id: `uiDiv` }),
         weatherDiv = createDiv({ id: `weatherDiv` }),
-        copyrightDiv = createDiv({ id: `copyrightDiv` }),
-        yearArr = Array.from({ length: dateInfo.year + 1 }, (a, b) => b).slice(dateInfo.year - 40).reverse(), // Creates an array in a single line of code
+        copyrightDiv = createDiv({ id: `footer` }),
+        yearArr = Array.from({ length: dateInfo.year + 1 }, (a, b) => b).slice(2000 - dateInfo.year).reverse(), // Creates an array in a single line of code
         yearSelect = createSelect({ data: yearArr, defOp: `Select A Year`, onChangeFunc: yearSelected, id: `yearSelect` }),
-        cityInput = createInput({ pHolder: `City, Country Code`, id: `cityInput`, sCheck: true }),
+        cityInput = createInput({ pHolder: `Location Name`, id: `cityInput`, sCheck: true }),
         submitDate = createButton({ id: `submitDate`, text: `Get Weather For Selected Date`, onClickFunc: stationReq });
 
     cityInput.onkeyup = testUserSubmit;
@@ -62,8 +62,6 @@ function stationReq() {
         let res = JSON.parse(xhr.responseText),
             wStations = res.data;
 
-        console.log(wStations); // displays to the console an array of objects; each object represents a weather station that this API pulled from the user input
-
         stationFilter(wStations);
 
     }
@@ -82,7 +80,14 @@ function stationFilter(wStations) {
 
         let okay = confirm(`You're search came back with ${wStations[0].name}, ${wStations[0].country}.\nClick 'Ok' if that is the desired location.\nClick 'Cancel' to make a new search.`);
 
-        if (okay) { reqHistorical(wStations[0]); } else { return };
+        if (okay) {
+
+            let stationObj = wStations[0];
+            stationObj.name = `${stationObj.name}, ${stationObj.country}`;
+
+            reqHistorical(stationObj);
+
+        } else { return };
 
     } else {
 
@@ -129,7 +134,6 @@ function stationFilter(wStations) {
 
 };
 
-
 function reqHistorical(stationObj) {
 
     let month = dateInfo.month < 10 ? `0` + dateInfo.month : dateInfo.month,
@@ -146,8 +150,6 @@ function reqHistorical(stationObj) {
 
         let res = JSON.parse(xhr.responseText),
             weatherData = res.data[0];
-
-        console.log(res); // displays to the console the weather data for that day in an object; displays a blank array if no data for that day
 
         displayData(weatherData, stationObj);
 
@@ -172,33 +174,184 @@ function displayData(weatherData, stationObj) {
 
     if (weatherData != undefined) {
 
-        let stationName = createHeading({ text: `${stationObj.name}`, id: `stationName`, size: 4 }),
-            temp = createHeading({ text: `${weatherData.temperature != null && weatherData.temperature > 0.5 ? `Average Temperature: ${Math.round((weatherData.temperature * 9 / 5) + 32)}°F` : ``}`, class: `conditions`}),
-            tempMax = createHeading({text: `${weatherData.temperature_max != null && weatherData.temperature_max > 0.5 ? `High Temperature: ${Math.round((weatherData.temperature_max * 9 / 5) + 32)}°F` : ``}`, class: `conditions`}),
-            tempMin = createHeading({text: `${weatherData.temperature_min != null && weatherData.temperature_min > 0.5 ? `Low Temperature: ${Math.round((weatherData.temperature_min * 9 / 5) + 32)}°F` : ``}`, class: `conditions`}),
-            sunshine = createHeading({text: `${weatherData.sunshine != null && weatherData.sunshine > 0.5 ? `Sunshine for: ${weatherData.sunshine} hours` : ``}`, class: `conditions`}),
-            windDirection = createHeading({text: `${weatherData.winddirection != null && weatherData.winddirection > 0.5 ? `Wind Direction: ${weatherData.winddirection}°` : ``}`, class: `conditions`}),
-            windSpeed = createHeading({text: `${weatherData.windspeed != null && weatherData.windspeed > 0.5 ? `Wind Speed up to: ${Math.round(weatherData.windspeed / 1.609344)} mph` : ``}`, class: `conditions`}),
-            gusts = createHeading({text: `${weatherData.peakgust != null && weatherData.peakgust > 0.5 ? `Wind Gusts of up to: ${Math.round(weatherData.peakgust / 1.609344)} mph` : ``}`, class: `conditions`}),
-            precip = createHeading({ text: `${weatherData.precipitation != null && weatherData.precipitation > 0.5 ? `Rainfall total: ${Math.round(weatherData.precipitation / 25.4)} in` : ``}`, class: `conditions`}),
-            snowfall = createHeading({text: `${weatherData.snowfall != null && weatherData.snowfall > 0.5 ? `Snowfall total: ${Math.round(weatherData.snowfall / 2.54)} in` : ``}`, class: `conditions`}),
-            snowDepth = createHeading({text: `${weatherData.snowdepth != null && weatherData.snowdepth > 0.5 ? `Current Snow Depth: ${Math.round(weatherData.snowdepth / 2.54)} in` : ``}`, class: `conditions`}),
-            weatherDiv = document.getElementById(`weatherDiv`);
+        let stationDiv = createDiv({ id: ``, class: `stationDiv` }),
+            weatherDiv = document.getElementById(`weatherDiv`),
+            stationName = createHeading({ text: `${stationObj.name}`, size: 3, id: ``, class: `stationNames` });
 
-            if (weatherDiv.innerHTML != null) { weatherDiv.innerHTML = `` };
+        stationDiv.appendChild(stationName);
 
-            weatherDiv.appendChild(stationName);
-            weatherDiv.appendChild(temp);
-            weatherDiv.appendChild(tempMax);
-            weatherDiv.appendChild(tempMin);
-            weatherDiv.appendChild(precip);
-            weatherDiv.appendChild(sunshine);
-            weatherDiv.appendChild(windDirection);
-            weatherDiv.appendChild(windSpeed);
-            weatherDiv.appendChild(gusts);
-            weatherDiv.appendChild(snowfall);
-            weatherDiv.appendChild(snowDepth);
+        for (let k in weatherData) {
 
-    } else { alert(`Unfortunately, there is no data for this location on this day.\nPlease search for a more current date.`); }
+            if (weatherData[k] != null) {
+
+                let conditionName = k.substr(0, 1).toUpperCase() + k.substr(1, k.length),
+                    convertedData = convertData(k, weatherData[k]),
+                    element = createHeading({ text: `${convertedData}`, size: 4, id: ``, class: `conditions` });
+
+                stationDiv.appendChild(element);
+
+            }
+
+        }
+
+        let deleteButton = createButton({ text: `X`, onClickFunc: deleteDiv, class: `deleteButtons`, id: `` });
+
+        stationDiv.appendChild(deleteButton);
+        weatherDiv.appendChild(stationDiv);
+
+    } else {
+
+        alert(`Unfortunately, there is no data for this location on this day.\nPlease search for a more current date.`);
+
+    }
+
+};
+
+function convertData(key, value) {
+
+    switch (key) {
+
+        case `peakgust`:
+
+            return `Wind Gusts of up to: ${Math.round(value / 1.609344)} mph`
+
+        case `windspeed`:
+
+            return `Wind Speed up to: ${Math.round(value / 1.609344)} mph`
+
+        case `precipitation`:
+
+            return `Rainfall total: ${Math.round(value / 25.4)} in`
+
+        case `pressure`:
+
+            return `Air Pressure: ${value} hPa`
+
+        case `snowdepth`:
+
+            return `Snow Depth: ${Math.round(value / 2.54)} in`
+
+        case `snowfall`:
+
+            return `Snowfall total: ${Math.round(value / 2.54)} in`
+
+        case `temperature`:
+
+            return `Average Temperature: ${Math.round((value * 9 / 5) + 32)}°F`
+
+        case `temperature_max`:
+
+            return `High Temperature: ${Math.round((value * 9 / 5) + 32)}°F`
+
+        case `temperature_min`:
+
+            return `Low Temperature: ${Math.round((value* 9 / 5) + 32)}°F`
+
+        case `winddirection`:
+
+            return getWindDirection(value)
+
+        case `date`:
+
+            return convertDate(value)
+
+        case `sunshine`:
+
+            return `Sunshine for: ${value} hours`
+
+    }
+
+};
+
+function getWindDirection(value) {
+    let windDir = value,
+        direction = ``;
+
+    if (windDir < 22.5) {
+
+        direction = `Wind Direction: N ${windDir}°`;
+
+    } else if (windDir >= 22.5 && windDir < 45) {
+
+        direction = `Wind Direction: NNE ${windDir}°`;
+
+    } else if (windDir >= 45 && windDir < 67.5) {
+
+        direction = `Wind Direction: NE ${windDir}°`;
+
+    } else if (windDir >= 67.5 && windDir < 90) {
+
+        direction = `Wind Direction: ENE ${windDir}°`;
+
+    } else if (windDir >= 90 && windDir < 112.5) {
+
+        direction = `Wind Direction: E ${windDir}°`;
+
+    } else if (windDir >= 112.5 && windDir < 135) {
+
+        direction = `Wind Direction: ESE ${windDir}°`;
+
+    } else if (windDir >= 135 && windDir < 157.5) {
+
+        direction = `Wind Direction: SE ${windDir}°`;
+
+    } else if (windDir >= 157.5 && windDir < 180) {
+
+        direction = `Wind Direction: SSE ${windDir}°`;
+
+    } else if (windDir >= 180 && windDir < 202.5) {
+
+        direction = `Wind Direction: S ${windDir}°`;
+
+    } else if (windDir >= 202.5 && windDir < 225) {
+
+        direction = `Wind Direction: SSW ${windDir}°`;
+
+    } else if (windDir >= 225 && windDir < 247.5) {
+
+        direction = `Wind Direction: SW ${windDir}°`;
+
+    } else if (windDir >= 247.5 && windDir < 270) {
+
+        direction = `Wind Direction: WSW ${windDir}°`;
+
+    } else if (windDir >= 270 && windDir < 292.5) {
+
+        direction = `Wind Direction: W ${windDir}°`;
+
+    } else if (windDir >= 292.5 && windDir < 315) {
+
+        direction = `Wind Direction: WNW ${windDir}°`;
+
+    } else if (windDir >= 315 && windDir < 337.5) {
+
+        direction = `Wind Direction: NW ${windDir}°`;
+
+    } else if (windDir >= 337.5) {
+
+        direction = `Wind Direction: NNW ${windDir}°`;
+
+    }
+
+    return direction
+
+};
+
+function convertDate(value) {
+
+    value = value.replace(/-/g, ` `).split(` `);
+    let dateArr = [];
+
+    value.forEach(element => {
+        dateArr.push(Number(element));
+    });
+
+    return `${monthNames[dateArr[1]-1]} ${dateArr[2]}, ${dateArr[0]}`
+
+}
+
+function deleteDiv() {
+
+    this.parentNode.remove();
 
 };
