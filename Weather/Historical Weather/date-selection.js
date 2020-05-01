@@ -30,8 +30,6 @@ function yearSelected() {
 
         monthsArr.splice(currMonth, 12);
 
-
-
     }
 
     if (document.getElementById('monthSelect') != null) {
