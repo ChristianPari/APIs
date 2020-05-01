@@ -1,4 +1,4 @@
-const apiKey = `UcUSKkeI`;
+const apiKey = `ADD API KEY`;
 
 // ALL MAIN HTML ELEMENTS WILL BE CREATED
 window.onload = () => {
