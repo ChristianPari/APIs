@@ -59,4 +59,5 @@ I did create a seperate function for the wind direction property since the API o
 Then going back to the first function where the 'for in' method is being used, all this data is gathered and used to create heading elements that are all appneded to a div along with a title of the weather stations name followed by the date. This div is then appended to my weather div, so if the user wants to compare more than one locations weather they can and each will be in its own div. Then I wanted the user to be able to delete a locations data they so choose to, this made me think of creating a delete button for each specific div that when clicked would completely remove that div from the HTML.
 
 <b>May 1, 2020</b>
-6:00pm - pm
+6:00pm - 6:45pm
+Added simple styling just to be able to view the data a little more clearly.
