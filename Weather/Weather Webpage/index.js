@@ -8,8 +8,8 @@ https://api.meteostat.net/v1/stations/search?key=${api Key}&q=${city Name} gets 
 https://api.meteostat.net/v1/history/daily?key=${api Key}&station=${station id}&start=${start Date}&end=${end Date} gets weather data
 */
 
-let owKey = `c81d51bf76bfdeb0cf59fa68e2336eb5`,
-    metKey = `UcUSKkeI`,
+let owKey = `ADD API KEY`,
+    metKey = `ADD API KEY`,
     body = document.body,
     condtionImgs = { // GLOBAL VARIABLES FOR BACKGROUND IMAGES
         1: `https://hoodline.imgix.net/uploads/story/image/582979/istock__..featured_image_1..sunny_3.jpg.jpg?auto=format`,
@@ -210,6 +210,7 @@ function histStart() {
         let res = JSON.parse(xhr.responseText),
             wStations = res.data;
 
+        // function for filtering station data from the API request JSON object    
         // stationFilter(wStations);
 
     }
