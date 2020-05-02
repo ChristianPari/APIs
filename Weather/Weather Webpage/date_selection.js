@@ -119,8 +119,6 @@ function daySelected() {
 
     userProvidedDate = true;
 
-    // testUserSubmit();
-
     let day = this.value;
 
     dateInfo.day = day;
