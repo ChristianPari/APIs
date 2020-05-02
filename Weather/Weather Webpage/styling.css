@@ -1,0 +1,9 @@
+body {
+    text-align: center;
+}
+
+#mainDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
