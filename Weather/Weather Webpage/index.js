@@ -10,7 +10,19 @@ https://api.meteostat.net/v1/history/daily?key=${api Key}&station=${station id}&
 
 let owKey = `c81d51bf76bfdeb0cf59fa68e2336eb5`,
     metKey = `UcUSKkeI`,
-    body = document.body;
+    body = document.body,
+    condtionImgs = { // GLOBAL VARIABLES FOR BACKGROUND IMAGES
+        1: `https://hoodline.imgix.net/uploads/story/image/582979/istock__..featured_image_1..sunny_3.jpg.jpg?auto=format`,
+        2: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
+        3: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
+        4: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
+        9: `https://i.pinimg.com/originals/33/39/a5/3339a59d7b0697e11dc11a12f921abca.jpg`,
+        10: `https://i.pinimg.com/originals/33/39/a5/3339a59d7b0697e11dc11a12f921abca.jpg`,
+        11: `https://i2-prod.nottinghampost.com/incoming/article3008203.ece/ALTERNATES/s1200b/2_Thunderstorm-at-sunset.jpg`,
+        13: `https://www.wallpaperflare.com/static/861/598/512/winter-snow-dawn-footprints-wallpaper.jpg`,
+        50: `https://c1.wallpaperflare.com/preview/124/91/824/winding-road-railing-guard-rail.jpg`
+
+    };
 
 window.onload = () => {
 
@@ -115,32 +127,56 @@ function curStart() {
 
 function displayData(data) {
 
-    // Create DOM display, allow user to be able to have multiple and have delete button
+    let locationDiv = createDiv({ id: ``, class: `locationDivs` }),
+        locationName = `${data.name}, ${data.sys.country}`,
+        location = createHeading({ text: locationName, size: 3, id: ``, class: `locations` }),
+        weatherInfoDiv = createDiv({ id: ``, class: `infoDivs` }),
+        weatherCondDiv = createDiv({ id: ``, class: `conditionDivs` }),
+        humidity = createHeading({ text: `Humidity: ${data.main.humidity}`, size: 4, id: ``, class: `conditions` }),
+        feelsLike = createHeading({ text: `Feels Like: ${data.main.feels_like}`, size: 4, id: ``, class: `conditions` }),
+        curTemp = createHeading({ text: `Current Temperature: ${data.main.temp}`, size: 4, id: ``, class: `conditions` }),
+        tempRange = createHeading({ text: `High: ${data.main.temp_max} / Low: ${data.main.temp_min}`, size: 4, id: ``, class: `conditions` }),
+        pressure = createHeading({ text: `Air Pressure: ${data.main.pressure} hPa`, size: 4, id: ``, class: `conditions` }),
+        windSpeed = createHeading({ text: `Wind Speed: ${data.wind.speed} / Gusts: ${data.wind.gust}`, size: 4, class: `conditions`, id: `` }),
+        windDirection = createHeading({ text: `Wind Direction: ${data.wind.deg}`, class: `conditions`, id: ``, size: 4 }),
+        conditionsImg = createImage({ src: `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`, alt: `weather icon image`, id: ``, class: `icons` }),
+        deleteButton = createButton({ text: `X`, onClickFunc: deleteDiv, class: `deleteButtons`, id: `` });
 
-    // document.getElementById(`location`).innerText = `${data.name}`;
-    // document.getElementById(`humidity`).innerText = `Humidity: ${Math.round(data.main.humidity)}%`;
-    // document.getElementById(`feelsLike`).innerText = `Feels Like: ${Math.round(data.main.feels_like)}°F`;
-    // document.getElementById(`curTenp`).innerText = `Current Temperature: ${Math.round(data.main.temp)}°F`;
-    // document.getElementById(`maxT`).innerText = `High: ${Math.round(data.main.temp_max)}°F`;
-    // document.getElementById(`minT`).innerText = `Low: ${Math.round(data.main.temp_min)}°F`;
-    // document.getElementById(`conditionsImg`).src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-    // document.getElementById(`conditionsImg`).style.display = `initial`;
-    // document.getElementById(`conditionsDesc`).innerText = `${data.weather[0].description.toUpperCase()}`;
-    // document.getElementById(`conditionsDesc`).style.display = `initial`;
-    // if (Number(data.weather[0].icon.substr(0, 2) < 10)) {
-    //     document.getElementById(`weatherInfo`).style.backgroundImage = `url(${condtionImgs[data.weather[0].icon.substr(1, 1)]})`;
-    // } else {
-    //     document.getElementById(`weatherInfo`).style.backgroundImage = `url(${condtionImgs[data.weather[0].icon.substr(0, 2)]})`;
-    // }
+    // Assigns background image to each location
+    if (Number(data.weather[0].icon.substr(0, 2) < 10)) {
+
+        locationDiv.style.backgroundImage = `url(${condtionImgs[data.weather[0].icon.substr(1, 1)]})`;
+
+    } else {
+
+        locationDiv.style.backgroundImage = `url(${condtionImgs[data.weather[0].icon.substr(0, 2)]})`;
+
+    }
+
+    document.getElementById(`curDataDiv`).appendChild(locationDiv);
+    locationDiv.appendChild(location);
+    locationDiv.appendChild(weatherInfoDiv);
+    weatherInfoDiv.appendChild(conditionsImg);
+    weatherInfoDiv.appendChild(weatherCondDiv);
+    weatherCondDiv.appendChild(curTemp);
+    weatherCondDiv.appendChild(feelsLike);
+    weatherCondDiv.appendChild(tempRange);
+    weatherCondDiv.appendChild(humidity);
+    weatherCondDiv.appendChild(windSpeed);
+    weatherCondDiv.appendChild(windDirection);
+    weatherCondDiv.appendChild(pressure);
+    locationDiv.appendChild(deleteButton);
 
 };
 
 function histStart() {
 
-    let histInput = document.getElementById(`curInput`).value.replace(/^\s{1,}/g, ``).replace(/\s{2,}/g, ` `),
+    let histInput = document.getElementById(`histInput`).value.replace(/^\s{1,}/g, ``).replace(/\s{2,}/g, ` `),
         numRegex = /[0-9]/g;
 
-    if (histInput.length < 3 || histInput.length > 60 || numRegex.test(histInput)) {
+    console.log(histInput);
+
+    if (histInput.length <= 2 || histInput.length >= 60 || numRegex.test(histInput)) {
 
         alert(`A valid search has between 3-60 characters and does not contain numbers, please modify your search to fit this critera`);
         return
@@ -167,5 +203,11 @@ function histStart() {
     }
 
     xhr.send();
+
+};
+
+function deleteDiv() {
+
+    this.parentNode.remove();
 
 };
