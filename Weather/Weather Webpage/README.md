@@ -23,3 +23,13 @@ Had to rework my previosuly created date selection JavaScript file due to the wa
 <b>May 2, 2020</b>>
 3:15pm - 4:00pm
 Added styling to get the current weather div and historical weather div on their own side of the page. Created functions that are assigned to the onclick property for each search button, and due to each API having different kinds of query parameters I did all the user input sanitizing within these functions to work for each API request. Within the onload property of the XHR I pass the parsed JSON data as an argument into a for specific function for each API request. The OpenWeather API only sends a single location as a response with its' weather information so the only function left is to display the data to the DOM. The Meteostat API however can have anywhere between 0 to multiple weather stations that we can receive from a users' search, so becuase of this I have to first pass the parsed response from this API request to a function that will filter out the amount of stations and inform the user of the outcome. Planning on if none were found then alerting the user to try anohter search local to that area, if there's only one found then have them confirm via a confrim box, then if there is more than one then create a way for the user to select which ever location they want and also a cancel button so they can go back and not follow through with the search.
+
+4:15pm - 4:45pm
+Created a data display for the current weather, included many pieces of data like:
+* Location Name
+* A weather icon for conditions supplied from API
+* Current, High and Low Temperatures
+* Wind / Gust Speed, Direction
+* Humidity
+* Air Pressure
+* Background image source from the web that displays an image relavent to the conditions of that location
