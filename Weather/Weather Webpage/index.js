@@ -132,13 +132,14 @@ function displayData(data) {
         location = createHeading({ text: locationName, size: 3, id: ``, class: `locations` }),
         weatherInfoDiv = createDiv({ id: ``, class: `infoDivs` }),
         weatherCondDiv = createDiv({ id: ``, class: `conditionDivs` }),
-        humidity = createHeading({ text: `Humidity: ${data.main.humidity}`, size: 4, id: ``, class: `conditions` }),
-        feelsLike = createHeading({ text: `Feels Like: ${data.main.feels_like}`, size: 4, id: ``, class: `conditions` }),
-        curTemp = createHeading({ text: `Current Temperature: ${data.main.temp}`, size: 4, id: ``, class: `conditions` }),
-        tempRange = createHeading({ text: `High: ${data.main.temp_max} / Low: ${data.main.temp_min}`, size: 4, id: ``, class: `conditions` }),
-        pressure = createHeading({ text: `Air Pressure: ${data.main.pressure} hPa`, size: 4, id: ``, class: `conditions` }),
-        windSpeed = createHeading({ text: `Wind Speed: ${data.wind.speed} / Gusts: ${data.wind.gust}`, size: 4, class: `conditions`, id: `` }),
-        windDirection = createHeading({ text: `Wind Direction: ${data.wind.deg}`, class: `conditions`, id: ``, size: 4 }),
+        sun = createHeading({ text: `Sunrise: ${convertUnix(data.sys.sunrise)} AM / Sunset: ${convertUnix(data.sys.sunset)} PM`, size: 4, class: `conditions`, id: `` }),
+        humidity = createHeading({ text: `Humidity: ${Math.round(data.main.humidity)}%`, size: 4, id: ``, class: `conditions` }),
+        feelsLike = createHeading({ text: `Feels Like: ${Math.round(data.main.feels_like)}°F`, size: 4, id: ``, class: `conditions` }),
+        curTemp = createHeading({ text: `Current Temperature: ${Math.round(data.main.temp)}°F`, size: 4, id: ``, class: `conditions` }),
+        tempRange = createHeading({ text: `High: ${Math.round(data.main.temp_max)}°F / Low: ${Math.round(data.main.temp_min)}°F`, size: 4, id: ``, class: `conditions` }),
+        pressure = createHeading({ text: `Air Pressure: ${Math.round(data.main.pressure)} hPa`, size: 4, id: ``, class: `conditions` }),
+        windSpeed = createHeading({ text: `Wind Speed: ${Math.round(data.wind.speed)}mph / Gusts: ${Math.round(data.wind.gust)}mph`, size: 4, class: `conditions`, id: `` }),
+        windDirection = createHeading({ text: `Wind Direction: ${data.wind.deg}°`, class: `conditions`, id: ``, size: 4 }),
         conditionsImg = createImage({ src: `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`, alt: `weather icon image`, id: ``, class: `icons` }),
         deleteButton = createButton({ text: `X`, onClickFunc: deleteDiv, class: `deleteButtons`, id: `` });
 
@@ -161,6 +162,7 @@ function displayData(data) {
     weatherCondDiv.appendChild(curTemp);
     weatherCondDiv.appendChild(feelsLike);
     weatherCondDiv.appendChild(tempRange);
+    weatherCondDiv.appendChild(sun);
     weatherCondDiv.appendChild(humidity);
     weatherCondDiv.appendChild(windSpeed);
     weatherCondDiv.appendChild(windDirection);
@@ -168,6 +170,16 @@ function displayData(data) {
     locationDiv.appendChild(deleteButton);
 
 };
+
+function convertUnix(unix) {
+
+    let milis = new Date(unix * 1000),
+        hour = milis.getHours() > 12 ? milis.getHours() - 12 : milis.getHours(),
+        min = milis.getMinutes() < 10 ? `0${milis.getMinutes()}` : milis.getMinutes(),
+        time = `${hour}:${min}`;
+    return time
+
+}
 
 function histStart() {
 
