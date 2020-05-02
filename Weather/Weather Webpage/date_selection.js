@@ -7,10 +7,10 @@ let dateInfo = {
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
     day: new Date().getDate(),
+
 };
 
 function yearSelected() {
-
 
     //extract the year that was selected
     let year = this.value;
@@ -18,8 +18,7 @@ function yearSelected() {
     //set the year property of the new date object
     dateInfo.year = year;
 
-    //hide the year select
-    this.style.display = 'none';
+    if (document.getElementById(`defaultYear`) != null) { document.getElementById(`defaultYear`).remove(); };
 
     //create the month select 
     let monthsArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -32,96 +31,98 @@ function yearSelected() {
 
     }
 
-    if (document.getElementById('monthSelect') != null) {
+    if (year % 4 == 0 || (year % 100 != 0 && year % 400 == 0)) { daysInMonth[1] = 29; }
 
-        let child = document.getElementById('monthSelect').remove()
+    let monthSelect = document.getElementById(`monthSelect`),
+        newMonth = document.createElement(`select`);
+
+    monthSelect.parentNode.replaceChild(newMonth, monthSelect);
+
+    newMonth.id = `monthSelect`;
+
+    let defaultOp = document.createElement(`option`);
+
+    defaultOp.innerHTML = `Select a Month`;
+
+    defaultOp.id = `defaultMonth`;
+
+    newMonth.appendChild(defaultOp);
+
+    for (let a = 1; a < monthsArr.length + 1; a++) {
+
+        let option = document.createElement(`option`);
+
+        option.id = monthNames[a - 1];
+
+        option.innerHTML = monthNames[a - 1];
+
+        option.value = [a];
+
+        newMonth.appendChild(option);
 
     }
 
-    let monthSelect = createSelect({
-        defOp: 'Select A Month',
-        id: 'monthSelect',
-        onChangeFunc: monthSelected,
-        data: monthsArr
-
-    });
-
-    document.getElementById(`uiDiv`).appendChild(monthSelect);
+    newMonth.onchange = monthSelected;
 
 };
 
 function monthSelected() {
 
-
     let month = this.value; //extract value from select
 
     dateInfo.month = month; //set dateinfo prop accordingly
 
-    this.style.display = 'none';
+    if (document.getElementById(`defaultMonth`) != null) { document.getElementById(`defaultMonth`).remove(); }
 
-    //create the day select elm
+    let daysArr = Array.from({ length: daysInMonth[month - 1] }, (a, b) => b + 1).slice();
 
-    let daysInMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-    let daysArr = [];
-
-    let count = 1;
-    let days = []
-
-    for (let i = 1; i <= daysInMonths[month - 1]; i++) {
-
-        daysArr.push(i)
-
-    }
-
-    if (dateInfo.year == 1995 && month == 6) {
-
-        daysArr.splice(0, 15)
-
-    } else if (dateInfo.year == new Date().getFullYear() && month == new Date().getMonth() + 1) {
-
-        console.log(new Date().getDate(), daysArr.length - 1);
+    if (dateInfo.year == new Date().getFullYear() && month == new Date().getMonth() + 1) {
 
         daysArr.splice(new Date().getDate(), daysArr.length - 1);
 
+    }
+
+    let daySelect = document.getElementById(`daySelect`),
+        newDay = document.createElement(`select`);
+
+    daySelect.parentNode.replaceChild(newDay, daySelect);
+
+    newDay.id = `daySelect`;
+
+    let defaultOp = document.createElement(`option`);
+
+    defaultOp.innerHTML = `Select a Day`;
+
+    defaultOp.id = `defaultDay`;
+
+    newDay.appendChild(defaultOp);
+
+    for (let a = 0; a < daysArr.length; a++) {
+
+        let option = document.createElement(`option`);
+
+        option.innerHTML = daysArr[a];
+
+        option.value = daysArr[a];
+
+        newDay.appendChild(option);
 
     }
 
-
-    if (document.getElementById('daySelect') != null) {
-
-        let child = document.getElementById('daySelect').remove()
-
-    }
-
-    let daySelect = createSelect({
-        defOp: 'Select A Day',
-        id: 'daySelect',
-        onChangeFunc: daySelected,
-        data: daysArr
-    })
-
-    //append the select element to the dom
-
-    document.getElementById(`uiDiv`).appendChild(daySelect);
+    newDay.onchange = daySelected;
 
 };
 
 function daySelected() {
 
+    if (document.getElementById(`defaultDay`) != null) { document.getElementById(`defaultDay`).remove(); }
+
     userProvidedDate = true;
 
-    testUserSubmit();
-
-    this.style.display = 'none';
+    // testUserSubmit();
 
     let day = this.value;
 
     dateInfo.day = day;
-
-    document.getElementById('yearSelect').value = '';
-    document.getElementById('yearSelect').style.display = 'initial';
-
-    document.getElementById(`dateHead`).innerHTML = `You Have Selected<br>${monthNames[dateInfo.month - 1]} ${dateInfo.day}, ${dateInfo.year}`;
 
 };
