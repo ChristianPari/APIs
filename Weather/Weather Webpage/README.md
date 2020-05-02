@@ -33,3 +33,10 @@ Created a data display for the current weather, included many pieces of data lik
 * Humidity
 * Air Pressure
 * Background image source from the web that displays an image relavent to the conditions of that location
+
+4:45pm - 5:15pm
+Added some more data:
+* Sunrise and Sunset
+    * Made a function that converts UNIX Timestamps into hours and mins and returned the value as a string for the Sunset and Sunrise text
+* Delete Button
+    * The onclick function simple removes the parent node of the button which is equivalent to the whole div that contains the locations data
