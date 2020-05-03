@@ -78,7 +78,7 @@ function monthSelected() {
 
     if (dateInfo.year == new Date().getFullYear() && month == new Date().getMonth() + 1) {
 
-        daysArr.splice(new Date().getDate(), daysArr.length - 1);
+        daysArr.splice(new Date().getDate() - 1, daysArr.length - 1);
 
     }
 
