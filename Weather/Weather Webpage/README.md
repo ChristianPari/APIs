@@ -39,4 +39,8 @@ Added some more data:
 * Sunrise and Sunset
     * Made a function that converts UNIX Timestamps into hours and mins and returned the value as a string for the Sunset and Sunrise text
 * Delete Button
-    * The onclick function simple removes the parent node of the button which is equivalent to the whole div that contains the locations data
+    * The onclick function simply removes the parent node of the button which is equivalent to the whole div that contains the locations data
+
+<b>May 3, 2020</b>
+3:45pm - 4:30pm
+Created code logic for the function created on May 2 @ 3:15pm timestamp, this is the function that takes in the parsed response from the Meteostat API request and filters the weather stations becuase depending on the location name the user inputted, their can be numerous weather stations with similar names. So far in this function I have made the logic for if there are none found or if there is only 1 found which then passes that stations data as an argument to a function that I use to get the full country name. I thought of this now becuase not everyone will know country codes so I thought it would be better for the names to have the full length name. Within this function I used another API called RestCountries to get the country data and extract the name from the parsed response. I then used a confirm box to alert the user of the station found and if they'd like to proceed, the location name in the box is the weather station, country name. If they do then the station data is passed via argument into a function that will then be used to get the weather data from that station on the selected day by the user. I will use the name and country name later as well when I display the weather to the DOM.
