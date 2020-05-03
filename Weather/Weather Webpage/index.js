@@ -8,8 +8,8 @@ https://api.meteostat.net/v1/stations/search?key=${api Key}&q=${city Name} gets 
 https://api.meteostat.net/v1/history/daily?key=${api Key}&station=${station id}&start=${start Date}&end=${end Date} gets weather data
 */
 
-let owKey = `ADD API KEY`,
-    metKey = `ADD API KEY`,
+let owKey = `c81d51bf76bfdeb0cf59fa68e2336eb5`,
+    metKey = `UcUSKkeI`,
     body = document.body,
     condtionImgs = { // GLOBAL VARIABLES FOR BACKGROUND IMAGES
         1: `https://hoodline.imgix.net/uploads/story/image/582979/istock__..featured_image_1..sunny_3.jpg.jpg?auto=format`,
@@ -117,7 +117,7 @@ function curStart() {
 
         }
 
-        displayData(weatherData);
+        displayCurData(weatherData);
 
     };
 
@@ -125,32 +125,32 @@ function curStart() {
 
 };
 
-function displayData(data) {
+function displayCurData(curData) {
 
     let locationDiv = createDiv({ id: ``, class: `locationDivs` }),
-        locationName = `${data.name}, ${data.sys.country}`,
+        locationName = `${curData.name}, ${curData.sys.country}`,
         location = createHeading({ text: locationName, size: 3, id: ``, class: `locations` }),
         weatherInfoDiv = createDiv({ id: ``, class: `infoDivs` }),
         weatherCondDiv = createDiv({ id: ``, class: `conditionDivs` }),
-        sun = createHeading({ text: `Sunrise: ${convertUnix(data.sys.sunrise)} AM / Sunset: ${convertUnix(data.sys.sunset)} PM`, size: 4, class: `conditions`, id: `` }),
-        humidity = createHeading({ text: `Humidity: ${Math.round(data.main.humidity)}%`, size: 4, id: ``, class: `conditions` }),
-        feelsLike = createHeading({ text: `Feels Like: ${Math.round(data.main.feels_like)}°F`, size: 4, id: ``, class: `conditions` }),
-        curTemp = createHeading({ text: `Current Temperature: ${Math.round(data.main.temp)}°F`, size: 4, id: ``, class: `conditions` }),
-        tempRange = createHeading({ text: `High: ${Math.round(data.main.temp_max)}°F / Low: ${Math.round(data.main.temp_min)}°F`, size: 4, id: ``, class: `conditions` }),
-        pressure = createHeading({ text: `Air Pressure: ${Math.round(data.main.pressure)} hPa`, size: 4, id: ``, class: `conditions` }),
-        windSpeed = createHeading({ text: `Wind Speed: ${Math.round(data.wind.speed)}mph / Gusts: ${Math.round(data.wind.gust)}mph`, size: 4, class: `conditions`, id: `` }),
-        windDirection = createHeading({ text: `Wind Direction: ${data.wind.deg}°`, class: `conditions`, id: ``, size: 4 }),
-        conditionsImg = createImage({ src: `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`, alt: `weather icon image`, id: ``, class: `icons` }),
+        sun = createHeading({ text: `Sunrise: ${convertUnix(curData.sys.sunrise)} AM / Sunset: ${convertUnix(curData.sys.sunset)} PM`, size: 4, class: `conditions`, id: `` }),
+        humidity = createHeading({ text: `Humidity: ${Math.round(curData.main.humidity)}%`, size: 4, id: ``, class: `conditions` }),
+        feelsLike = createHeading({ text: `Feels Like: ${Math.round(curData.main.feels_like)}°F`, size: 4, id: ``, class: `conditions` }),
+        curTemp = createHeading({ text: `Current Temperature: ${Math.round(curData.main.temp)}°F`, size: 4, id: ``, class: `conditions` }),
+        tempRange = createHeading({ text: `High: ${Math.round(curData.main.temp_max)}°F / Low: ${Math.round(curData.main.temp_min)}°F`, size: 4, id: ``, class: `conditions` }),
+        pressure = createHeading({ text: `Air Pressure: ${Math.round(curData.main.pressure)} hPa`, size: 4, id: ``, class: `conditions` }),
+        windSpeed = createHeading({ text: `Wind Speed: ${Math.round(curData.wind.speed)}mph / Gusts: ${Math.round(curData.wind.gust)}mph`, size: 4, class: `conditions`, id: `` }),
+        windDirection = createHeading({ text: `Wind Direction: ${curData.wind.deg}°`, class: `conditions`, id: ``, size: 4 }),
+        conditionsImg = createImage({ src: `http://openweathermap.org/img/wn/${curData.weather[0].icon}@2x.png`, alt: `weather icon image`, id: ``, class: `icons` }),
         deleteButton = createButton({ text: `X`, onClickFunc: deleteDiv, class: `deleteButtons`, id: `` });
 
     // Assigns background image to each location
-    if (Number(data.weather[0].icon.substr(0, 2) < 10)) {
+    if (Number(curData.weather[0].icon.substr(0, 2) < 10)) {
 
-        locationDiv.style.backgroundImage = `url(${condtionImgs[data.weather[0].icon.substr(1, 1)]})`;
+        locationDiv.style.backgroundImage = `url(${condtionImgs[curData.weather[0].icon.substr(1, 1)]})`;
 
     } else {
 
-        locationDiv.style.backgroundImage = `url(${condtionImgs[data.weather[0].icon.substr(0, 2)]})`;
+        locationDiv.style.backgroundImage = `url(${condtionImgs[curData.weather[0].icon.substr(0, 2)]})`;
 
     }
 
@@ -186,8 +186,6 @@ function histStart() {
     let histInput = document.getElementById(`histInput`).value.replace(/^\s{1,}/g, ``).replace(/\s{2,}/g, ` `),
         numRegex = /[0-9]/g;
 
-    console.log(histInput);
-
     if (histInput.length <= 2 || histInput.length >= 60 || numRegex.test(histInput)) {
 
         alert(`A valid search has between 3-60 characters and does not contain numbers, please modify your search to fit this critera`);
@@ -211,11 +209,64 @@ function histStart() {
             wStations = res.data;
 
         // function for filtering station data from the API request JSON object    
-        // stationFilter(wStations);
+        stationFilter(wStations);
 
     }
 
     xhr.send();
+
+};
+
+function stationFilter(stations) {
+
+    console.log(stations);
+
+    if (stations.length == 0) {
+
+        alert(`No weather stations found, please try another search`);
+        return
+
+    } else if (stations.length == 1) {
+
+        singleStation(stations[0]); // function to get country name from RESTCountries API
+
+    } else {
+
+        // code for multiple stations
+        // create select
+        // create cancel button
+        // assign choosen station to the singleStation function
+
+    }
+
+};
+
+function singleStation(station) {
+
+    let xhr = new XMLHttpRequest(),
+        endpoint = station.country.length > 2 ? `https://restcountries.eu/rest/v2/alpha/${station.country}` : `https://restcountries.eu/rest/v2/alpha/${station.country}`;
+
+    xhr.open('GET', endpoint);
+
+    xhr.onload = () => {
+
+        let res = JSON.parse(xhr.responseText),
+            location = `${station.name}, ${res.name}`,
+            okay = confirm(`You're search came back with only one result: ${location}.\nClick 'Ok' if that is the desired location.\nClick 'Cancel' to make a new search.`);
+
+        station.name = `${location}`; // combines name, easier for later
+
+        if (okay) { getHistData(station); }
+
+    };
+
+    xhr.send();
+
+};
+
+function getHistData(stationInfo) {
+
+    console.log(stationInfo);
 
 };
 
