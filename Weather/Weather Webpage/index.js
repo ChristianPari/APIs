@@ -25,6 +25,8 @@ window.onload = () => {
         curWeather = createDiv({ id: `curWeatherDiv` }),
         histWeather = createDiv({ id: `histWeatherDiv` }),
         copyRightDiv = createDiv({ id: `copyRightDiv` }),
+        curDesc = createParagraph({ id: `curDesc`, text: `Search for any city in the world and see what the weather is like there!` }),
+        histDesc = createParagraph({ id: `histDesc`, text: `Go back in time with this Historical Weather Data Puller! Choose a date and then search a location.\nThis Data Puller uses weather stations from around the world so unfortunately not every city or location may have one designated with their name. So if your search comes back with nothing found or not the area you were looking for, please modify your search to another area close to your search!` }),
         curUiDiv = createDiv({ id: `curUiDiv` }),
         histUiDiv = createDiv({ id: `histUiDiv` }),
         curDataDiv = createDiv({ id: `curDataDiv` }),
@@ -45,10 +47,12 @@ window.onload = () => {
     body.appendChild(copyRightDiv);
     mainDiv.appendChild(curWeather);
     mainDiv.appendChild(histWeather);
+    curWeather.appendChild(curDesc);
     curWeather.appendChild(curUiDiv);
     curWeather.appendChild(curDataDiv);
     curUiDiv.appendChild(curInput);
     curUiDiv.appendChild(curButton);
+    histWeather.appendChild(histDesc);
     histWeather.appendChild(histUiDiv);
     histWeather.appendChild(histDataDiv);
     histUiDiv.appendChild(yearSelect);
