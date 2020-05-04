@@ -54,7 +54,7 @@ body {
 #curDataDiv,
 #histDataDiv {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     width: max-content;
 }
 
