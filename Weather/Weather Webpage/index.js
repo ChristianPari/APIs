@@ -136,7 +136,7 @@ function displayCurData(curData) {
         tempRange = createHeading({ text: `High: ${Math.round(curData.main.temp_max)}°F / Low: ${Math.round(curData.main.temp_min)}°F`, size: 4, id: ``, class: `curConditions` }),
         pressure = createHeading({ text: `Air Pressure: ${Math.round(curData.main.pressure)} hPa`, size: 4, id: ``, class: `curConditions` }),
         windSpeed = createHeading({ text: `Wind Speed: ${Math.round(curData.wind.speed)}mph / Gusts: ${Math.round(curData.wind.gust)}mph`, size: 4, class: `curConditions`, id: `` }),
-        windDirection = createHeading({ text: `Wind Direction: ${curData.wind.deg}°`, class: `curConditions`, id: ``, size: 4 }),
+        windDirection = createHeading({ text: getWindDirection(curData.wind.deg), class: `curConditions`, id: ``, size: 4 }),
         conditionsImg = createImage({ src: `http://openweathermap.org/img/wn/${curData.weather[0].icon}.png`, alt: `weather icon image`, id: ``, class: `icons` }),
         conditionDesc = createHeading({ text: `${curData.weather[0].description.toUpperCase()}`, id: ``, class: `conditionDescs` }),
         deleteButton = createButton({ text: `X`, onClickFunc: deleteDiv, class: `deleteButtons`, id: `` });
@@ -361,8 +361,8 @@ function displayHistData(histData, stationName) {
 
         let deleteButton = createButton({ text: `X`, onClickFunc: deleteDiv, class: `deleteButtons`, id: `` });
 
-        stationDiv.appendChild(deleteButton);
         stationDiv.appendChild(weatherDiv);
+        stationDiv.appendChild(deleteButton);
         document.getElementById(`histDataDiv`).appendChild(stationDiv);
 
     } else {
