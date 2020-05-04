@@ -1,18 +1,6 @@
 let owKey = `c81d51bf76bfdeb0cf59fa68e2336eb5`,
     metKey = `UcUSKkeI`,
-    body = document.body,
-    condtionImgs = { // GLOBAL VARIABLES FOR BACKGROUND IMAGES
-        1: `https://hoodline.imgix.net/uploads/story/image/582979/istock__..featured_image_1..sunny_3.jpg.jpg?auto=format`,
-        2: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
-        3: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
-        4: `https://c1.wallpaperflare.com/preview/586/645/192/japan-sea-winter-road-hokkaido-sea-it-was-cloudy-weather.jpg`,
-        9: `https://i.pinimg.com/originals/33/39/a5/3339a59d7b0697e11dc11a12f921abca.jpg`,
-        10: `https://i.pinimg.com/originals/33/39/a5/3339a59d7b0697e11dc11a12f921abca.jpg`,
-        11: `https://i2-prod.nottinghampost.com/incoming/article3008203.ece/ALTERNATES/s1200b/2_Thunderstorm-at-sunset.jpg`,
-        13: `https://www.wallpaperflare.com/static/861/598/512/winter-snow-dawn-footprints-wallpaper.jpg`,
-        50: `https://c1.wallpaperflare.com/preview/124/91/824/winding-road-railing-guard-rail.jpg`
-
-    };
+    body = document.body;
 
 window.onload = () => {
 
@@ -149,24 +137,15 @@ function displayCurData(curData) {
         pressure = createHeading({ text: `Air Pressure: ${Math.round(curData.main.pressure)} hPa`, size: 4, id: ``, class: `curConditions` }),
         windSpeed = createHeading({ text: `Wind Speed: ${Math.round(curData.wind.speed)}mph / Gusts: ${Math.round(curData.wind.gust)}mph`, size: 4, class: `curConditions`, id: `` }),
         windDirection = createHeading({ text: `Wind Direction: ${curData.wind.deg}°`, class: `curConditions`, id: ``, size: 4 }),
-        conditionsImg = createImage({ src: `http://openweathermap.org/img/wn/${curData.weather[0].icon}@2x.png`, alt: `weather icon image`, id: ``, class: `icons` }),
+        conditionsImg = createImage({ src: `http://openweathermap.org/img/wn/${curData.weather[0].icon}.png`, alt: `weather icon image`, id: ``, class: `icons` }),
+        conditionDesc = createHeading({ text: `${curData.weather[0].description.toUpperCase()}`, id: ``, class: `conditionDescs` }),
         deleteButton = createButton({ text: `X`, onClickFunc: deleteDiv, class: `deleteButtons`, id: `` });
-
-    // Assigns background image to each location
-    if (Number(curData.weather[0].icon.substr(0, 2) < 10)) {
-
-        locationDiv.style.backgroundImage = `url(${condtionImgs[curData.weather[0].icon.substr(1, 1)]})`;
-
-    } else {
-
-        locationDiv.style.backgroundImage = `url(${condtionImgs[curData.weather[0].icon.substr(0, 2)]})`;
-
-    }
 
     document.getElementById(`curDataDiv`).appendChild(locationDiv);
     locationDiv.appendChild(location);
     locationDiv.appendChild(weatherInfoDiv);
     weatherInfoDiv.appendChild(conditionsImg);
+    weatherInfoDiv.appendChild(conditionDesc);
     weatherInfoDiv.appendChild(weatherCondDiv);
     weatherCondDiv.appendChild(curTemp);
     weatherCondDiv.appendChild(feelsLike);
