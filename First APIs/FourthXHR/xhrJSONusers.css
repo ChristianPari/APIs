@@ -1,0 +1,80 @@
+body {
+    background-color: black;
+    text-align: center;
+}
+
+#mainHead {
+    font-size: 50px;
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#mainDiv {
+    display: flex;
+}
+
+#companysDiv {
+    flex: 1;
+    background-color: rgb(107, 107, 107);
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 0.5%;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    height: 649px;
+}
+
+#sidebar {
+    flex: .2;
+    background-color: white;
+    margin-left: 0.5%;
+    padding-bottom: 0.3%;
+    margin-bottom: auto;
+}
+
+#sidebarHead {
+    font-size: 25px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    text-decoration: underline;
+}
+
+.userDivs {
+    border-style: double;
+    border-color: rgb(0, 0, 0);
+    border-width: 5px;
+    margin: 1%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.companyNames {
+    font-size: 35px;
+    margin-top: 1%;
+    text-decoration: underline;
+    margin-bottom: unset;
+}
+
+.slogans {
+    font-size: 20px;
+    font-style: italic;
+    margin: unset;
+}
+
+.owner {
+    margin: 1%;
+    text-decoration: underline;
+    font-size: 30px;
+}
+
+.directions {
+    text-decoration: none;
+    color: black;
+}
+
+.websites {
+    color: black;
+    text-decoration: none;
+}
