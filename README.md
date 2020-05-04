@@ -4,4 +4,4 @@ This repo will contain all of my API projects, the contents of this repo will be
     - All projects using just NASA APIs
 
 * Weather
-    - All projects using OpenWeather APIs
+    - All projects using Weather APIs
