@@ -1,0 +1,38 @@
+#allUsers {
+    background-color: darkgreen;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+
+.userDiv {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: lightseagreen;
+    border-style: double;
+    border-width: 8px;
+    border-color: black;
+    margin: 1%;
+}
+
+.userDiv img {
+    margin: auto;
+    width: 150px;
+    height: 150px;
+}
+
+.userDiv a {
+    text-decoration: none;
+    color: white;
+}
+
+.userDiv button {
+    border-style: solid;
+    border-color: black;
+    margin: 1%;
+    cursor: pointer;
+}
+
+.userDiv h5 {
+    margin: unset;
+}
