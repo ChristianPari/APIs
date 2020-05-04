@@ -1,0 +1,51 @@
+body {
+    background-color: black;
+    text-align: center;
+}
+
+#mainDiv {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.userDivs {
+    background-color: lightblue;
+    border-style: solid;
+    border-color: gray;
+    display: flex;
+    flex-direction: column;
+}
+
+.compNames {
+    margin: unset;
+}
+
+.ceoPics {
+    margin: auto;
+}
+
+.slogan {
+    font-size: 15px;
+    margin: unset;
+    margin-bottom: 3%;
+    font-style: italic;
+}
+
+.ceoPics {
+    width: 200px;
+    height: 200px;
+}
+
+.ceoNames {
+    margin: unset;
+}
+
+.websites {
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.directions {
+    text-decoration: none;
+    font-size: 13px;
+}
