@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First XMLHR</title>
+</head>
+
+<body>
+    <div id="users"></div>
+
+    <script>
+        // STEPS:
+        // 1) CREATE THE XHR OBJECT
+        // 2) OPEN THE CHANNEL FOR THE REQUEST
+        // 3) A FUNCTION RUNS WHEN THE RESPONSE HAS BEEN RECIEVED FROM THE SERVER
+        // 4) FINALIZES THE 'OPEN' METHOD AND SENDS DATA ALONG WITH THE REQUEST WHEN NEEDED
+
+        let xhr = new XMLHttpRequest(); // STEP 1
+
+        // IF IT FAILS
+        // xhr.onabort = error => {
+
+        //     console.log(`The request has been aborted`, error, error.message);
+
+        // }
+
+        // ESSENTIAL METHODS
+
+        let reqMethod = `GET`,
+            apiURL = `https://api.github.com/users`,
+            asyncBool = true;
+
+        // OPEN: initializes a newly-created request, or re-initializes an existing one
+        xhr.open(reqMethod, apiURL, asyncBool) //STEP 2
+            //non-optional userData:
+            // URL: the API address where the request is sent
+            // REQUEST METHOD: GET 
+            // asyncBool: true or false
+
+        xhr.onload = () => { // STEP 3
+
+            // CREATES RAW TEXT
+            let rawResponseData = xhr.responseText;
+
+            // TURNS THE RAW TEXT INTO JAVASCRIPT OBJECT NOTATION
+            let jsonData = JSON.parse(rawResponseData);
+            console.log(jsonData);
+
+            let objKeys = Object.keys(jsonData[0]);
+            console.log(objKeys);
+
+            for (let a = 0; a < 10; a++) {
+
+                let userInfo = jsonData[a];
+
+                displayUser(userInfo);
+
+            }
+
+        }
+
+        xhr.send() // STEP 4
+
+        function displayUser(userData) {
+
+            let div = createDiv({
+                    id: userData.login,
+                    class: `userDivs`
+                }),
+                userName = createHeading({
+                    id: `${userData.login}ID`,
+                    text: userData.login,
+                    size: 3
+                }),
+                userImg = createImage({
+                    src: userData.avatar_url,
+                    id: `${userData.login}Img`,
+                    class: `userImgs`
+                }),
+                userHREF = createHREF({
+                    id: `${userData.login}HREF`,
+                    newTab: true,
+                    ref: userData.html_url,
+                    display: `User's GitHub`
+                });
+
+            document.getElementById(`users`).appendChild(div);
+            div.appendChild(userName);
+            div.appendChild(userImg);
+            div.appendChild(userHREF);
+            userName.style.textTransform = `uppercase`;
+            userImg.style.width = `100px`;
+            userImg.style.height = `100px`;
+            userHREF.style.textDecoration = `none`;
+
+
+        }
+
+        function createDiv(divObj) {
+
+            // id, class
+
+            let div = document.createElement(`div`);
+
+            div.id = divObj.id != undefined && document.getElementById(divObj.id) == null ? divObj.id : `>> No ID <<`;
+
+            div.className = divObj.class != undefined ? divObj.class : ``;
+
+            return div
+
+        };
+
+        function createHeading(headingObj) {
+
+            // size, text, id
+
+            let heading = headingObj.size >= 1 && headingObj.size <= 5 ? document.createElement(`h` + headingObj.size) : document.createElement(`h5`);
+
+            heading.innerHTML = typeof headingObj.text == `string` ? headingObj.text : `>> No text <<`;
+
+            heading.id = headingObj.id != undefined && document.getElementById(headingObj.id) == null ? headingObj.id : `>> No ID <<`;
+
+            return heading
+
+        };
+
+        function createImage(imageObj) {
+
+            // src, alt, id, class
+
+            let image = document.createElement(`img`);
+
+            image.src = imageObj.src != undefined ? imageObj.src : ``;
+
+            image.alt = imageObj.alt != undefined ? imageObj.alt : `image couldn't load; broke`;
+
+            image.id = imageObj.id != undefined && document.getElementById(imageObj.id) == null ? imageObj.id : `>> No ID <<`;
+
+            image.className = imageObj.class != undefined ? imageObj.class : ``;
+
+            return image
+
+        };
+
+        function createHREF(hrefObj) {
+
+            // id, newTab (true or false), ref, display (wether text, image, ect.)
+
+            let href = document.createElement(`a`);
+
+            href.id = hrefObj.id != undefined && document.getElementById(hrefObj.id) == null ? hrefObj.id : `>> No ID <<`;
+
+            href.target = hrefObj.newTab === true ? href.target = `_blank` : ``;
+
+            href.href = hrefObj.ref != undefined ? hrefObj.ref : `>> No Referenece <<`;
+
+            href.innerHTML = hrefObj.display != undefined ? hrefObj.display : `>> No Display <<`;
+
+            return href
+        };
+    </script>
+
+</body>
+
+</html>
