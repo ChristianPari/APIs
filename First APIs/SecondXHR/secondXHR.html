@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="xhrStyling.css">
+    <title>Second XHR</title>
+</head>
+
+<body>
+
+    <div id="users"></div>
+
+    <script>
+        let xhr = new XMLHttpRequest();
+
+        let reqMethod = `GET`,
+            apiURL = `https://jsonplaceholder.typicode.com/users`,
+            asyncBool = true;
+
+        xhr.open(reqMethod, apiURL, asyncBool);
+
+        xhr.onload = () => {
+
+            let rawResponse = xhr.responseText,
+                jsonData = JSON.parse(rawResponse),
+                objKeys = Object.keys(jsonData[0]);
+
+            console.log(jsonData[0]);
+            console.log(objKeys);
+
+            jsonData.forEach(userInfo => {
+
+                displayUser(userInfo);
+
+            });
+
+            function displayUser(userData) {
+
+                let div = createDiv({
+                        id: `${userData.name}Div`,
+                        class: `userDivs`
+                    }),
+                    userName = createHeading({
+                        id: `${userData.name}ID`,
+                        text: `Owner: ${userData.name}`,
+                        size: 2
+                    }),
+                    companyName = createHeading({
+                        id: `${userData.name}Comp`,
+                        text: userData.company.name,
+                        size: 1
+                    }),
+                    companyPhrase = createHeading({
+                        id: `${userData.name}Phrase`,
+                        text: `Company Catch Phrase: ${userData.company.catchPhrase}`,
+                        size: 2
+                    }),
+                    address = createHeading({
+                        id: `${userData.name}CompAdd`,
+                        text: `${userData.address.street} ${userData.address.suite}, ${userData.address.city} ${userData.address.zipcode}`,
+                        size: 3
+                    }),
+                    email = createHeading({
+                        id: `${userData.name}Email`,
+                        text: `Email: ${userData.email}`,
+                        size: 4
+                    }),
+                    phone = createHeading({
+                        id: `${userData.name}Phone`,
+                        text: `Phone/Extension: ${userData.phone}`,
+                        size: 4
+                    }),
+                    website = createHREF({
+                        id: `${userData.name}Website`,
+                        display: `Check out our Webiste`,
+                        newTab: true,
+                        ref: `http://${userData.website}`
+                    });
+
+                document.getElementById(`users`).appendChild(div);
+                div.appendChild(companyName);
+                div.appendChild(userName);
+                div.appendChild(companyPhrase);
+                div.appendChild(address);
+                div.appendChild(email);
+                div.appendChild(phone);
+                div.appendChild(website);
+                companyName.style.textTransform = `uppercase`;
+
+            }
+
+        }
+
+        xhr.send();
+
+
+        function createDiv(divObj) {
+
+            // id, class
+
+            let div = document.createElement(`div`);
+
+            div.id = divObj.id != undefined && document.getElementById(divObj.id) == null ? divObj.id : `>> No ID <<`;
+
+            div.className = divObj.class != undefined ? divObj.class : ``;
+
+            return div
+
+        };
+
+        function createHeading(headingObj) {
+
+            // size, text, id
+
+            let heading = headingObj.size >= 1 && headingObj.size <= 5 ? document.createElement(`h` + headingObj.size) : document.createElement(`h5`);
+
+            heading.innerHTML = typeof headingObj.text == `string` ? headingObj.text : `>> No text <<`;
+
+            heading.id = headingObj.id != undefined && document.getElementById(headingObj.id) == null ? headingObj.id : `>> No ID <<`;
+
+            return heading
+
+        };
+
+        function createHREF(hrefObj) {
+
+            // id, newTab (true or false), ref, display (wether text, image, ect.)
+
+            let href = document.createElement(`a`);
+
+            href.id = hrefObj.id != undefined && document.getElementById(hrefObj.id) == null ? hrefObj.id : `>> No ID <<`;
+
+            href.target = hrefObj.newTab === true ? href.target = `_blank` : ``;
+
+            href.href = hrefObj.ref != undefined ? hrefObj.ref : `>> No Referenece <<`;
+
+            href.innerHTML = hrefObj.display != undefined ? hrefObj.display : `>> No Display <<`;
+
+            return href
+        };
+    </script>
+
+</body>
+
+</html>
