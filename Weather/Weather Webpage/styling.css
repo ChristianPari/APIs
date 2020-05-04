@@ -1,9 +1,135 @@
 body {
     text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(0, 157, 255);
 }
 
 #mainDiv {
     display: flex;
+    flex-direction: column;
+}
+
+#mainHead {
+    font-size: 40px;
+    color: white;
+    margin: 0.2%;
+    margin-bottom: 1%;
+    text-shadow: 3px 3px 5px rgb(0, 0, 0);
+}
+
+#curWeatherDiv {
+    margin-bottom: 1%;
+}
+
+#curDesc,
+#histDesc {
+    font-size: 12px;
+    text-align: center;
+    font-weight: 600;
+    margin: auto;
+    margin-top: 0.3%;
+    margin-bottom: 0.3%;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 3px;
+    background-color: white;
+    padding: 0.1%;
+}
+
+#curDesc {
+    width: 27%;
+}
+
+#histDesc {
+    width: 80%;
+}
+
+.containers {
+    width: 100%;
+    overflow-x: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(0, 200, 255) transparent;
+}
+
+#curDataDiv,
+#histDataDiv {
+    display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    width: max-content;
+}
+
+.locationDivs,
+.stationDivs {
+    border-style: outset;
+    background-color: rgb(108, 206, 255);
+    border-radius: 10px;
+    margin-top: 0.5%;
+    margin-left: 0.25%;
+    margin-right: 0.25%;
+    margin-bottom: 0.5%;
+    padding: 0.1%;
+}
+
+.stationDivs {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.locations,
+.stationNames {
+    margin: unset;
+    font-size: 13px;
+    width: 200px;
+    text-shadow: 1px 1px rgb(255, 255, 255);
+}
+
+.conditionDivs,
+.weatherDivs {
+    margin: 3%;
+}
+
+.conditionDescs {
+    margin: unset;
+    font-size: 9px;
+}
+
+.curConditions,
+.histConditions {
+    margin: 1%;
+    font-size: 10px;
+}
+
+#stationSelect {
+    scrollbar-width: none;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 10px;
+    border-width: 3px;
+    margin-right: 0.2%;
+    font-weight: 600;
+}
+
+button {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    border-style: outset;
+    border-width: 3px;
+    border-radius: 10px;
+    padding-bottom: 0.2%;
+    cursor: pointer;
+}
+
+.deleteButtons {
+    color: red;
+    background-color: transparent;
+    border-style: none;
+    font-weight: 900;
+    font-size: 15px;
+}
+
+#copyRightDiv {
+    font-size: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
