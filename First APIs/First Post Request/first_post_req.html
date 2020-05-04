@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First POST Request</title>
+</head>
+
+<body>
+
+    <script>
+        console.log('hello careerdevs');
+
+        let xhr = new XMLHttpRequest(),
+            endpoint = 'https://jsonplaceholder.typicode.com/posts';
+
+        xhr.open('POST', endpoint);
+
+        xhr.onload = () => { // Proper term: CALLBACK FUNCTION
+
+            let res = JSON.parse(xhr.responseText);
+
+            console.log(res);
+
+        };
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        let postOjbj = JSON.stringify({
+            title: 'First Post',
+            body: 'Testing',
+            userId: 777
+        });
+
+        xhr.send(postOjbj);
+    </script>
+
+</body>
+
+</html>
