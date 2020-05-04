@@ -1,5 +1,5 @@
-let owKey = `c81d51bf76bfdeb0cf59fa68e2336eb5`,
-    metKey = `UcUSKkeI`,
+let owKey = `ADD API KEY`,
+    metKey = `ADD API KEY`,
     body = document.body;
 
 window.onload = () => {
@@ -17,7 +17,9 @@ window.onload = () => {
         histDesc = createParagraph({ id: `histDesc`, text: `Go back in time with this Historical Weather Data Puller! Choose a date and then search a location.\nThis Data Puller uses weather stations from around the world so unfortunately not every city or location may have one designated with their name. So if your search comes back with nothing found or not the area you were looking for, please modify your search to another area close to your search!` }),
         curUiDiv = createDiv({ id: `curUiDiv` }),
         histUiDiv = createDiv({ id: `histUiDiv` }),
+        curDataContainer = createDiv({ id: ``, class: `containers` }),
         curDataDiv = createDiv({ id: `curDataDiv` }),
+        histDataContainer = createDiv({ id: ``, class: `containers` }),
         histDataDiv = createDiv({ id: `histDataDiv` }),
         curInput = createInput({ id: `curInput`, sCheck: true, pHolder: `City, State, Country Code` }),
         histInput = createInput({ id: `histInput`, sCheck: true, pHolder: `City, Country Code` }),
@@ -37,12 +39,14 @@ window.onload = () => {
     mainDiv.appendChild(histWeather);
     curWeather.appendChild(curDesc);
     curWeather.appendChild(curUiDiv);
-    curWeather.appendChild(curDataDiv);
+    curWeather.appendChild(curDataContainer);
+    curDataContainer.appendChild(curDataDiv);
     curUiDiv.appendChild(curInput);
     curUiDiv.appendChild(curButton);
     histWeather.appendChild(histDesc);
     histWeather.appendChild(histUiDiv);
-    histWeather.appendChild(histDataDiv);
+    histWeather.appendChild(histDataContainer);
+    histDataContainer.appendChild(histDataDiv);
     histUiDiv.appendChild(yearSelect);
     histUiDiv.appendChild(monthSelect);
     histUiDiv.appendChild(daySelect);
@@ -135,10 +139,10 @@ function displayCurData(curData) {
         curTemp = createHeading({ text: `Current Temperature: ${Math.round(curData.main.temp)}°F`, size: 4, id: ``, class: `curConditions` }),
         tempRange = createHeading({ text: `High: ${Math.round(curData.main.temp_max)}°F / Low: ${Math.round(curData.main.temp_min)}°F`, size: 4, id: ``, class: `curConditions` }),
         pressure = createHeading({ text: `Air Pressure: ${Math.round(curData.main.pressure)} hPa`, size: 4, id: ``, class: `curConditions` }),
-        windSpeed = createHeading({ text: `Wind Speed: ${Math.round(curData.wind.speed)}mph / Gusts: ${Math.round(curData.wind.gust)}mph`, size: 4, class: `curConditions`, id: `` }),
+        windSpeed = createHeading({ text: `Wind Speed: ${Math.round(curData.wind.speed)}mph`, size: 4, class: `curConditions`, id: `` }),
         windDirection = createHeading({ text: getWindDirection(curData.wind.deg), class: `curConditions`, id: ``, size: 4 }),
         conditionsImg = createImage({ src: `http://openweathermap.org/img/wn/${curData.weather[0].icon}.png`, alt: `weather icon image`, id: ``, class: `icons` }),
-        conditionDesc = createHeading({ text: `${curData.weather[0].description.toUpperCase()}`, id: ``, class: `conditionDescs` }),
+        conditionDesc = createHeading({ text: `${curData.weather[0].description.toUpperCase()}`, id: ``, class: `conditionDescs`, size: 4 }),
         deleteButton = createButton({ text: `X`, onClickFunc: deleteDiv, class: `deleteButtons`, id: `` });
 
     document.getElementById(`curDataDiv`).appendChild(locationDiv);
@@ -281,11 +285,9 @@ function multipleStations(wStations) {
 
     for (let a = 0; a < wStations.length; a++) {
 
-        console.log(wStations[a]);
-
         let option = document.createElement(`option`);
 
-        option.innerHTML = wStations[a].name;
+        option.innerHTML = `${a+1}. ${wStations[a].name}`;
         option.value = wStations[a].id;
 
         stationSelect.appendChild(option);
@@ -344,7 +346,7 @@ function displayHistData(histData, stationName) {
             weatherDiv = createDiv({ class: `weatherDivs`, id: `` }),
             nameHead = createHeading({ text: stationName, size: 3, id: ``, class: `stationNames` });
 
-        weatherDiv.appendChild(nameHead);
+        stationDiv.appendChild(nameHead);
 
         for (const k in histData) {
 
