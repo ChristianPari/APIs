@@ -52,3 +52,7 @@ This next function is where the weather stations data is actually going to be di
 Within the function to convert the data I used a switch statement that uses the possible keys as cases and then each cases returns its own specific string description with the value.
 Although for the wind direction I pass the given data (in degrees) into a function to get the NSEW specifcally and return that and the degrees as a string for that case.
 Then for the date key I pass that data as an argument into a function that uses a RegEx to split the date from YYYY-MM-DD format into an array of just number in each index (removed the dashes) and then I pushed them into an array. I then returned a string using the month names array in my date selection JS file to get the month name followed by the day number, and then year (Month Name DD, YYYY format).
+
+<b>May 4, 2020</b>
+3:00pm - 5:00pm
+Removed the images that become the background of the location div with the current weather divs. Added a short description that is provided by the OpenWeather API that gives a few words to describe the weather in the searched for area (ex. Few Clouds, Clear Sky) as a heading and placed that beloew the small icon used to display the weather conditions. Finsihed styling and created scrollable divs for the user to be able to scroll through all their search for locations.
