@@ -26,3 +26,6 @@ Short summary of each folders contents:
 
 * Two APIs:
     - First walkthrough using more than one API at once. This was interesting, having to begin getting an understanding on SYNCHRONOUS and ASYNCHRONOUS which I did gain the basic knowledge of it but will spend more time researching. This program used an API to gather IMAGE LINKs that would be used as profile pictures for the second APIs user data. Using CSS Grid I gave the DOM a 4 column layout to display the data. HTML ELEMENTS used were: DIVs, HEADINGs, IMAGEs, HREF LINKs.
+
+* First Post Request
+    - Learning the fundamentals of how to create and use a post API request correctly and be able to gather user input from a form and pass as a parameter in the xhr send property method.
