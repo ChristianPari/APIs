@@ -1,0 +1,3 @@
+<b>May 4, 2020</b>
+5:30pm - 8:30pm
+As a class we walked through the fundamentals of how to use and create a POST request. We created a form element and simply made some input elements and a submit button to test the XHR request after sanitizing user input. Created a body object that we would assign the data gathered from the input elements values, stored them as key/value pairs and then passed as an argument into the function that holds the XHR.
