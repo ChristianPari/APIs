@@ -5,35 +5,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First POST Request</title>
+    <style>
+        body {
+            background-color: black;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
 
+    <!-- <form action="https://jsonplaceholder.typicode.com/posts" method="POST"> THIS WAY TAKES THE USER TO A TOTALLY NEW PAGE WHEN GETTING DATA FROM AN API-->
+    <form>
+        <input type="text" name='title' placeholder="Enter Post Title"><br>
+        <input type="text" name='body' placeholder="Enter Post Body"><br>
+        <input type="text" name='userId' placeholder="Enter Your User ID"><br>
+        <input type="button" value="Post!" id='submitButton'>
+    </form>
+
     <script>
-        console.log('hello careerdevs');
+        submitButton.onclick = () => {
 
-        let xhr = new XMLHttpRequest(),
-            endpoint = 'https://jsonplaceholder.typicode.com/posts';
+            let form = submitButton.parentNode,
+                postData = {},
+                validSubmit = true,
+                nums = /[0-9]/;
 
-        xhr.open('POST', endpoint);
+            for (const inputElement of form) {
 
-        xhr.onload = () => { // Proper term: CALLBACK FUNCTION
+                if (inputElement.type == 'text') {
 
-            let res = JSON.parse(xhr.responseText);
+                    inputElement.onkeydown = () => {
 
-            console.log(res);
+                        if (inputElement.style.color == 'red') {
 
-        };
+                            inputElement.style.color = 'black';
 
-        xhr.setRequestHeader('Content-Type', 'application/json');
+                        }
 
-        let postOjbj = JSON.stringify({
-            title: 'First Post',
-            body: 'Testing',
-            userId: 777
-        });
+                    };
 
-        xhr.send(postOjbj);
+                    if (inputElement.value.trim() != '') {
+
+                        postData[inputElement.name] = inputElement.value.trim();
+
+                    } else {
+
+                        inputElement.value = '';
+                        inputElement.placeholder = 'This is a requried field';
+                        inputElement.style.color = 'red';
+                        validSubmit = false;
+
+                    }
+
+                }
+
+            }
+
+            if (validSubmit) {
+
+                makeAPost(postData);
+
+            };
+
+        }
+
+        function makeAPost(body) {
+
+            let xhr = new XMLHttpRequest(),
+                endpoint = 'https://jsonplaceholder.typicode.com/posts';
+
+            xhr.open('POST', endpoint);
+
+            xhr.onload = () => { // Proper term: CALLBACK FUNCTION
+
+                let res = JSON.parse(xhr.responseText);
+
+                console.log(res);
+
+            };
+
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            let postObj = JSON.stringify(body);
+
+            xhr.send(postObj);
+        }
     </script>
 
 </body>
