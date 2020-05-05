@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First PUT-PATCH Request</title>
+</head>
+
+<body>
+    <script>
+        // PUT REQ ARE USED TO COMPLETELY REPLACE OBJECT DATA WITH THE BODY BEING SENT
+        // PATCH REQ USED TO ADDS ON TO THE OBJECT DATA OR REPLACE SPECIFIC KEY VALUE PAIRS WITHIN THE OBJECT DATA
+        let xhr = new XMLHttpRequest(),
+            endpoint = 'https://jsonplaceholder.typicode.com/posts/1';
+
+        xhr.open('PATCH', endpoint);
+
+        xhr.onload = () => { // calback function
+
+
+
+        };
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        let reqBody = {
+
+            name: 'joe'
+
+        };
+
+        xhr.send(JSON.stringify(reqBody));
+    </script>
+</body>
+
+</html>
