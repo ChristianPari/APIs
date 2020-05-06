@@ -1,9 +1,47 @@
 window.onload = () => {
 
-    // request all posts > array of 100 posts
+    // request all posts => array of 100 posts
+    let xhr = new XMLHttpRequest(),
+        endpoint = `https://jsonplaceholder.typicode.com/posts`,
+        posts = [];
 
-    // itterate through the first 10-20 elements of the array
-    // display each of those elements to the DOM
+    xhr.open('GET', endpoint);
+
+    xhr.onload = () => {
+
+        let res = JSON.parse(xhr.responseText);
+
+        for (let a = 0; a < 10; a++) {
+
+            posts.push(res[a]);
+
+        }
+
+        createPosts(posts);
+
+    };
+
+    xhr.send();
+
+};
+
+function createPosts(posts) {
+
+    for (const post of posts) {
+
+        let div = createDiv({ class: `postDiv`, id: post.id }),
+            userId = createHeading({ text: `User ${post.userId}`, id: ``, class: `userIds`, size: 2 }),
+            title = createHeading({ text: post.title.toUpperCase(), class: `titles`, id: ``, size: 3 }),
+            body = createParagraph({ text: post.body, class: `bodys`, id: `` }),
+            postId = createHeading({ text: `Post ${post.id}`, class: `postIds`, id: ``, size: 4 });
+
+        postsDiv.appendChild(div);
+        div.appendChild(userId);
+        div.appendChild(title);
+        div.appendChild(body);
+        div.appendChild(postId);
+
+    }
 
 };
 
@@ -41,6 +79,8 @@ function compileFormData() {
             postId: postIdInput
         });
 
+        document.getElementsByName(`userId`).value = document.getElementsByName(`userId`).defaultValue;
+
     } else if (postBodyLength == formId.length - 2) { // PUT method
 
         updatedReq({
@@ -55,6 +95,8 @@ function compileFormData() {
 
     }
 
+    formId.reset();
+
 };
 
 function updatedReq(reqObj) {
@@ -65,6 +107,44 @@ function updatedReq(reqObj) {
     xhr.open(reqObj.method, endpoint);
 
     xhr.onload = () => { // calback function
+
+        let object = reqObj.reqBody;
+
+        for (const k in object) {
+
+            switch (k) {
+
+                case `userId`:
+
+                    let newUserId = createHeading({ text: `User ${object[k]}`, class: `userIds`, id: ``, size: 2 }),
+                        oldUserId = document.getElementById(reqObj.postId).childNodes[0];
+
+                    document.getElementById(reqObj.postId).replaceChild(newUserId, oldUserId);
+
+                    break;
+
+                case `title`:
+
+                    let newTitle = createHeading({ text: object[k], class: `titles`, id: ``, size: 3 }),
+                        oldTitle = document.getElementById(reqObj.postId).childNodes[1];
+
+                    document.getElementById(reqObj.postId).replaceChild(newTitle, oldTitle);
+
+                    break;
+
+                case `body`:
+
+                    let newBody = createParagraph({ text: object[k], class: `bodys`, id: `` }),
+                        oldBody = document.getElementById(reqObj.postId).childNodes[2];
+
+                    document.getElementById(reqObj.postId).replaceChild(newBody, oldBody);
+
+                    break;
+
+            }
+
+        }
+
     };
 
     xhr.setRequestHeader('Content-Type', 'application/json');
