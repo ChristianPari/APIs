@@ -8,15 +8,23 @@
 </head>
 
 <body>
-    <form id="formId">
-        <input type="text" name='title' placeholder="Enter Post Title"><br>
-        <input type="text" name='body' placeholder="Enter Post Body"><br>
-        <input type="text" name='userId' placeholder="Enter Your User ID"><br>
-        <input type="text" name='postId' placeholder="Enter Post ID"><br>
-        <input type="button" value="Post!" id='submitButton' onclick="compileFormData()">
-    </form>
+
+    <h1>OurSpace</h1>
+
+    <div id="formDiv">
+        <form id="formId">
+            <input type="text" name='title' placeholder="Enter Post Title"><br>
+            <input type="text" name='body' placeholder="Enter Post Body"><br>
+            <input type="text" name='userId' placeholder="Enter Your User ID"><br>
+            <input type="text" name='postId' placeholder="Enter Post ID"><br>
+            <input type="button" value="Post!" id='submitButton' onclick="compileFormData()">
+        </form>
+    </div>
+
+    <div id="postsDiv"></div>
 
     <script src="index.js"></script>
+    <script src="htmlFuncs.js"></script>
 </body>
 
 </html>
