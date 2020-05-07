@@ -1,0 +1,92 @@
+html {
+    scrollbar-width: thin;
+}
+
+body {
+    background-color: rgb(46, 157, 46);
+    text-align: center;
+    font-family: cursive;
+    border-style: solid;
+    border-width: 20px;
+    border-color: black;
+    margin: unset;
+}
+
+h1 {
+    font-size: 65px;
+    text-shadow: 2px 2px 2px white;
+    margin: unset;
+    margin-bottom: 15px;
+}
+
+form {
+    position: fixed;
+    right: 0;
+    margin-right: 140px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: rgb(165, 146, 0);
+}
+
+input {
+    width: 250px;
+    text-align: center;
+    padding: 5px;
+    border-style: solid;
+    border-color: black;
+    margin-bottom: 1%;
+    border-radius: 10px;
+}
+
+[type=button] {
+    width: initial;
+    padding: initial;
+    border-style: solid;
+    border-color: initial;
+    margin-bottom: initial;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    cursor: pointer;
+}
+
+#postsDiv {
+    border-style: solid;
+    border-color: black;
+    border-radius: 13px;
+    width: 25%;
+    margin: auto;
+    margin-top: 10px;
+    background-color: white;
+}
+
+.postDiv {
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    margin: 0.5%;
+    background-color: rgb(0, 255, 166);
+}
+
+.userIds {
+    font-size: 20px;
+    margin: unset;
+}
+
+.titles {
+    font-size: 15px;
+    margin: unset;
+    margin-bottom: 5px;
+}
+
+.bodys {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 5px;
+}
+
+.postIds {
+    margin: unset;
+}
