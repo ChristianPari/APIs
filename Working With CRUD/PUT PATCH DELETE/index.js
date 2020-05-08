@@ -103,8 +103,8 @@ function displayPosts() { // clear postsDiv, viewingUser array of posts, DOM dis
 
             let div = createDiv({ id: post.id }),
                 postUI = createDiv({ class: `postUIs` }),
-                title = createHeading({ text: post.title, size: 3 }),
-                body = createParagraph({ text: post.body }),
+                title = createHeading({ text: post.title, size: 3, class: `titles` }),
+                body = createParagraph({ text: post.body, class: `bodys` }),
                 editButton = createButton({ text: `EDIT`, onClickFunc: editPost }),
                 deleteButton = createButton({ text: `DELETE`, onClickFunc: deletePost });
 
@@ -123,7 +123,142 @@ function displayPosts() { // clear postsDiv, viewingUser array of posts, DOM dis
 
 function editPost() { // allow user to edit post, PUT or PATCH req to DB
 
+    let postDiv = this.parentNode.parentNode,
+        postTitle = postDiv.childNodes[0],
+        postBody = postDiv.childNodes[1],
+        postUI = postDiv.childNodes[2];
 
+    if (postDiv.childNodes[3] != null) { postDiv.childNodes[3].remove(); }
+
+    let form = createForm({}),
+        titleInput = createInput({ type: `text`, name: `title`, value: postTitle.innerText }),
+        bodyInput = createInput({ type: `text`, name: `body`, value: postBody.innerText }),
+        cancelInput = createInput({ type: `button`, value: `CANCEL`, onClickFunc: cancelProcess }),
+        confirmInput = createInput({ type: `button`, value: `CONFIRM`, onClickFunc: confirmChange });
+
+    postTitle.style.display = `none`;
+    postBody.style.display = `none`;
+    postUI.style.display = `none`;
+    form.appendChild(titleInput);
+    form.appendChild(bodyInput);
+    form.appendChild(cancelInput);
+    form.appendChild(confirmInput);
+    postDiv.appendChild(form);
+
+};
+
+function cancelProcess() { // makes postDiv previous elements reappear
+
+    let postDiv = this.parentNode.parentNode,
+        postTitle = postDiv.childNodes[0],
+        postBody = postDiv.childNodes[1],
+        postUI = postDiv.childNodes[2],
+        form = this.parentNode;
+
+    postTitle.style.display = `inherit`;
+    postBody.style.display = `inherit`;
+    postUI.style.display = `inherit`;
+    form.style.display = `none`;
+
+};
+
+function confirmChange() { // checks form data and creates an object to pass as an arguement to the dataChange function with neccessary API request method
+
+    let form = this.parentNode,
+        postData = {};
+
+    for (const input of form) {
+
+        if (input.type == 'text' && input.value.trim() != '') { postData[input.name] = input.value.trim(); }
+
+    }
+
+    // conditons to decide if the request is going to be made
+    let postDataLength = Object.keys(postData).length;
+
+    if (postDataLength != 0 && postDataLength < form.length - 2) { // PATCH method
+
+        dataChange({
+            reqBody: postData,
+            method: 'PATCH',
+            postID: form.parentNode.id,
+            postDiv: form.parentNode
+        });
+
+        console.log(`PATCH`);
+
+    } else if (postDataLength == form.length - 2) { // PUT method
+
+        dataChange({
+            reqBody: postData,
+            method: 'PUT',
+            postID: form.parentNode.id,
+            postDiv: form.parentNode
+        });
+
+        console.log(`PUT`);
+
+    } else { // if all inputs were left blank then don't request the API
+
+        alert('You must fill out at least 1 field');
+        return
+
+    }
+
+};
+
+function dataChange(reqObj) { // makes request, replaces old elements w/ new, hides form, reappears title and body
+
+    let postDiv = reqObj.postDiv,
+        changeXHR = new XMLHttpRequest(),
+        endpoint = `https://jsonplaceholder.typicode.com/posts/${reqObj.postID}`,
+        method = reqObj.method;
+
+    changeXHR.open(method, endpoint);
+
+    changeXHR.onload = () => {
+
+        for (const k in reqObj.reqBody) {
+
+            switch (k) {
+
+                case `title`:
+
+                    let newTitle = createHeading({ text: reqObj.reqBody[k], class: `titles`, size: 3 }),
+                        oldTitle = document.getElementById(reqObj.postID).childNodes[0];
+
+                    postDiv.replaceChild(newTitle, oldTitle);
+
+                    break;
+
+                case `body`:
+
+                    let newBody = createParagraph({ text: reqObj.reqBody[k], class: `bodys` }),
+                        oldBody = document.getElementById(reqObj.postID).childNodes[1];
+
+                    postDiv.replaceChild(newBody, oldBody);
+
+                    break;
+
+            }
+
+        }
+
+        let postTitle = postDiv.childNodes[0],
+            postBody = postDiv.childNodes[1],
+            postUI = postDiv.childNodes[2],
+            form = postDiv.childNodes[3];
+
+        postTitle.style.display = `inherit`;
+        postBody.style.display = `inherit`;
+        postUI.style.display = `inherit`;
+        form.style.display = `none`;
+
+    };
+
+    let body = JSON.stringify(reqObj.reqBody);
+
+    changeXHR.send(body);
 
 };
 
@@ -149,7 +284,7 @@ function deletePost() { // remove post from DOM, DELETE req to DB
     // sessionStorage.setItem(`post${postID}`, postID);
     //^ session storage way
 
-    deletedPosts.push(post);
+    deletedPosts.push(postDiv);
     postDiv.remove(); // removing post div from postsDiv
 
     console.log(deletedPosts);
