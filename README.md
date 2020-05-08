@@ -10,4 +10,4 @@ This repo will contain all of my API projects, the contents of this repo will be
     - All projects using Weather APIs
 
 * Working With CRUD
-    - These are simple projects that are utilizing CRUD to maniuplate data from a database
+    - These are projects created to learn how to utilize CRUD to maniuplate data
