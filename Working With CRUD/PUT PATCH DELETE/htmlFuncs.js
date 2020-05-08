@@ -14,7 +14,7 @@ function createHeading(headingObj) { // size, text, id, class
 
     let heading = headingObj.size >= 1 && headingObj.size <= 5 ? document.createElement(`h` + headingObj.size) : document.createElement(`h5`);
 
-    heading.innerHTML = typeof headingObj.text == `string` ? headingObj.text : `>> No text <<`;
+    heading.innerHTML = typeof headingObj.text == `string` ? headingObj.text : ``;
 
     heading.id = headingObj.id != undefined && document.getElementById(headingObj.id) == null ? headingObj.id : ``;
 
@@ -28,7 +28,7 @@ function createParagraph(paraObj) { // text, class, id
 
     let paragraph = document.createElement(`p`);
 
-    paragraph.innerHTML = paraObj.text != undefined ? paraObj.text : `>> No Text <<`;
+    paragraph.innerHTML = paraObj.text != undefined ? paraObj.text : ``;
 
     paragraph.className = paraObj.class != undefined ? paraObj.class : ``;
 
@@ -62,9 +62,9 @@ function createButton(buttonObj) { // id, class, text, onClickFunc
 
     button.className = buttonObj.class != undefined ? buttonObj.class : ``;
 
-    button.innerText = typeof buttonObj.text == `string` ? buttonObj.text : `>> No Text <<`;
+    button.innerText = typeof buttonObj.text == `string` ? buttonObj.text : ``;
 
-    button.onclick = buttonObj.onClickFunc != undefined && typeof buttonObj.onClickFunc == `function` ? buttonObj.onClickFunc : `>> No function <<`;
+    button.onclick = buttonObj.onClickFunc != undefined && typeof buttonObj.onClickFunc == `function` ? buttonObj.onClickFunc : ``;
 
     return button
 
@@ -123,7 +123,7 @@ function createSelect(selectObj) { // id, class, defOp, defOpID, data (used to c
 
 };
 
-function createInput(inputObj) { // id, type, name, class, sCheck, pHolder
+function createInput(inputObj) { // id, type, name, class, sCheck, pHolder, onClickFunc, value
 
     let input = document.createElement(`input`);
 
@@ -133,11 +133,15 @@ function createInput(inputObj) { // id, type, name, class, sCheck, pHolder
 
     input.name = inputObj.name != undefined ? inputObj.name : ``;
 
+    input.value = inputObj.value != undefined ? inputObj.value : ``;
+
     input.spellcheck = inputObj.sCheck != undefined ? inputObj.sCheck : true;
 
     input.placeholder = inputObj.pHolder != undefined ? inputObj.pHolder : ``;
 
     input.className = inputObj.class != undefined ? inputObj.class : ``;
+
+    input.onclick = inputObj.onClickFunc != undefined && typeof inputObj.onClickFunc == `function` ? inputObj.onClickFunc : ``;
 
     return input
 
@@ -145,6 +149,10 @@ function createInput(inputObj) { // id, type, name, class, sCheck, pHolder
 
 function createForm(formObj) { // id
 
-    let form = formObj.id != undefined ? formObj.id : ``;
+    let form = document.createElement(`form`);
+
+    form.id = formObj.id != undefined ? formObj.id : ``;
+
+    return form
 
 };
