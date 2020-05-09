@@ -1,0 +1,13 @@
+body {
+    width: 50%;
+    margin: auto;
+}
+
+#uiDiv {
+    display: flex;
+    justify-content: space-between;
+}
+
+#postsDiv {
+    text-align: center;
+}
