@@ -131,10 +131,23 @@ function editPost() { // allow user to edit post, PUT or PATCH req to DB
     if (postDiv.childNodes[3] != null) { postDiv.childNodes[3].remove(); }
 
     let form = createForm({}),
-        titleInput = createInput({ type: `text`, name: `title`, value: postTitle.innerText }),
-        bodyInput = createInput({ type: `text`, name: `body`, value: postBody.innerText }),
+        // titleInput = createInput({ type: `text`, name: `title`, pHolder: `Enter title` }),
+        // bodyInput = createInput({ type: `text`, name: `body`, pHolder: `Enter Body` }),
+        titleInput = document.createElement(`textarea`), // EXPERIMENTED WITH TEXT AREAS; WORKED
+        bodyInput = document.createElement(`textarea`), // EXPERIMENTED WITH TEXT AREAS; WORKED
         cancelInput = createInput({ type: `button`, value: `CANCEL`, onClickFunc: cancelProcess }),
         confirmInput = createInput({ type: `button`, value: `CONFIRM`, onClickFunc: confirmChange });
+
+    titleInput.name = `title`;
+    titleInput.placeholder = `Enter title`;
+    titleInput.rows = `1`;
+    titleInput.cols = `50`;
+    bodyInput.name = `body`;
+    bodyInput.placeholder = `Enter post body`;
+    bodyInput.rows = `3`;
+    bodyInput.cols = `50`;
+    //^ TEXTAREA PROPERTY INFO
+    //! DIDN'T KEEP THEM IN THE CODE BC OF HOW I WANT THE PUT OR PATCH REQUESTS TO FUNCTION, BUT LEFT IN FOR FUTURE REFERENCING
 
     postTitle.style.display = `none`;
     postBody.style.display = `none`;
@@ -169,7 +182,7 @@ function confirmChange() { // checks form data and creates an object to pass as 
 
     for (const input of form) {
 
-        if (input.type == 'text' && input.value.trim() != '') { postData[input.name] = input.value.trim(); }
+        if (input.type == 'textarea' && input.value.trim() != '') { postData[input.name] = input.value.trim(); }
 
     }
 
