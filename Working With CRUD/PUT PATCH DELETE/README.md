@@ -23,3 +23,6 @@ Next was to actually start creating the functionallity for the delete and edit b
 <b>May 9, 2020</b>
 4:00pm - 4:15pm
 Changed the input boxes for editing the title and body in the form to text area boxes. Started adding styling, made the whole body element centered on the DOM and will start styling elements next.
+
+4:30pm - 5:45pm
+Ran into some issues when trying to compare the value of the textarea inputs with the innerText of the title and body elements, for some reason there were hidden new line "\n" characters within the text causing them to not be equal when compared. It took me a while and lots of researching to find out that the hidden new lines were the actual issue but then realizing it after I used RegEx to replace all whitespace with a single space, then after a lot of testing found it to work perfectly! So then reworked my functionallity of the confirm button, so now the user gets a confrim alert if they don't change anything and if they click okay then the text returns to its normal state. If the user changes one then a PATCH request is made, and if both are changed then a PUT request is made. 
