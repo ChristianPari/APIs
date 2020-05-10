@@ -101,10 +101,11 @@ function displayPosts() { // clear postsDiv, viewingUser array of posts, DOM dis
 
         if (post.userId == viewingUser) {
 
-            let div = createDiv({ id: post.id }),
+            let div = createDiv({ id: post.id, class: `posts` }),
                 postUI = createDiv({ class: `postUIs` }),
                 title = createHeading({ text: post.title, size: 3, class: `titles` }),
                 body = createParagraph({ text: post.body, class: `bodys` }),
+                // body = createHeading({ text: post.body, class: `bodys`, size: 5 }),
                 editButton = createButton({ text: `EDIT`, onClickFunc: editPost }),
                 deleteButton = createButton({ text: `DELETE`, onClickFunc: deletePost });
 
@@ -131,23 +132,23 @@ function editPost() { // allow user to edit post, PUT or PATCH req to DB
     if (postDiv.childNodes[3] != null) { postDiv.childNodes[3].remove(); }
 
     let form = createForm({}),
-        // titleInput = createInput({ type: `text`, name: `title`, pHolder: `Enter title` }),
-        // bodyInput = createInput({ type: `text`, name: `body`, pHolder: `Enter Body` }),
-        titleInput = document.createElement(`textarea`), // EXPERIMENTED WITH TEXT AREAS; WORKED
-        bodyInput = document.createElement(`textarea`), // EXPERIMENTED WITH TEXT AREAS; WORKED
+        titleInput = document.createElement(`textarea`),
+        bodyInput = document.createElement(`textarea`),
         cancelInput = createInput({ type: `button`, value: `CANCEL`, onClickFunc: cancelProcess }),
         confirmInput = createInput({ type: `button`, value: `CONFIRM`, onClickFunc: confirmChange });
 
     titleInput.name = `title`;
     titleInput.placeholder = `Enter title`;
+    titleInput.value = postDiv.childNodes[0].innerText;
     titleInput.rows = `1`;
     titleInput.cols = `50`;
+    // titleInput.onkeypress = () => { titleInput.value = titleInput.value; };
     bodyInput.name = `body`;
     bodyInput.placeholder = `Enter post body`;
+    bodyInput.value = postDiv.childNodes[1].innerText;
     bodyInput.rows = `3`;
     bodyInput.cols = `50`;
-    //^ TEXTAREA PROPERTY INFO
-    //! DIDN'T KEEP THEM IN THE CODE BC OF HOW I WANT THE PUT OR PATCH REQUESTS TO FUNCTION, BUT LEFT IN FOR FUTURE REFERENCING
+    // bodyInput.onkeypress = () => { bodyInput.value = bodyInput.value; };
 
     postTitle.style.display = `none`;
     postBody.style.display = `none`;
@@ -178,43 +179,68 @@ function cancelProcess() { // makes postDiv previous elements reappear
 function confirmChange() { // checks form data and creates an object to pass as an arguement to the dataChange function with neccessary API request method
 
     let form = this.parentNode,
+        postDiv = form.parentNode,
+        postTitle = postDiv.childNodes[0].innerText.replace(/\s+/g, " "),
+        postBody = postDiv.childNodes[1].innerText.replace(/\s+/g, " "),
+        formTitle = form[0],
+        formBody = form[1],
+        changeCount = 0,
         postData = {};
 
-    for (const input of form) {
+    if (formTitle.value != postTitle) {
 
-        if (input.type == 'textarea' && input.value.trim() != '') { postData[input.name] = input.value.trim(); }
+        changeCount++;
+        postData[formTitle.name] = formTitle.value;
 
     }
 
-    // conditons to decide if the request is going to be made
-    let postDataLength = Object.keys(postData).length;
+    if (formBody.value != postBody) {
 
-    if (postDataLength != 0 && postDataLength < form.length - 2) { // PATCH method
+        changeCount++;
+        postData[formBody.name] = formBody.value;
+
+    }
+
+    if (changeCount < 2 && changeCount > 0) { // PATCH method
 
         dataChange({
             reqBody: postData,
             method: 'PATCH',
-            postID: form.parentNode.id,
-            postDiv: form.parentNode
+            postID: postDiv.id,
+            post: postDiv
         });
 
         console.log(`PATCH`);
 
-    } else if (postDataLength == form.length - 2) { // PUT method
+    } else if (changeCount == 2) { // PUT method
 
         dataChange({
             reqBody: postData,
             method: 'PUT',
-            postID: form.parentNode.id,
-            postDiv: form.parentNode
+            postID: postDiv.id,
+            post: postDiv
         });
 
         console.log(`PUT`);
 
-    } else { // if all inputs were left blank then don't request the API
+    } else {
 
-        alert('You must fill out at least 1 field');
-        return
+        let okay = confirm(`No changes were made, please confirm`);
+
+        if (okay) {
+
+            let postDiv = this.parentNode.parentNode,
+                postTitle = postDiv.childNodes[0],
+                postBody = postDiv.childNodes[1],
+                postUI = postDiv.childNodes[2],
+                form = this.parentNode;
+
+            postTitle.style.display = `inherit`;
+            postBody.style.display = `inherit`;
+            postUI.style.display = `inherit`;
+            form.style.display = `none`;
+
+        }
 
     }
 
@@ -222,7 +248,7 @@ function confirmChange() { // checks form data and creates an object to pass as 
 
 function dataChange(reqObj) { // makes request, replaces old elements w/ new, hides form, reappears title and body
 
-    let postDiv = reqObj.postDiv,
+    let postDiv = reqObj.post,
         changeXHR = new XMLHttpRequest(),
         endpoint = `https://jsonplaceholder.typicode.com/posts/${reqObj.postID}`,
         method = reqObj.method;
