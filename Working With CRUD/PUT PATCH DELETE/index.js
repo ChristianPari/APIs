@@ -291,6 +291,8 @@ function dataChange(reqObj) { // makes request, replaces old elements w/ new, hi
 
     };
 
+    changeXHR.setRequestHeader('Content-Type', 'application/json');
+
     let body = JSON.stringify(reqObj.reqBody);
 
     changeXHR.send(body);
