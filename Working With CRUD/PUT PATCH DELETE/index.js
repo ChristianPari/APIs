@@ -142,13 +142,11 @@ function editPost() { // allow user to edit post, PUT or PATCH req to DB
     titleInput.value = postDiv.childNodes[0].innerText;
     titleInput.rows = `1`;
     titleInput.cols = `50`;
-    // titleInput.onkeypress = () => { titleInput.value = titleInput.value; };
     bodyInput.name = `body`;
     bodyInput.placeholder = `Enter post body`;
     bodyInput.value = postDiv.childNodes[1].innerText;
     bodyInput.rows = `3`;
     bodyInput.cols = `50`;
-    // bodyInput.onkeypress = () => { bodyInput.value = bodyInput.value; };
 
     postTitle.style.display = `none`;
     postBody.style.display = `none`;
@@ -292,6 +290,7 @@ function dataChange(reqObj) { // makes request, replaces old elements w/ new, hi
     };
 
     changeXHR.setRequestHeader('Content-Type', 'application/json');
+    // changeXHR.setRequestHeader('Access-Control-Allow-Origin', '*');
 
     let body = JSON.stringify(reqObj.reqBody);
 
@@ -316,10 +315,9 @@ function deletePost() { // remove post from DOM, DELETE req to DB
 
     };
 
-    delXHR.send();
+    // delXHR.setRequestHeader('Access-Control-Allow-Origin', '*');
 
-    // sessionStorage.setItem(`post${postID}`, postID);
-    //^ session storage way
+    delXHR.send();
 
     deletedPosts.push(postDiv);
     postDiv.remove(); // removing post div from postsDiv
