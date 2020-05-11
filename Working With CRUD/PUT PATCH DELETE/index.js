@@ -290,7 +290,6 @@ function dataChange(reqObj) { // makes request, replaces old elements w/ new, hi
     };
 
     changeXHR.setRequestHeader('Content-Type', 'application/json');
-    // changeXHR.setRequestHeader('Access-Control-Allow-Origin', '*');
 
     let body = JSON.stringify(reqObj.reqBody);
 
@@ -314,8 +313,6 @@ function deletePost() { // remove post from DOM, DELETE req to DB
         console.log(resData);
 
     };
-
-    // delXHR.setRequestHeader('Access-Control-Allow-Origin', '*');
 
     delXHR.send();
 
