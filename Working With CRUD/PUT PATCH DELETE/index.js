@@ -106,8 +106,8 @@ function displayPosts() { // clear postsDiv, viewingUser array of posts, DOM dis
                 title = createHeading({ text: post.title, size: 3, class: `titles` }),
                 body = createParagraph({ text: post.body, class: `bodys` }),
                 // body = createHeading({ text: post.body, class: `bodys`, size: 5 }),
-                editButton = createButton({ text: `EDIT`, onClickFunc: editPost }),
-                deleteButton = createButton({ text: `DELETE`, onClickFunc: deletePost });
+                editButton = createButton({ text: `Edit`, onClickFunc: editPost }),
+                deleteButton = createButton({ text: `Delete`, onClickFunc: deletePost });
 
             div.appendChild(title);
             div.appendChild(body);
@@ -134,8 +134,8 @@ function editPost() { // allow user to edit post, PUT or PATCH req to DB
     let form = createForm({}),
         titleInput = document.createElement(`textarea`),
         bodyInput = document.createElement(`textarea`),
-        cancelInput = createInput({ type: `button`, value: `CANCEL`, onClickFunc: cancelProcess }),
-        confirmInput = createInput({ type: `button`, value: `CONFIRM`, onClickFunc: confirmChange });
+        cancelInput = createInput({ type: `button`, value: `Cancel`, onClickFunc: cancelProcess }),
+        confirmInput = createInput({ type: `button`, value: `Confirm`, onClickFunc: confirmChange });
 
     titleInput.name = `title`;
     titleInput.placeholder = `Enter title`;
@@ -210,8 +210,6 @@ function confirmChange() { // checks form data and creates an object to pass as 
             post: postDiv
         });
 
-        console.log(`PATCH`);
-
     } else if (changeCount == 2) { // PUT method
 
         dataChange({
@@ -220,8 +218,6 @@ function confirmChange() { // checks form data and creates an object to pass as 
             postID: postDiv.id,
             post: postDiv
         });
-
-        console.log(`PUT`);
 
     } else {
 
