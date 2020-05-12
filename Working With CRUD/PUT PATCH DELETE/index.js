@@ -90,15 +90,6 @@ function displayPosts() { // clear postsDiv, viewingUser array of posts, DOM dis
 
     allPosts.forEach(post => {
 
-        // if (sessionStorage.getItem(`post${post.id}`) != null) {
-
-        //     let postInd = allPosts.indexOf(post);
-
-        //     allPosts.splice(postInd, 1);
-
-        // }
-        //^ session storage code
-
         if (post.userId == viewingUser) {
 
             let div = createDiv({ id: post.id, class: `posts` }),
