@@ -3,7 +3,6 @@ let body = document.body,
     lastPage,
     storedData = {};
 
-//! create a way to get very last page from the API to use instead of a hard coded number being used in the next/prev page btns
 window.onload = () => { // uiDiv, usersDiv, prevButton, nextButton
 
     let uiDiv = createDiv({ id: `uiDiv` }),
