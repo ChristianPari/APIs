@@ -5,6 +5,27 @@ body {
 }
 
 
+/* ######################### Main UI Div ######################### */
+
+#newUserFormHead {
+    margin-bottom: unset;
+}
+
+
+/** ############### New User Form ############### */
+
+#createUserForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#createUserForm input,
+select,
+button {
+    margin: auto;
+}
+
+
 /* ######################### User Divs ######################### */
 
 
