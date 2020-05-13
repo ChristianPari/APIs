@@ -1,19 +1,60 @@
 let body = document.body,
     currentPage = 1,
     lastPage, // is assigned a value later within the intial GET request in xhrReqs.js line 27
+    emailRegEx = /[A-z0-9]+[A-z0-9\.]+@[A-z0-9\.]+[A-z0-9]+/, // used to sanitize user email input in multiple functions
+    sanitizeEmail = /\.+/g; // used to sanitize user email input in multiple functions
+dobRegEx = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/,
     storedData = {};
 
 window.onload = () => { // uiDiv, usersDiv, prevButton, nextButton
 
-    const uiDiv = createDiv({ id: `uiDiv` }),
-        usersDiv = createDiv({ id: `usersDiv` }),
+    let usersDiv = createDiv({ id: `usersDiv` }),
+        uiDiv = createDiv({ id: `uiDiv` }),
         prevPageBtn = createButton({ id: `prevPageBtn`, text: `Previous Page`, onClickFunc: prevPageFunc }),
-        nextPageBtn = createButton({ id: `nextPageBtn`, text: `Next Page`, onClickFunc: nextPageFunc });
+        nextPageBtn = createButton({ id: `nextPageBtn`, text: `Next Page`, onClickFunc: nextPageFunc }),
+        newUserHeading = createHeading({ id: `newUserFormHead`, text: `Create New User`, size: 3 }),
+        createUserForm = createForm({ id: `createUserForm` }),
+        fNameInput = createInput({ type: `text`, id: `firstNameInput`, pHolder: `First Name`, name: `first_name` }),
+        lNameInput = createInput({ type: `text`, id: `lastNameInput`, pHolder: `Last Name`, name: `last_name` }),
+        dobInput = createInput({ type: `text`, id: `dobInput`, pHolder: `DoB YYYY-MM-DD`, name: `dob` }),
+        addressInput = createInput({ type: `text`, id: `addressInput`, pHolder: `Address`, name: `address` }),
+        emailInput = createInput({ type: `text`, id: `emailInput`, pHolder: `Email`, name: `email` }),
+        confirmNewButton = createInput({ type: `button`, id: `confrimNewButton`, value: `Confirm`, onClickFunc: createNewUser }),
+        genderSelect = document.createElement(`select`);
+    genderSelect.id = `genderSelect`;
+    genderSelect.name = `gender`;
+    genderSelect.onchange = genderChange;
+
+    let defaultGender = document.createElement(`option`);
+    defaultGender.innerText = `Select Gender`;
+    defaultGender.value = ``;
+
+    let male = document.createElement(`option`);
+    male.innerText = `Male`;
+    male.value = `male`;
+
+    let female = document.createElement(`option`);
+    female.innerText = `Female`;
+    female.value = `female`;
+
+    genderSelect.appendChild(defaultGender);
+    genderSelect.appendChild(male);
+    genderSelect.appendChild(female);
+
 
     body.appendChild(uiDiv);
     body.appendChild(usersDiv);
     uiDiv.appendChild(prevPageBtn);
     uiDiv.appendChild(nextPageBtn);
+    uiDiv.appendChild(newUserHeading);
+    uiDiv.appendChild(createUserForm);
+    createUserForm.appendChild(fNameInput);
+    createUserForm.appendChild(lNameInput);
+    createUserForm.appendChild(dobInput);
+    createUserForm.appendChild(addressInput);
+    createUserForm.appendChild(emailInput);
+    createUserForm.appendChild(genderSelect);
+    createUserForm.appendChild(confirmNewButton);
 
     reqUsers(currentPage);
 
@@ -30,6 +71,125 @@ function nextPageFunc() { // increments page, if last page goes to first page
 
     currentPage = currentPage == lastPage ? 1 : currentPage + 1;
     reqUsers(currentPage);
+
+};
+
+function genderChange() { // removes the default option from the select
+
+    if (this[0].innerText == `Select Gender`) { this[0].style.display = `none`; }
+
+};
+
+function createNewUser() {
+
+    let formData = Array.from({ length: this.parentNode.childNodes.length - 1 }, (a, b) => { return this.parentNode.childNodes[b] }),
+        reqData = {},
+        reqBody = ``,
+        requiredFields = [`first_name`, `last_name`, `email`, `gender`],
+        makeReq = true;
+
+    formData.forEach(elm => {
+
+        if (elm.localName == `input`) {
+
+            switch (elm.name) {
+
+                case `first_name`:
+
+
+                    if (elm.value.trim() == ``) {
+
+                        alert(`You must enter a first name`);
+
+                    } else {
+
+                        reqData[elm.name] = elm.value.trim();
+
+                    }
+
+                    break;
+
+                case `last_name`:
+
+                    if (elm.value.trim() == ``) {
+
+                        alert(`You must enter a last name`);
+
+                    } else {
+
+                        reqData[elm.name] = elm.value.trim();
+
+                    }
+
+                    break;
+
+                case `dob`:
+
+                    if (elm.value != ``) {
+
+                        if (!dobRegEx.test(elm.value)) {
+
+                            alert(`Enter a valid date of birth`)
+
+                        } else { reqData[elm.name] = elm.value; }
+
+                    }
+
+                    break;
+
+                case `address`:
+
+                    if (elm.value != ``) { reqData[elm.name] = elm.value; }
+
+                    break;
+
+                case `email`:
+
+                    if (!emailRegEx.test(elm.value)) {
+
+                        alert(`You must enter a valid email`);
+
+                    } else {
+
+                        reqData[elm.name] = elm.value.replace(sanitizeEmail, `.`);
+
+                    }
+
+                    break;
+
+            }
+
+        }
+
+        if (elm.localName == `select`) {
+
+            if (elm.value != ``) {
+
+                reqData[elm.name] = elm.value;
+
+                let genderSelect = document.getElementById(`genderSelect`);
+                genderSelect[0].style.display = `initial`;
+                genderSelect.value = ``;
+
+            } else {
+
+                alert(`You must select a gender`);
+                return
+
+            }
+
+        }
+
+    });
+
+    requiredFields.forEach(item => { if (!reqData.hasOwnProperty(item)) { makeReq = false; } });
+
+    for (const k in reqData) { reqBody += `${k}=${reqData[k]} `; }
+
+    let userBody = reqBody.replace(/\s/g, `&`);
+    userBody = userBody.substr(0, userBody.length - 1);
+
+    if (makeReq == true) { createUser(userBody) }
 
 };
 
@@ -52,17 +212,19 @@ function displayUsers(users) { // clear usersDiv, create: div1 => page heading, 
             editDiv = createDiv({ class: `editDivs` }),
             displayUiDiv = createDiv({ class: `displayUiDivs` }),
             editUiDiv = createDiv({ class: `editUiDivs` }),
-            userName = createHeading({ text: `${user.first_name} ${user.last_name}`, size: 3, class: `userNames` }),
+            nameDiv = createDiv({ class: `nameDivs` }),
+            firstName = createHeading({ text: user.first_name, size: 3, class: `firstNames` }),
+            lastName = createHeading({ text: user.last_name, size: 3, class: `lastNames` }),
             dateOfBirth = createHeading({ text: `DoB: ${user.dob}`, size: 4, class: `dateOfBitrhs` }),
             address = createHeading({ text: user.address, size: 5, class: `addresses` }),
             email = createHeading({ text: user.email, size: 5, class: `emails` }),
             editButton = createButton({ text: `Edit User`, onClickFunc: editUser }),
             deleteButton = createButton({ text: `Delete User`, onClickFunc: deleteUser }),
-            fNameInput = createInput({ class: `nameInputs`, pHolder: `New First Name`, name: `first_name` }),
-            lNameInput = createInput({ class: `nameInputs`, pHolder: `New Last Name`, name: `last_name` }),
-            dobInput = createInput({ class: `dobInputs`, pHolder: `New DoB YYYY-MM-DD`, name: `dob` }),
-            addressInput = createInput({ class: `addressInputs`, pHolder: `New Address`, name: `address` }),
-            emailInput = createInput({ class: `emailInputs`, pHolder: `New Email`, name: `email` }),
+            fNameInput = createInput({ type: `text`, class: `nameInputs`, pHolder: `New First Name`, name: `first_name` }),
+            lNameInput = createInput({ type: `text`, class: `nameInputs`, pHolder: `New Last Name`, name: `last_name` }),
+            dobInput = createInput({ type: `text`, class: `dobInputs`, pHolder: `New DoB YYYY-MM-DD`, name: `dob` }),
+            addressInput = createInput({ type: `text`, class: `addressInputs`, pHolder: `New Address`, name: `address` }),
+            emailInput = createInput({ type: `text`, class: `emailInputs`, pHolder: `New Email`, name: `email` }),
             confirmButton = createButton({ text: `Confirm`, onClickFunc: confirmEdit }),
             cancelButton = createButton({ text: `Cancel`, onClickFunc: cancelEdit });
 
@@ -72,7 +234,14 @@ function displayUsers(users) { // clear usersDiv, create: div1 => page heading, 
         div.appendChild(editDiv);
 
         // initial DOM layout
-        displayDiv.appendChild(userName);
+        displayDiv.appendChild(nameDiv);
+        nameDiv.appendChild(firstName);
+        firstName.style.display = `inline`;
+        firstName.style.paddingRight = `2.5px`;
+        nameDiv.appendChild(lastName);
+        lastName.style.display = `inline`;
+        lastName.style.paddingLeft = `2.5px`;
+        //^ styling needed to have first and last name be next to each other, this way allows for easier change of innerText later in editing by user
         displayDiv.appendChild(dateOfBirth);
         displayDiv.appendChild(address);
         displayDiv.appendChild(email);
@@ -136,7 +305,7 @@ function cancelEdit() { // display none => editDiv, display initial => displayDi
     displayDiv.style.display = `initial`;
 };
 
-function confirmEdit() { // create a request body object filled with input data, call updateUserReq() with reqBody and userID as arguments
+function confirmEdit() { // create a request body object filled with input data, call updateUserReq() with reqBody and userID as arguments, updates DOM
 
     let editDiv = this.parentNode.parentNode,
         userDivID = editDiv.parentNode.id,
@@ -154,6 +323,7 @@ function confirmEdit() { // create a request body object filled with input data,
 
                     reqBody[child.name] = child.value.trim();
                     inputs.push(child);
+                    displayDiv.childNodes[0].childNodes[0].innerText = child.value.trim();
 
                     break;
 
@@ -161,6 +331,13 @@ function confirmEdit() { // create a request body object filled with input data,
 
                     reqBody[child.name] = child.value.trim();
                     inputs.push(child);
+                    displayDiv.childNodes[0].childNodes[1].innerText = child.value.trim();
+
+                    break;
+
+                case 'dob':
+
+                    // sanitize
 
                     break;
 
@@ -168,12 +345,7 @@ function confirmEdit() { // create a request body object filled with input data,
 
                     reqBody[child.name] = child.value.trim();
                     inputs.push(child);
-
-                    break;
-
-                case 'dob':
-
-                    // sanitize
+                    displayDiv.childNodes[2].innerText = child.value.trim();
 
                     break;
 
