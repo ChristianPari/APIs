@@ -1,4 +1,4 @@
-const apiKey = `oIPkz8yUCLZ_IDYhsYBjD2Swn1T0BcDEJoU3`;
+const apiKey = `f7PTYxjCIzQYQ5qdmmemFKNBBSXq9XDaC2tw`;
 
 function reqUsers(pageNum) { // GET request for all users data per specified page, call displayUsers()
 
@@ -65,6 +65,28 @@ function updateUserReq(upObj) { // PATCH request for specified user
     let body = JSON.stringify(upObj.newData);
 
     updateXHR.send(body);
+
+};
+
+function createUser(body) {
+    console.log(body);
+    let createXHR = new XMLHttpRequest(),
+        endpoint = `https://gorest.co.in/public-api/users?access-token=${apiKey}`;
+
+    createXHR.open('POST', endpoint);
+
+    createXHR.onload = () => {
+
+        let res = JSON.parse(createXHR.responseText);
+
+        console.log(res);
+
+    }
+
+    createXHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    createXHR.setRequestHeader("Authorization", "Basic");
+
+    createXHR.send(body);
 
 };
 
