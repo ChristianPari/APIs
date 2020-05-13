@@ -67,3 +67,6 @@ function updateUserReq(upObj) { // PATCH request for specified user
     updateXHR.send(body);
 
 };
+
+// vscode-fold=1
+//^ folding extension for vsCode that I utilize

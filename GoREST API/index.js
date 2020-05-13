@@ -199,3 +199,6 @@ function confirmEdit() { // create a request body object filled with input data,
     inputs.forEach(input => { input.value = `` });
 
 };
+
+// vscode-fold=1
+//^ folding extension for vsCode that I utilize

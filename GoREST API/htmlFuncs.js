@@ -156,3 +156,6 @@ function createForm(formObj) { // id
     return form
 
 };
+
+// vscode-fold=1
+//^ folding extension for vsCode that I utilize
