@@ -19,8 +19,8 @@ function reqUsers(pageNum) { // GET request for all users data per specified pag
         let usersRes = JSON.parse(reqXHR.responseText),
             allUsers = usersRes.result;
 
-        console.log(usersRes);
-        console.log(allUsers);
+        console.log(`Initial Response for page ${pageNum}`, usersRes);
+        console.log(`User Data for page ${pageNum}`, allUsers);
 
         displayUsers(allUsers);
 
@@ -48,7 +48,7 @@ function deleteUserReq(userID) { // DELETE request for specified userID
 function updateUserReq(upObj) { // PATCH request for specified user
 
     let updateXHR = new XMLHttpRequest(),
-        endpoint = `https://gorest.co.in/public-api/users/${userID}?access-token=${apiKey}`;
+        endpoint = `https://gorest.co.in/public-api/users/${upObj.userID}?access-token=${apiKey}`;
 
     updateXHR.open('PATCH', endpoint);
 
@@ -61,6 +61,8 @@ function updateUserReq(upObj) { // PATCH request for specified user
     };
 
     updateXHR.setRequestHeader('Content-Type', 'application/json');
+
+    let body = JSON.stringify(upObj.newData);
 
     updateXHR.send(body);
 
