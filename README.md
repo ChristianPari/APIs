@@ -11,3 +11,6 @@ This repo will contain all of my API projects, the contents of this repo will be
 
 * Working With CRUD
     - These are projects created to learn how to utilize CRUD to maniuplate data
+
+* GoRest
+    - All projects using the GoREST APIs
