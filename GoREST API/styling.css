@@ -1,0 +1,19 @@
+/* ######################### Body ######################### */
+
+body {
+    text-align: center;
+}
+
+
+/* ######################### User Divs ######################### */
+
+
+/** ############### Edit Divs ############### */
+
+.editDivs input {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
