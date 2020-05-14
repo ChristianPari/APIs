@@ -19,8 +19,8 @@ function reqUsers(pageNum) { // GET request for all users data per specified pag
         let usersRes = JSON.parse(reqXHR.responseText),
             allUsers = usersRes.result;
 
-        console.log(`Initial Response for page ${pageNum}`, usersRes);
-        console.log(`User Data for page ${pageNum}`, allUsers);
+        // console.log(`Initial Response for page ${pageNum}`, usersRes);
+        // console.log(`User Data for page ${pageNum}`, allUsers);
 
         displayUsers(allUsers);
 
@@ -47,6 +47,7 @@ function deleteUserReq(userID) { // DELETE request for specified userID
 
 function updateUserReq(upObj) { // PATCH request for specified user
 
+    console.log(upObj.newData);
     let updateXHR = new XMLHttpRequest(),
         endpoint = `https://gorest.co.in/public-api/users/${upObj.userID}?access-token=${apiKey}`;
 
@@ -56,14 +57,32 @@ function updateUserReq(upObj) { // PATCH request for specified user
 
         let updatedRes = JSON.parse(updateXHR.responseText);
 
-        console.log(updatedRes);
+        if (updatedRes._meta.success == true) {
+
+            updateDOM({ data: upObj.newData, divID: upObj.userID });
+
+        } else {
+
+            let subErrorsArr = updatedRes.result,
+                subErrorsMess = ``;
+
+            subErrorsArr.forEach(error => {
+
+                subErrorsMess += `Error ${subErrorsArr.indexOf(error) + 1}). Field '${error.field}': '${error.message}'\n`;
+
+            });
+
+            subErrorsMess += `Please fix and reconfirm`;
+
+            alert(`${subErrorsMess}`);
+
+        }
 
     };
 
     updateXHR.setRequestHeader('Content-Type', 'application/json');
 
     let body = JSON.stringify(upObj.newData);
-
     updateXHR.send(body);
 
 };
@@ -84,11 +103,9 @@ function createUser(body) {
     }
 
     createXHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    createXHR.setRequestHeader("Authorization", "Basic");
 
     createXHR.send(body);
 
 };
 
 // vscode-fold=1
-//^ folding extension for vsCode that I utilize
