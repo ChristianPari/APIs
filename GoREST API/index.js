@@ -2,8 +2,8 @@ let body = document.body,
     currentPage = 1,
     lastPage, // is assigned a value later within the intial GET request in xhrReqs.js line 27
     emailRegEx = /[A-z0-9]+[A-z0-9\.]+@[A-z0-9\.]+[A-z0-9]+/, // used to sanitize user email input in multiple functions
-    sanitizeEmail = /\.+/g; // used to sanitize user email input in multiple functions
-dobRegEx = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/,
+    sanitizeEmail = /\.+/g, // used to sanitize user email input in multiple functions
+    dobRegEx = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/, // used to sanitize user date of birth input for multiple functions
     storedData = {};
 
 window.onload = () => { // uiDiv, usersDiv, prevButton, nextButton
