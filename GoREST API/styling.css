@@ -2,13 +2,33 @@
 
 body {
     text-align: center;
+    background-color: black;
+    color: rgb(147, 147, 147);
 }
 
 
 /* ######################### Main UI Div ######################### */
 
+#uiDiv {
+    margin-bottom: 40px;
+}
+
+
+/** ############### Form Div ############### */
+
+#formDiv {
+    border-style: outset;
+    border-width: 5px;
+    border-color: black;
+    width: 200px;
+    height: 175px;
+    margin: auto;
+}
+
 #newUserFormHead {
-    margin-bottom: unset;
+    margin: unset;
+    margin-bottom: 2%;
+    border-bottom-style: double;
 }
 
 
@@ -25,8 +45,76 @@ button {
     margin: auto;
 }
 
+#prevPageBtn {
+    float: left;
+    margin-left: 25%;
+}
+
+#nextPageBtn {
+    float: right;
+    margin-right: 25%;
+}
+
+
+/* ######################### Users Div ######################### */
+
+#pageHeading {
+    font-size: 30px;
+    border-top-style: double;
+    border-bottom-style: double;
+    border-width: 10px;
+    border-color: rgba(255, 255, 255, 0.598);
+}
+
+
+/* ######################### Main Users Display ######################### */
+
+#mainUsersDisplay {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto;
+    border-style: inset;
+    border-width: 5px;
+    border-color: black;
+    padding: 0.5%;
+}
+
 
 /* ######################### User Divs ######################### */
+
+.userDivs {
+    border-style: inset;
+    border-width: 5px;
+    border-color: black;
+    margin: 2%;
+    padding: 0.5%;
+    height: 90%;
+}
+
+.nameDivs {
+    margin: unset;
+}
+
+.genders {
+    text-transform: capitalize;
+}
+
+.displayUiDivs {
+    margin-bottom: 0.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.editButtons {
+    float: left;
+    margin-left: 5%;
+}
+
+.deleteButtons {
+    float: right;
+    margin-right: 5%;
+}
 
 
 /** ############### Edit Divs ############### */
@@ -38,3 +126,16 @@ button {
     margin-top: 1%;
     margin-bottom: 1%;
 }
+
+.cancelButtons {
+    float: left;
+    margin: 10%;
+}
+
+.confirmButtons {
+    float: right;
+    margin: 10%;
+}
+
+
+/* vscode-fold=1 */
