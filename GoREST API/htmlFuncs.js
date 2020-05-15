@@ -1,4 +1,4 @@
-function createDiv(divObj) { // id, class
+function createDiv(divObj) { //* id, class
 
     let div = document.createElement(`div`);
 
@@ -10,7 +10,7 @@ function createDiv(divObj) { // id, class
 
 };
 
-function createHeading(headingObj) { // size, text, id, class
+function createHeading(headingObj) { //* size, text, id, class
 
     let heading = headingObj.size >= 1 && headingObj.size <= 5 ? document.createElement(`h` + headingObj.size) : document.createElement(`h5`);
 
@@ -24,7 +24,7 @@ function createHeading(headingObj) { // size, text, id, class
 
 };
 
-function createParagraph(paraObj) { // text, class, id
+function createParagraph(paraObj) { //* text, class, id
 
     let paragraph = document.createElement(`p`);
 
@@ -38,7 +38,7 @@ function createParagraph(paraObj) { // text, class, id
 
 };
 
-function createImage(imageObj) { // src, alt, id, class
+function createImage(imageObj) { //* src, alt, id, class
 
     let image = document.createElement(`img`);
 
@@ -54,7 +54,7 @@ function createImage(imageObj) { // src, alt, id, class
 
 };
 
-function createButton(buttonObj) { // id, class, text, onClickFunc
+function createButton(buttonObj) { //* id, class, text, onClickFunc
 
     let button = document.createElement(`button`);
 
@@ -70,7 +70,7 @@ function createButton(buttonObj) { // id, class, text, onClickFunc
 
 };
 
-function createHREF(hrefObj) { // id, newTab (true or false), ref, display (wether text, image, ect.)
+function createHREF(hrefObj) { //* id, newTab (true or false), ref, display (wether text, image, ect.)
 
     let href = document.createElement(`a`);
 
@@ -85,7 +85,7 @@ function createHREF(hrefObj) { // id, newTab (true or false), ref, display (weth
     return href
 };
 
-function createSelect(selectObj) { // id, class, defOp, defOpID, data (used to create the options), onChangeFunc
+function createSelect(selectObj) { //* id, class, defOp, defOpID, data (used to create the options), onChangeFunc
 
     let select = document.createElement(`select`);
 
@@ -123,7 +123,7 @@ function createSelect(selectObj) { // id, class, defOp, defOpID, data (used to c
 
 };
 
-function createInput(inputObj) { // id, type, name, class, sCheck, pHolder, onClickFunc, value
+function createInput(inputObj) { //* id, type, name, class, sCheck, pHolder, onClickFunc, value
 
     let input = document.createElement(`input`);
 
@@ -147,7 +147,7 @@ function createInput(inputObj) { // id, type, name, class, sCheck, pHolder, onCl
 
 };
 
-function createForm(formObj) { // id
+function createForm(formObj) { //* id
 
     let form = document.createElement(`form`);
 
