@@ -1,6 +1,6 @@
 const apiKey = `f7PTYxjCIzQYQ5qdmmemFKNBBSXq9XDaC2tw`;
 
-function reqUsers(pageNum) { // GET request for all users data per specified page, call displayUsers()
+function reqUsers(pageNum) { //* GET request for all users data per specified page, call displayUsers()
 
     if (storedData.hasOwnProperty(`page${pageNum}`)) {
 
@@ -19,8 +19,8 @@ function reqUsers(pageNum) { // GET request for all users data per specified pag
         let usersRes = JSON.parse(reqXHR.responseText),
             allUsers = usersRes.result;
 
-        // console.log(`Initial Response for page ${pageNum}`, usersRes);
-        // console.log(`User Data for page ${pageNum}`, allUsers);
+        console.log(`Initial Response for page ${pageNum}`, usersRes);
+        console.log(`User Data for page ${pageNum}`, allUsers);
 
         displayUsers(allUsers);
 
@@ -32,7 +32,7 @@ function reqUsers(pageNum) { // GET request for all users data per specified pag
 
 };
 
-function deleteUserReq(userID) { // DELETE request for specified userID
+function deleteUserReq(userID) { //* DELETE request for specified userID
 
     let delXHR = new XMLHttpRequest(),
         endpoint = `https://gorest.co.in/public-api/users/${userID}?access-token=${apiKey}`;
@@ -45,7 +45,7 @@ function deleteUserReq(userID) { // DELETE request for specified userID
 
 };
 
-function updateUserReq(upObj) { // PATCH request for specified user
+function updateUserReq(upObj) { //* PATCH request for specified user
 
     console.log(upObj.newData);
     let updateXHR = new XMLHttpRequest(),
@@ -87,24 +87,25 @@ function updateUserReq(upObj) { // PATCH request for specified user
 
 };
 
-function createUser(body) {
-    console.log(body);
+function createUser(body) { //* POST request for a new user
+
     let createXHR = new XMLHttpRequest(),
-        endpoint = `https://gorest.co.in/public-api/users?access-token=${apiKey}`;
+        endpoint = `https://gorest.co.in/public-api/users`; // apiKey is not needed when using Authorization header with Bearer Tokensa
 
     createXHR.open('POST', endpoint);
 
     createXHR.onload = () => {
 
-        let res = JSON.parse(createXHR.responseText);
+        storedData = {};
 
-        console.log(res);
+    };
 
-    }
+    createXHR.setRequestHeader('Content-Type', 'application/json');
+    createXHR.setRequestHeader('Authorization', `Bearer ${apiKey}`);
 
-    createXHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    let newBody = JSON.stringify(body);
 
-    createXHR.send(body);
+    createXHR.send(newBody);
 
 };
 
