@@ -2,14 +2,15 @@ let body = document.body,
     currentPage = 1,
     lastPage, // is assigned a value later within the intial GET request in xhrReqs.js line 27
     emailRegEx = /[A-z0-9]+[A-z0-9\.]+@[A-z0-9\.]+[A-z0-9]+/, // used to sanitize user email input in multiple functions
-    sanitizeEmail = /\.+/g, // used to sanitize user email input in multiple functions
+    dotRegex = /\.{2,}/g, // used to sanitize user email input in multiple functions
     dobRegEx = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/, // used to sanitize user date of birth input for multiple functions
     storedData = {};
 
-window.onload = () => { // uiDiv, usersDiv, prevButton, nextButton
+window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDiv, 
 
     let usersDiv = createDiv({ id: `usersDiv` }),
         uiDiv = createDiv({ id: `uiDiv` }),
+        formDiv = createDiv({ id: `formDiv` }),
         prevPageBtn = createButton({ id: `prevPageBtn`, text: `Previous Page`, onClickFunc: prevPageFunc }),
         nextPageBtn = createButton({ id: `nextPageBtn`, text: `Next Page`, onClickFunc: nextPageFunc }),
         newUserHeading = createHeading({ id: `newUserFormHead`, text: `Create New User`, size: 3 }),
@@ -19,7 +20,7 @@ window.onload = () => { // uiDiv, usersDiv, prevButton, nextButton
         dobInput = createInput({ type: `text`, id: `dobInput`, pHolder: `DoB YYYY-MM-DD`, name: `dob` }),
         addressInput = createInput({ type: `text`, id: `addressInput`, pHolder: `Address`, name: `address` }),
         emailInput = createInput({ type: `text`, id: `emailInput`, pHolder: `Email`, name: `email` }),
-        confirmNewButton = createInput({ type: `button`, id: `confrimNewButton`, value: `Confirm`, onClickFunc: `` }),
+        confirmNewButton = createInput({ type: `button`, id: `confrimNewButton`, value: `Confirm`, onClickFunc: createNewUser }),
         genderSelect = document.createElement(`select`);
     genderSelect.id = `genderSelect`;
     genderSelect.name = `gender`;
@@ -44,8 +45,9 @@ window.onload = () => { // uiDiv, usersDiv, prevButton, nextButton
 
     body.appendChild(uiDiv);
     body.appendChild(usersDiv);
-    uiDiv.appendChild(newUserHeading);
-    uiDiv.appendChild(createUserForm);
+    uiDiv.appendChild(formDiv);
+    formDiv.appendChild(newUserHeading);
+    formDiv.appendChild(createUserForm);
     createUserForm.style.marginBottom = `20px`;
     uiDiv.appendChild(prevPageBtn);
     uiDiv.appendChild(nextPageBtn);
@@ -61,146 +63,155 @@ window.onload = () => { // uiDiv, usersDiv, prevButton, nextButton
 
 };
 
-function prevPageFunc() { // decrements page, if first page goes to last page
+function prevPageFunc() { //* decrements page, if first page goes to last page
 
     currentPage = currentPage == 1 ? lastPage : currentPage - 1;
     reqUsers(currentPage);
 
 };
 
-function nextPageFunc() { // increments page, if last page goes to first page
+function nextPageFunc() { //* increments page, if last page goes to first page
 
     currentPage = currentPage == lastPage ? 1 : currentPage + 1;
     reqUsers(currentPage);
 
 };
 
-function genderChange() { // removes the default option from the select
+function genderChange() { //* removes the default option from the select
 
     if (this[0].innerText == `Select Gender`) { this[0].style.display = `none`; }
 
 };
 
-// function createNewUser() {
+function createNewUser() { //* checks inputed data aganist required feilds, if all required are filled then send the data as object to the createUser()
 
-//     let formData = Array.from({ length: this.parentNode.childNodes.length - 1 }, (a, b) => { return this.parentNode.childNodes[b] }),
-//         reqData = {},
-//         reqBody = ``,
-//         requiredFields = [`first_name`, `last_name`, `email`, `gender`],
-//         makeReq = true;
+    let formData = Array.from({ length: this.parentNode.childNodes.length - 1 }, (a, b) => { return this.parentNode.childNodes[b] }),
+        reqData = {},
+        requiredFields = [`first_name`, `last_name`, `email`, `gender`],
+        makeReq = true;
 
-//     formData.forEach(elm => {
+    formData.forEach(elm => {
 
-//         if (elm.localName == `input`) {
+        if (elm.localName == `input`) {
 
-//             switch (elm.name) {
+            switch (elm.name) {
 
-//                 case `first_name`:
+                case `first_name`:
 
 
-//                     if (elm.value.trim() == ``) {
+                    if (elm.value.trim() == ``) {
 
-//                         alert(`You must enter a first name`);
+                        alert(`You must enter a first name`);
 
-//                     } else {
+                    } else {
 
-//                         reqData[elm.name] = elm.value.trim();
+                        reqData[elm.name] = elm.value.trim();
+                        elm.value = '';
 
-//                     }
+                    }
 
-//                     break;
+                    break;
 
-//                 case `last_name`:
+                case `last_name`:
 
-//                     if (elm.value.trim() == ``) {
+                    if (elm.value.trim() == ``) {
 
-//                         alert(`You must enter a last name`);
+                        alert(`You must enter a last name`);
 
-//                     } else {
+                    } else {
 
-//                         reqData[elm.name] = elm.value.trim();
+                        reqData[elm.name] = elm.value.trim();
+                        elm.value = '';
 
-//                     }
+                    }
 
-//                     break;
+                    break;
 
-//                 case `dob`:
+                case `dob`:
 
-//                     if (elm.value != ``) {
+                    if (elm.value != ``) {
 
-//                         if (!dobRegEx.test(elm.value)) {
+                        if (!dobRegEx.test(elm.value)) {
 
-//                             alert(`Enter a valid date of birth`)
+                            alert(`Enter a valid date of birth`)
 
-//                         } else { reqData[elm.name] = elm.value; }
+                        } else {
 
-//                     }
+                            reqData[elm.name] = elm.value;
+                            elm.value = '';
 
-//                     break;
+                        }
 
-//                 case `address`:
+                    }
 
-//                     if (elm.value != ``) { reqData[elm.name] = elm.value; }
+                    break;
 
-//                     break;
+                case `address`:
 
-//                 case `email`:
+                    if (elm.value != ``) {
 
-//                     if (!emailRegEx.test(elm.value)) {
+                        reqData[elm.name] = elm.value;
+                        elm.value = '';
 
-//                         alert(`You must enter a valid email`);
+                    }
 
-//                     } else {
+                    break;
 
-//                         reqData[elm.name] = elm.value.replace(sanitizeEmail, `.`);
+                case `email`:
 
-//                     }
+                    if (!emailRegEx.test(elm.value) || dotRegex.test(elm.value)) {
 
-//                     break;
+                        alert(`You must enter a valid email`);
 
-//             }
+                    } else {
 
-//         }
+                        reqData[elm.name] = elm.value;
+                        elm.value = '';
 
-//         if (elm.localName == `select`) {
+                    }
 
-//             if (elm.value != ``) {
+                    break;
 
-//                 reqData[elm.name] = elm.value;
+            }
 
-//                 let genderSelect = document.getElementById(`genderSelect`);
-//                 genderSelect[0].style.display = `initial`;
-//                 genderSelect.value = ``;
+        }
 
-//             } else {
+        if (elm.localName == `select`) {
 
-//                 alert(`You must select a gender`);
-//                 return
+            if (elm.value != ``) {
 
-//             }
+                reqData[elm.name] = elm.value;
 
-//         }
+                let genderSelect = document.getElementById(`genderSelect`);
+                genderSelect[0].style.display = `initial`;
+                genderSelect.value = ``;
 
-//     });
+            } else {
 
-//     requiredFields.forEach(item => { if (!reqData.hasOwnProperty(item)) { makeReq = false; } });
+                alert(`You must select a gender`);
+                return
 
-//     for (const k in reqData) { reqBody += `${k}=${reqData[k]} `; }
+            }
 
-//     let userBody = reqBody.replace(/\s/g, `&`);
-//     userBody = userBody.substr(0, userBody.length - 1);
+        }
 
-//     if (makeReq == true) { createUser(userBody) }
+    });
 
-// };
+    requiredFields.forEach(item => { if (!reqData.hasOwnProperty(item)) { makeReq = false; } });
 
-function displayUsers(users) { // clear usersDiv, create: div1 => page heading, users divs w/ data; div2 => editing user data with inputs
+    if (makeReq == true) { createUser(reqData) }
+
+};
+
+function displayUsers(users) { //* clear usersDiv, create: div1 => page heading, users divs w/ data; div2 => editing user data with inputs
 
     usersDiv.innerHTML = ``;
 
-    let pageHeading = createHeading({ text: `Viewing Page #${currentPage}`, size: 2, id: `pageHeading` });
+    let mainUsersDisplay = createDiv({ id: `mainUsersDisplay` }),
+        pageHeading = createHeading({ text: `Viewing Page #${currentPage}`, size: 2, id: `pageHeading` });
 
     usersDiv.appendChild(pageHeading);
+    usersDiv.appendChild(mainUsersDisplay);
 
     let pageData = [];
 
@@ -217,18 +228,18 @@ function displayUsers(users) { // clear usersDiv, create: div1 => page heading, 
             firstName = createHeading({ text: user.first_name, size: 3, class: `firstNames` }),
             lastName = createHeading({ text: user.last_name, size: 3, class: `lastNames` }),
             gender = createHeading({ text: user.gender, size: 3, class: `genders` }),
-            dateOfBirth = createHeading({ text: `DoB: ${user.dob}`, size: 4, class: `dateOfBitrhs` }),
-            address = createHeading({ text: user.address, size: 5, class: `addresses` }),
+            dateOfBirth = createHeading({ text: user.dob != null ? `DoB: ${user.dob}` : '', size: 4, class: `dateOfBitrhs` }),
+            address = createHeading({ text: user.address != null ? user.address : '', size: 5, class: `addresses` }),
             email = createHeading({ text: user.email, size: 5, class: `emails` }),
-            editButton = createButton({ text: `Edit User`, onClickFunc: editUser }),
-            deleteButton = createButton({ text: `Delete User`, onClickFunc: deleteUser }),
+            editButton = createButton({ text: `Edit User`, class: `editButtons`, onClickFunc: editUser }),
+            deleteButton = createButton({ text: `Delete User`, class: `deleteButtons`, onClickFunc: deleteUser }),
             fNameInput = createInput({ type: `text`, class: `nameInputs`, pHolder: `New First Name`, name: `first_name` }),
             lNameInput = createInput({ type: `text`, class: `nameInputs`, pHolder: `New Last Name`, name: `last_name` }),
             dobInput = createInput({ type: `text`, class: `dobInputs`, pHolder: `New DoB YYYY-MM-DD`, name: `dob` }),
             addressInput = createInput({ type: `text`, class: `addressInputs`, pHolder: `New Address`, name: `address` }),
             emailInput = createInput({ type: `text`, class: `emailInputs`, pHolder: `New Email`, name: `email` }),
-            confirmButton = createButton({ text: `Confirm`, onClickFunc: confirmEdit }),
-            cancelButton = createButton({ text: `Cancel`, onClickFunc: cancelEdit });
+            confirmButton = createButton({ text: `Confirm`, class: `confirmButtons`, onClickFunc: confirmEdit }),
+            cancelButton = createButton({ text: `Cancel`, class: `cancelButtons`, onClickFunc: cancelEdit });
         genderSelectUpdate = document.createElement(`select`);
         genderSelectUpdate.name = `gender`;
         genderSelectUpdate.onchange = genderChange;
@@ -250,14 +261,13 @@ function displayUsers(users) { // clear usersDiv, create: div1 => page heading, 
         genderSelectUpdate.appendChild(female);
 
         // main divs for each user appended to parents
-        usersDiv.appendChild(div);
+        mainUsersDisplay.appendChild(div);
         div.appendChild(displayDiv);
         div.appendChild(editDiv);
 
         // initial DOM layout
         displayDiv.appendChild(nameDiv);
         nameDiv.appendChild(firstName);
-        nameDiv.style.marginTop = `15px`;
         firstName.style.display = `inline`;
         firstName.style.paddingRight = `2.5px`;
         nameDiv.appendChild(lastName);
@@ -290,10 +300,10 @@ function displayUsers(users) { // clear usersDiv, create: div1 => page heading, 
 
     storedData[`page${currentPage}`] = pageData;
 
-    // console.log(`Stored Pages`, storedData);
+    console.log(`Stored Pages`, storedData);
 };
 
-function editUser() { // display none => displayDiv, display initial => editDiv
+function editUser() { //* display none => displayDiv, display initial => editDiv
 
     let displayDiv = this.parentNode.parentNode,
         editDiv = this.parentNode.parentNode.parentNode.childNodes[1];
@@ -303,7 +313,7 @@ function editUser() { // display none => displayDiv, display initial => editDiv
 
 };
 
-function deleteUser() { // user confrim, if confirmed => DELETE request made with userID, userDiv removed from DOM, otherwise user not deleted
+function deleteUser() { //* user confrim, if confirmed => DELETE request made with userID, userDiv removed from DOM, otherwise user not deleted
 
     let userID = this.parentNode.parentNode.parentNode.id,
         confirm = prompt(`Type CONFIRM to make this deletion`);
@@ -317,7 +327,7 @@ function deleteUser() { // user confrim, if confirmed => DELETE request made wit
 
 };
 
-function cancelEdit() { // display none => editDiv, display initial => displayDiv, clears inputs value
+function cancelEdit() { //* display none => editDiv, display initial => displayDiv, clears inputs value
 
     let editDiv = this.parentNode.parentNode,
         displayDiv = this.parentNode.parentNode.parentNode.childNodes[0],
@@ -329,7 +339,7 @@ function cancelEdit() { // display none => editDiv, display initial => displayDi
     displayDiv.style.display = `initial`;
 };
 
-function confirmEdit() { // create a request body object filled with input data, call updateUserReq() with reqBody and userID as arguments, updates DOM
+function confirmEdit() { //* create a request body object filled with input data, call updateUserReq() with reqBody and userID as arguments, updates DOM
 
     let editDiv = this.parentNode.parentNode,
         userDivID = editDiv.parentNode.id,
@@ -411,13 +421,13 @@ function confirmEdit() { // create a request body object filled with input data,
 
                     if (child.value != ``) {
 
-                        if (!emailRegEx.test(child.value)) {
+                        if (!emailRegEx.test(child.value) || dotRegex.test(child.value)) {
 
                             alert(`You must enter a valid email`);
 
                         } else {
 
-                            reqBody[child.name] = child.value.replace(sanitizeEmail, `.`);
+                            reqBody[child.name] = child.value;
                             inputs.push(child);
 
                         }
@@ -443,7 +453,7 @@ function confirmEdit() { // create a request body object filled with input data,
 
 };
 
-function updateDOM(updated) { // uses the object data from the PATCH request to fill the DOM elements with the new data
+function updateDOM(updated) { //* uses the object data from the PATCH request to fill the DOM elements with the new data
 
     let displayDiv = document.getElementById(updated.divID).childNodes[0];
 
