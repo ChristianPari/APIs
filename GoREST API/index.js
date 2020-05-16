@@ -207,10 +207,34 @@ function displayUsers(users) { //* clear usersDiv, create: div1 => page heading,
 
     usersDiv.innerHTML = ``;
 
-    let mainUsersDisplay = createDiv({ id: `mainUsersDisplay` }),
-        pageHeading = createHeading({ text: `Viewing Page #${currentPage}`, size: 2, id: `pageHeading` });
+    let pageHeading = createHeading({ text: `Viewing Page #${currentPage}`, size: 2, id: `pageHeading` }),
+        mainUsersDisplay = createDiv({ id: `mainUsersDisplay` }),
+        filterDiv = createDiv({ id: `filterDiv` }),
+        filterHead = createHeading({ id: `filterHead`, text: `Filters`, size: 3 }),
+        genderForm = createForm({ id: `genderForm` }),
+        defGenLabel = createLabel({ for: `noGender`, text: `No Gender Filter` }),
+        maleLabel = createLabel({ for: `male`, text: `Filter Male` }),
+        femaleLabel = createLabel({ for: `female`, text: `Filter Female` });
+
+    let defGenRadio = createInput({ type: `radio`, name: `genders`, value: ``, checked: true });
+    defGenRadio.onclick = () => { genderFilter(defGenRadio) };
+
+    let maleRadio = createInput({ type: `radio`, name: `genders`, value: `male` });
+    maleRadio.onclick = () => { genderFilter(maleRadio) };
+
+    let femaleRadio = createInput({ type: `radio`, name: `genders`, value: `female` });
+    femaleRadio.onclick = () => { genderFilter(femaleRadio) };
 
     usersDiv.appendChild(pageHeading);
+    usersDiv.appendChild(filterDiv);
+    filterDiv.appendChild(filterHead);
+    filterDiv.appendChild(genderForm);
+    genderForm.appendChild(defGenRadio);
+    genderForm.appendChild(defGenLabel);
+    genderForm.appendChild(maleRadio);
+    genderForm.appendChild(maleLabel);
+    genderForm.appendChild(femaleRadio);
+    genderForm.appendChild(femaleLabel);
     usersDiv.appendChild(mainUsersDisplay);
 
     let pageData = [];
@@ -301,6 +325,51 @@ function displayUsers(users) { //* clear usersDiv, create: div1 => page heading,
     storedData[`page${currentPage}`] = pageData;
 
     console.log(`Stored Pages`, storedData);
+};
+
+function filterUsers() {
+
+    console.log(this);
+
+    switch (this.localName) {
+
+        case 'select':
+
+            break;
+    }
+
+};
+
+function genderFilter(button) {
+
+    let userDivs = button.parentNode.parentNode.parentNode.childNodes[2].childNodes,
+        users = Array.from({ length: userDivs.length }, (a, b) => userDivs[b]);
+
+    users.forEach(user => { user.style.display = `initial` });
+
+    if (button.value == `male`) {
+
+        users.filter(user => {
+
+            if (user.childNodes[0].childNodes[1].innerText.toLowerCase() != `male`) { user.style.display = `none` }
+
+        });
+
+    } else if (button.value == `female`) {
+
+        users.filter(user => {
+
+            if (user.childNodes[0].childNodes[1].innerText.toLowerCase() != `female`) { user.style.display = `none` }
+
+        });
+
+    } else {
+
+        user.forEach(user => { user.style.display = `initial` });
+
+    }
+
+
 };
 
 function editUser() { //* display none => displayDiv, display initial => editDiv
