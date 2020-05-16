@@ -203,7 +203,7 @@ function createNewUser() { //* checks inputed data aganist required feilds, if a
 
 };
 
-function displayUsers(users) { //* clear usersDiv, create: div1 => page heading, users divs w/ data; div2 => editing user data with inputs
+function displayUsers(users) { //* clear usersDiv, create: page heading, div1 => filtering actions, div2 => users divs w/ data; div3 => editing user data with inputs
 
     usersDiv.innerHTML = ``;
 
@@ -327,20 +327,7 @@ function displayUsers(users) { //* clear usersDiv, create: div1 => page heading,
     console.log(`Stored Pages`, storedData);
 };
 
-function filterUsers() {
-
-    console.log(this);
-
-    switch (this.localName) {
-
-        case 'select':
-
-            break;
-    }
-
-};
-
-function genderFilter(button) {
+function genderFilter(button) { //* uses radio value to filter divs by the users gender
 
     let userDivs = button.parentNode.parentNode.parentNode.childNodes[2].childNodes,
         users = Array.from({ length: userDivs.length }, (a, b) => userDivs[b]);
