@@ -14,7 +14,7 @@ function createHeading(headingObj) { //* size, text, id, class
 
     let heading = headingObj.size >= 1 && headingObj.size <= 5 ? document.createElement(`h` + headingObj.size) : document.createElement(`h5`);
 
-    heading.innerHTML = typeof headingObj.text == `string` ? headingObj.text : ``;
+    heading.innerText = typeof headingObj.text == `string` ? headingObj.text : ``;
 
     heading.id = headingObj.id != undefined && document.getElementById(headingObj.id) == null ? headingObj.id : ``;
 
@@ -28,7 +28,7 @@ function createParagraph(paraObj) { //* text, class, id
 
     let paragraph = document.createElement(`p`);
 
-    paragraph.innerHTML = paraObj.text != undefined ? paraObj.text : ``;
+    paragraph.innerText = paraObj.text != undefined ? paraObj.text : ``;
 
     paragraph.className = paraObj.class != undefined ? paraObj.class : ``;
 
@@ -80,7 +80,7 @@ function createHREF(hrefObj) { //* id, newTab (true or false), ref, display (wet
 
     href.href = hrefObj.ref != undefined ? hrefObj.ref : `>> No Referenece <<`;
 
-    href.innerHTML = hrefObj.display != undefined ? hrefObj.display : `>> No Display <<`;
+    href.innerText = hrefObj.display != undefined ? hrefObj.display : `>> No Display <<`;
 
     return href
 };
@@ -95,7 +95,7 @@ function createSelect(selectObj) { //* id, class, defOp, defOpID, data (used to 
 
     let defaultOp = document.createElement(`option`);
 
-    defaultOp.innerHTML = selectObj.defOp != undefined ? selectObj.defOp : `Select an Option`;
+    defaultOp.innerText = selectObj.defOp != undefined ? selectObj.defOp : `Select an Option`;
 
     defaultOp.id = selectObj.defOpID != undefined && document.getElementById(selectObj.defOpID) == null ? selectObj.defOpID : ``;
 
@@ -109,7 +109,7 @@ function createSelect(selectObj) { //* id, class, defOp, defOpID, data (used to 
 
         option.id = selectObj.data[a];
 
-        option.innerHTML = selectObj.data[a];
+        option.innerText = selectObj.data[a];
 
         option.value = selectObj.data[a];
 
@@ -123,11 +123,13 @@ function createSelect(selectObj) { //* id, class, defOp, defOpID, data (used to 
 
 };
 
-function createInput(inputObj) { //* id, type, name, class, sCheck, pHolder, onClickFunc, value
+function createInput(inputObj) { //* id, type, name, class, sCheck, pHolder, onClickFunc, value, text, checked
 
     let input = document.createElement(`input`);
 
     input.id = inputObj.id != undefined && document.getElementById(inputObj.id) == null ? inputObj.id : ``;
+
+    input.innerText = typeof inputObj.text == `string` ? inputObj.text : ``;
 
     input.type = inputObj.type != undefined ? inputObj.type : ``;
 
@@ -143,7 +145,21 @@ function createInput(inputObj) { //* id, type, name, class, sCheck, pHolder, onC
 
     input.onclick = inputObj.onClickFunc != undefined && typeof inputObj.onClickFunc == `function` ? inputObj.onClickFunc : ``;
 
+    input.checked = inputObj.checked != undefined && typeof inputObj.checked == `boolean` ? inputObj.checked : ``;
+
     return input
+
+};
+
+function createLabel(labelObj) { //* text, for
+
+    let label = document.createElement(`label`);
+
+    label.for = labelObj.for != undefined ? labelObj.for : ``;
+
+    label.innerText = labelObj.text != undefined ? labelObj.text : ``;
+
+    return label
 
 };
 
