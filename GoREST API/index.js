@@ -263,32 +263,8 @@ function displayUsers(users) { //* clear usersDiv, create: page heading, div1 =>
 
     let pageHeading = createHeading({ text: `Viewing Page #${currentPage}`, size: 2, id: `pageHeading` }),
         mainUsersDisplay = createDiv({ id: `mainUsersDisplay` });
-    // filterDiv = createDiv({ id: `filterDiv` }),
-    // filterHead = createHeading({ id: `filterHead`, text: `Filters`, size: 3 }),
-    // genderForm = createForm({ id: `genderForm` }),
-    // defGenLabel = createLabel({ for: `noGender`, text: `No Gender Filter` }),
-    // maleLabel = createLabel({ for: `male`, text: `Filter Male` }),
-    // femaleLabel = createLabel({ for: `female`, text: `Filter Female` });
-
-    // let defGenRadio = createInput({ type: `radio`, name: `genders`, value: ``, checked: true });
-    // defGenRadio.onclick = () => { genderFilter(defGenRadio) };
-
-    // let maleRadio = createInput({ type: `radio`, name: `genders`, value: `male` });
-    // maleRadio.onclick = () => { genderFilter(maleRadio) };
-
-    // let femaleRadio = createInput({ type: `radio`, name: `genders`, value: `female` });
-    // femaleRadio.onclick = () => { genderFilter(femaleRadio) };
 
     usersDiv.appendChild(pageHeading);
-    // usersDiv.appendChild(filterDiv);
-    // filterDiv.appendChild(filterHead);
-    // filterDiv.appendChild(genderForm);
-    // genderForm.appendChild(defGenRadio);
-    // genderForm.appendChild(defGenLabel);
-    // genderForm.appendChild(maleRadio);
-    // genderForm.appendChild(maleLabel);
-    // genderForm.appendChild(femaleRadio);
-    // genderForm.appendChild(femaleLabel);
     usersDiv.appendChild(mainUsersDisplay);
 
     let pageData = [];
@@ -376,17 +352,25 @@ function displayUsers(users) { //* clear usersDiv, create: page heading, div1 =>
 
     });
 
+    // let ageButton = document.getElementById(`ageRangeButton`);
+    // ageFilter(ageButton);
+    // // console.log(document.getElementById(`ageRangeButton`));
+    //! can't get age to filter on page change
+
+    let formElms = Array.from({ length: document.getElementById('genderForm').childNodes.length }, (a, b) => document.getElementById('genderForm').childNodes[b]),
+        checkedRadio = formElms.filter(elm => elm.checked == true)[0];
+    // console.log(checkedRadio);
+    genderFilter(checkedRadio);
+
     storedData[`page${currentPage}`] = pageData;
 
     console.log(`Stored Pages`, storedData);
 };
 
 function genderFilter(button) { //* uses radio value to filter divs by the users gender
-
+    // console.log(button);
     let userDivs = button.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1].childNodes,
         users = Array.from({ length: userDivs.length }, (a, b) => userDivs[b]);
-
-    users.forEach(user => { user.style.display = `initial` });
 
     if (button.value == `male`) {
 
@@ -406,25 +390,46 @@ function genderFilter(button) { //* uses radio value to filter divs by the users
 
     } else {
 
-        user.forEach(user => { user.style.display = `initial` });
+        users.forEach(user => { user.style.display = `initial` });
 
     }
 
 };
 
-function ageFilter() { //* uses input values to filter displayed users by age
-
-    let form = this.parentNode,
-        minAge = form.childNodes[1],
-        maxAge = form.childNodes[2],
-        usersDiv = this.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1],
+function ageFilter(elm) { //* uses input values to filter displayed users by age
+    console.log(elm);
+    console.log(this);
+    let form = elm.type == `click` ? this.parentNode : elm.parentNode,
+        minAge = form.childNodes[1].value,
+        maxAge = form.childNodes[2].value,
+        usersDiv = elm.type == `click` ? this.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1] : elm.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1],
         users = Array.from({ length: usersDiv.childNodes.length }, (a, b) => usersDiv.childNodes[b]),
         date = new Date(),
-        currentDate = `${date.getFullYear()}${date.getMonth >= 10 ? date.getMonth : `0${date.getMonth()}`}${date.getDate >= 10 ? date.getDate : `0${date.getDate()}`}`;
+        currentDate = Number(`${date.getFullYear()}${date.getMonth() >= 10 ? date.getMonth() : `0${date.getMonth()}`}${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}`), // converts to YYYYMMDD format
+        earliestYear = minAge != '' ? currentDate - Number(`${minAge}0000`) : currentDate - 110000, // 110000 is 11 years, user must be at least 11 to have an account
+        oldestYear = maxAge != '' ? currentDate - Number(`${maxAge}0000`) : currentDate - currentDate ; // becomes year 0 due to no limit
 
-        console.log(users[0].childNodes[0].childNodes[2].innerText.replace(`DoB: `, ``).replace(/\-/g, ``));
-    // if (minAge.value < 11) { alert(`Minimum age must be 11 or older`); }
-    // if (maxAge.value > 100) { alert(`Maximum age must be 110 or less`); }
+        if (minAge.value < 11) { return alert(`Minimum age must be 11 or older`); }
+        if (maxAge.value > 110) { return alert(`Maximum age must be 110 or less`); }
+
+        users.forEach(user => {
+
+
+            userDoB = Number(user.childNodes[0].childNodes[2].innerText.replace(`DoB: `, ``).replace(/\-/g, ``));
+
+            if (userDoB > earliestYear || userDoB < oldestYear) { 
+                console.log(`none`);
+                user.style.display = `none`;
+            
+            } else { 
+            console.log(`initial`);    
+                user.style.display = `initial`;
+            
+            }
+
+        });
+
+
 
 };
 
