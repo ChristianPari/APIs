@@ -8,18 +8,15 @@ let body = document.body,
 
 window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDiv, 
 
-    let usersDiv = createDiv({ id: `usersDiv` }),
-        uiDiv = createDiv({ id: `uiDiv` }),
-        formDiv = createDiv({ id: `formDiv` }),
-        buttonsDiv = createDiv({ id: `buttonsDiv` }),
-        prevPageBtn = createButton({ id: `prevPageBtn`, text: `Previous Page`, onClickFunc: prevPageFunc }),
-        nextPageBtn = createButton({ id: `nextPageBtn`, text: `Next Page`, onClickFunc: nextPageFunc }),
-        filterDiv = createDiv({ id: `filterDiv` }),
-        filterHead = createHeading({ id: `filterHead`, text: `Filters`, size: 3 }),
-        genderForm = createForm({ id: `genderForm` }),
-        defGenLabel = createLabel({ for: `noGender`, text: `No Gender Filter` }),
-        maleLabel = createLabel({ for: `male`, text: `Filter Male` }),
-        femaleLabel = createLabel({ for: `female`, text: `Filter Female` }),
+    // ######################### Main Divs #########################
+    let uiDiv = createDiv({ id: `uiDiv` }), // contains UI for webpage
+        usersDiv = createDiv({ id: `usersDiv` }); // will contain user data
+
+    body.appendChild(uiDiv);
+    body.appendChild(usersDiv);
+
+    // ######################### New User Div #########################
+    let newUserDiv = createDiv({ id: `newUserDiv` }),
         newUserHeading = createHeading({ id: `newUserFormHead`, text: `Create New User`, size: 3 }),
         createUserForm = createForm({ id: `createUserForm` }),
         fNameInput = createInput({ type: `text`, id: `firstNameInput`, pHolder: `First Name`, name: `first_name` }),
@@ -45,9 +42,39 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
     female.innerText = `Female`;
     female.value = `female`;
 
+    uiDiv.appendChild(newUserDiv);
+    newUserDiv.appendChild(newUserHeading);
+    newUserDiv.appendChild(createUserForm);
+    createUserForm.style.marginBottom = `20px`;
+    createUserForm.appendChild(fNameInput);
+    createUserForm.appendChild(lNameInput);
+    createUserForm.appendChild(dobInput);
+    createUserForm.appendChild(addressInput);
+    createUserForm.appendChild(emailInput);
+    createUserForm.appendChild(genderSelect);
     genderSelect.appendChild(defaultGender);
     genderSelect.appendChild(male);
     genderSelect.appendChild(female);
+    createUserForm.appendChild(confirmNewButton);
+
+    // ######################### Button UI #########################
+    let buttonsDiv = createDiv({ id: `buttonsDiv` }),
+        prevPageBtn = createButton({ id: `prevPageBtn`, text: `Previous Page`, onClickFunc: prevPageFunc }),
+        nextPageBtn = createButton({ id: `nextPageBtn`, text: `Next Page`, onClickFunc: nextPageFunc });
+
+    uiDiv.appendChild(buttonsDiv);
+    buttonsDiv.appendChild(prevPageBtn);
+    buttonsDiv.appendChild(nextPageBtn);
+
+    // ######################### Filter Div #########################
+    let filterDiv = createDiv({ id: `filterDiv` });
+
+    //* ############### Gender Filters ###############
+    let genderForm = createForm({ id: `genderForm` }),
+        filterHead = createHeading({ id: `filterHead`, text: `Filters`, size: 3 }),
+        defGenLabel = createLabel({ for: `noGender`, text: `No Gender Filter` }),
+        maleLabel = createLabel({ for: `male`, text: `Filter Male` }),
+        femaleLabel = createLabel({ for: `female`, text: `Filter Female` });
 
     let defGenRadio = createInput({ type: `radio`, name: `genders`, value: ``, checked: true });
     defGenRadio.onclick = () => { genderFilter(defGenRadio) };
@@ -58,22 +85,18 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
     let femaleRadio = createInput({ type: `radio`, name: `genders`, value: `female` });
     femaleRadio.onclick = () => { genderFilter(femaleRadio) };
 
-    body.appendChild(uiDiv);
-    body.appendChild(usersDiv);
-    uiDiv.appendChild(formDiv);
-    formDiv.appendChild(newUserHeading);
-    formDiv.appendChild(createUserForm);
-    createUserForm.style.marginBottom = `20px`;
-    uiDiv.appendChild(buttonsDiv);
-    buttonsDiv.appendChild(prevPageBtn);
-    buttonsDiv.appendChild(nextPageBtn);
-    createUserForm.appendChild(fNameInput);
-    createUserForm.appendChild(lNameInput);
-    createUserForm.appendChild(dobInput);
-    createUserForm.appendChild(addressInput);
-    createUserForm.appendChild(emailInput);
-    createUserForm.appendChild(genderSelect);
-    createUserForm.appendChild(confirmNewButton);
+    //* ############### Age Filter ###############
+    let ageFilterDiv = createDiv({ id: `ageFilterDiv` }),
+        // need two inputs min age max age
+        // need label, placeholders for each
+        // an arrow from left to right
+        // confirm button
+        ageForm = createForm({ id: `ageForm` }),
+        ageFilterHead = createLabel({ text: `Filter Age: ` }),
+        minAgeInput = createInput({ type: `number`, name: `min`, pHolder: `11 and up`, min: 11, max: 110 }),
+        maxAgeInput = createInput({ type: `number`, name: `max`, pHolder: `110 or less`, min: 11, max: 110 }),
+        ageRangeButton = createInput({ type: `button`, id: `ageRangeButton`, value: `Confrim Age Range`, onClickFunc: ageFilter });
+
     uiDiv.appendChild(filterDiv);
     filterDiv.appendChild(filterHead);
     filterDiv.appendChild(genderForm);
@@ -83,6 +106,12 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
     genderForm.appendChild(maleLabel);
     genderForm.appendChild(femaleRadio);
     genderForm.appendChild(femaleLabel);
+    uiDiv.appendChild(ageFilterDiv);
+    ageFilterDiv.appendChild(ageForm);
+    ageForm.appendChild(ageFilterHead);
+    ageForm.appendChild(minAgeInput);
+    ageForm.appendChild(maxAgeInput);
+    ageForm.appendChild(ageRangeButton);
 
     reqUsers(currentPage);
 
@@ -380,6 +409,22 @@ function genderFilter(button) { //* uses radio value to filter divs by the users
         user.forEach(user => { user.style.display = `initial` });
 
     }
+
+};
+
+function ageFilter() { //* uses input values to filter displayed users by age
+
+    let form = this.parentNode,
+        minAge = form.childNodes[1],
+        maxAge = form.childNodes[2],
+        usersDiv = this.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1],
+        users = Array.from({ length: usersDiv.childNodes.length }, (a, b) => usersDiv.childNodes[b]),
+        date = new Date(),
+        currentDate = `${date.getFullYear()}${date.getMonth >= 10 ? date.getMonth : `0${date.getMonth()}`}${date.getDate >= 10 ? date.getDate : `0${date.getDate()}`}`;
+
+        console.log(users[0].childNodes[0].childNodes[2].innerText.replace(`DoB: `, ``).replace(/\-/g, ``));
+    // if (minAge.value < 11) { alert(`Minimum age must be 11 or older`); }
+    // if (maxAge.value > 100) { alert(`Maximum age must be 110 or less`); }
 
 };
 
