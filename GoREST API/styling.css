@@ -67,6 +67,16 @@ button {
 }
 
 
+/* ######################### Filters Div ######################### */
+
+
+/** ############### Gender Filter ############### */
+
+#genderForm {
+    border-style: solid;
+}
+
+
 /* ######################### Main Users Display ######################### */
 
 #mainUsersDisplay {
