@@ -123,7 +123,7 @@ function createSelect(selectObj) { //* id, class, defOp, defOpID, data (used to 
 
 };
 
-function createInput(inputObj) { //* id, type, name, class, sCheck, pHolder, onClickFunc, value, text, checked
+function createInput(inputObj) { //* id, type, name, class, sCheck, pHolder, onClickFunc, value, text, checked, min, max
 
     let input = document.createElement(`input`);
 
@@ -142,6 +142,10 @@ function createInput(inputObj) { //* id, type, name, class, sCheck, pHolder, onC
     input.placeholder = inputObj.pHolder != undefined ? inputObj.pHolder : ``;
 
     input.className = inputObj.class != undefined ? inputObj.class : ``;
+
+    input.min = inputObj.min != undefined ? inputObj.min : ``;
+
+    input.max = inputObj.max != undefined ? inputObj.max : ``;
 
     input.onclick = inputObj.onClickFunc != undefined && typeof inputObj.onClickFunc == `function` ? inputObj.onClickFunc : ``;
 
