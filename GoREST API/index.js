@@ -11,8 +11,15 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
     let usersDiv = createDiv({ id: `usersDiv` }),
         uiDiv = createDiv({ id: `uiDiv` }),
         formDiv = createDiv({ id: `formDiv` }),
+        buttonsDiv = createDiv({ id: `buttonsDiv` }),
         prevPageBtn = createButton({ id: `prevPageBtn`, text: `Previous Page`, onClickFunc: prevPageFunc }),
         nextPageBtn = createButton({ id: `nextPageBtn`, text: `Next Page`, onClickFunc: nextPageFunc }),
+        filterDiv = createDiv({ id: `filterDiv` }),
+        filterHead = createHeading({ id: `filterHead`, text: `Filters`, size: 3 }),
+        genderForm = createForm({ id: `genderForm` }),
+        defGenLabel = createLabel({ for: `noGender`, text: `No Gender Filter` }),
+        maleLabel = createLabel({ for: `male`, text: `Filter Male` }),
+        femaleLabel = createLabel({ for: `female`, text: `Filter Female` }),
         newUserHeading = createHeading({ id: `newUserFormHead`, text: `Create New User`, size: 3 }),
         createUserForm = createForm({ id: `createUserForm` }),
         fNameInput = createInput({ type: `text`, id: `firstNameInput`, pHolder: `First Name`, name: `first_name` }),
@@ -42,6 +49,14 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
     genderSelect.appendChild(male);
     genderSelect.appendChild(female);
 
+    let defGenRadio = createInput({ type: `radio`, name: `genders`, value: ``, checked: true });
+    defGenRadio.onclick = () => { genderFilter(defGenRadio) };
+
+    let maleRadio = createInput({ type: `radio`, name: `genders`, value: `male` });
+    maleRadio.onclick = () => { genderFilter(maleRadio) };
+
+    let femaleRadio = createInput({ type: `radio`, name: `genders`, value: `female` });
+    femaleRadio.onclick = () => { genderFilter(femaleRadio) };
 
     body.appendChild(uiDiv);
     body.appendChild(usersDiv);
@@ -49,8 +64,9 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
     formDiv.appendChild(newUserHeading);
     formDiv.appendChild(createUserForm);
     createUserForm.style.marginBottom = `20px`;
-    uiDiv.appendChild(prevPageBtn);
-    uiDiv.appendChild(nextPageBtn);
+    uiDiv.appendChild(buttonsDiv);
+    buttonsDiv.appendChild(prevPageBtn);
+    buttonsDiv.appendChild(nextPageBtn);
     createUserForm.appendChild(fNameInput);
     createUserForm.appendChild(lNameInput);
     createUserForm.appendChild(dobInput);
@@ -58,6 +74,15 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
     createUserForm.appendChild(emailInput);
     createUserForm.appendChild(genderSelect);
     createUserForm.appendChild(confirmNewButton);
+    uiDiv.appendChild(filterDiv);
+    filterDiv.appendChild(filterHead);
+    filterDiv.appendChild(genderForm);
+    genderForm.appendChild(defGenRadio);
+    genderForm.appendChild(defGenLabel);
+    genderForm.appendChild(maleRadio);
+    genderForm.appendChild(maleLabel);
+    genderForm.appendChild(femaleRadio);
+    genderForm.appendChild(femaleLabel);
 
     reqUsers(currentPage);
 
@@ -208,33 +233,33 @@ function displayUsers(users) { //* clear usersDiv, create: page heading, div1 =>
     usersDiv.innerHTML = ``;
 
     let pageHeading = createHeading({ text: `Viewing Page #${currentPage}`, size: 2, id: `pageHeading` }),
-        mainUsersDisplay = createDiv({ id: `mainUsersDisplay` }),
-        filterDiv = createDiv({ id: `filterDiv` }),
-        filterHead = createHeading({ id: `filterHead`, text: `Filters`, size: 3 }),
-        genderForm = createForm({ id: `genderForm` }),
-        defGenLabel = createLabel({ for: `noGender`, text: `No Gender Filter` }),
-        maleLabel = createLabel({ for: `male`, text: `Filter Male` }),
-        femaleLabel = createLabel({ for: `female`, text: `Filter Female` });
+        mainUsersDisplay = createDiv({ id: `mainUsersDisplay` });
+    // filterDiv = createDiv({ id: `filterDiv` }),
+    // filterHead = createHeading({ id: `filterHead`, text: `Filters`, size: 3 }),
+    // genderForm = createForm({ id: `genderForm` }),
+    // defGenLabel = createLabel({ for: `noGender`, text: `No Gender Filter` }),
+    // maleLabel = createLabel({ for: `male`, text: `Filter Male` }),
+    // femaleLabel = createLabel({ for: `female`, text: `Filter Female` });
 
-    let defGenRadio = createInput({ type: `radio`, name: `genders`, value: ``, checked: true });
-    defGenRadio.onclick = () => { genderFilter(defGenRadio) };
+    // let defGenRadio = createInput({ type: `radio`, name: `genders`, value: ``, checked: true });
+    // defGenRadio.onclick = () => { genderFilter(defGenRadio) };
 
-    let maleRadio = createInput({ type: `radio`, name: `genders`, value: `male` });
-    maleRadio.onclick = () => { genderFilter(maleRadio) };
+    // let maleRadio = createInput({ type: `radio`, name: `genders`, value: `male` });
+    // maleRadio.onclick = () => { genderFilter(maleRadio) };
 
-    let femaleRadio = createInput({ type: `radio`, name: `genders`, value: `female` });
-    femaleRadio.onclick = () => { genderFilter(femaleRadio) };
+    // let femaleRadio = createInput({ type: `radio`, name: `genders`, value: `female` });
+    // femaleRadio.onclick = () => { genderFilter(femaleRadio) };
 
     usersDiv.appendChild(pageHeading);
-    usersDiv.appendChild(filterDiv);
-    filterDiv.appendChild(filterHead);
-    filterDiv.appendChild(genderForm);
-    genderForm.appendChild(defGenRadio);
-    genderForm.appendChild(defGenLabel);
-    genderForm.appendChild(maleRadio);
-    genderForm.appendChild(maleLabel);
-    genderForm.appendChild(femaleRadio);
-    genderForm.appendChild(femaleLabel);
+    // usersDiv.appendChild(filterDiv);
+    // filterDiv.appendChild(filterHead);
+    // filterDiv.appendChild(genderForm);
+    // genderForm.appendChild(defGenRadio);
+    // genderForm.appendChild(defGenLabel);
+    // genderForm.appendChild(maleRadio);
+    // genderForm.appendChild(maleLabel);
+    // genderForm.appendChild(femaleRadio);
+    // genderForm.appendChild(femaleLabel);
     usersDiv.appendChild(mainUsersDisplay);
 
     let pageData = [];
@@ -329,7 +354,7 @@ function displayUsers(users) { //* clear usersDiv, create: page heading, div1 =>
 
 function genderFilter(button) { //* uses radio value to filter divs by the users gender
 
-    let userDivs = button.parentNode.parentNode.parentNode.childNodes[2].childNodes,
+    let userDivs = button.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1].childNodes,
         users = Array.from({ length: userDivs.length }, (a, b) => userDivs[b]);
 
     users.forEach(user => { user.style.display = `initial` });
@@ -355,7 +380,6 @@ function genderFilter(button) { //* uses radio value to filter divs by the users
         user.forEach(user => { user.style.display = `initial` });
 
     }
-
 
 };
 
