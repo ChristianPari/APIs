@@ -663,7 +663,7 @@ function getPosts() { //* gets the users posts via GET request to the API
 
 };
 
-function displayPosts(userName, posts) {
+function displayPosts(userName, posts) { //* clears DOM, takes posts data and creates a DOM layout
 
     body.innerHTML = '';
 
