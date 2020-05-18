@@ -6,7 +6,9 @@ let body = document.body,
     dobRegEx = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/, // used to sanitize user date of birth input for multiple functions
     storedData = {};
 
-window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDiv, 
+window.onload = () => { createMainPage(); }
+
+function createMainPage() { //* uiDiv, new userform, prevButton, nextButton, usersDiv, 
 
     // ######################### Main Divs #########################
     let uiDiv = createDiv({ id: `uiDiv` }), // contains UI for webpage
@@ -260,6 +262,89 @@ function createNewUser() { //* checks inputed data aganist required feilds, if a
 
 };
 
+function genderFilter(button) { //* uses radio value to filter divs by the users gender
+
+    let userDivs = button.parentNode.parentNode.parentNode.parentNode.children.usersDiv.childNodes[1].childNodes,
+        users = Array.from({ length: userDivs.length }, (a, b) => userDivs[b]);
+
+    if (button.value == `male`) {
+
+        users.filter(user => {
+
+            if (user.childNodes[0].childNodes[1].innerText.toLowerCase() != `male`) { user.style.display = `none` }
+
+        });
+
+    } else if (button.value == `female`) {
+
+        users.filter(user => {
+
+            if (user.childNodes[0].childNodes[1].innerText.toLowerCase() != `female`) { user.style.display = `none` }
+
+        });
+
+    } else {
+
+        users.forEach(user => { user.style.display = `initial` });
+
+    }
+
+    ageFilter(); // ensures age range is kept when changing genders
+
+};
+
+function ageFilter() { //* uses input values to filter displayed users by age
+
+    let form = document.getElementById('ageForm'),
+        genderForm = Array.from({ length: document.getElementById('genderForm').childNodes.length }, (a, b) => document.getElementById('genderForm').childNodes[b]),
+        checkedGender = genderForm.filter(elm => elm.checked == true)[0], // needed to compare the users genders and ensure that only the selected gender appears if any
+        minAge = form.childNodes[1].value,
+        maxAge = form.childNodes[2].value,
+        usersDiv = form.parentNode.parentNode.parentNode.children.usersDiv.childNodes[1],
+        users = Array.from({ length: usersDiv.childNodes.length }, (a, b) => usersDiv.childNodes[b]),
+        date = new Date(),
+        currentDate = Number(`${date.getFullYear()}${date.getMonth() >= 10 ? date.getMonth() : `0${date.getMonth()}`}${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}`), // converts to YYYYMMDD format
+        earliestYear = minAge != '' ? currentDate - Number(`${minAge}0000`) : currentDate,
+        oldestYear = maxAge != '' ? currentDate - Number(`${maxAge}0000`) : 0;
+        
+        if (minAge.value < 1 || minAge.value > 110 || maxAge.value < 1 || maxAge.value > 110) { 
+            
+            return alert(`Filter range is between 1 and 110, please adjust your filter ages`); 
+        
+        }
+
+        users.forEach(user => {
+
+            let userDoB = Number(user.childNodes[0].childNodes[2].innerText.replace(`DoB: `, ``).replace(/\-/g, ``)),
+                userGender = user.childNodes[0].childNodes[1].innerText.toLowerCase();
+
+            if (userDoB > earliestYear || userDoB < oldestYear) { 
+                console.log(`none`);
+                user.style.display = `none`;
+            
+            } else { 
+            console.log(`initial`);    
+                user.style.display = `initial`;
+            
+            }
+
+            if (checkedGender.value != '' && userGender != checkedGender.value) { user.style.display = `none`; }
+
+        });
+
+};
+
+function removeAgeFilter() { //* clears age inputs, removes sets age filters to current date and year 0 to remove filter
+
+    let formElms = Array.from({length: document.getElementById('ageForm').childNodes.length}, (a,b) => document.getElementById('ageForm').childNodes[b]),
+        ageInputs = formElms.filter(input => input.type == 'number');
+
+        ageInputs.forEach(input => { input.value = '' });
+
+        ageFilter();
+
+};
+
 function displayUsers(users) { //* clear usersDiv, create: page heading, div1 => filtering actions, div2 => users divs w/ data; div3 => editing user data with inputs
 
     usersDiv.innerHTML = ``;
@@ -290,6 +375,7 @@ function displayUsers(users) { //* clear usersDiv, create: page heading, div1 =>
             email = createHeading({ text: user.email, size: 5, class: `emails` }),
             editButton = createButton({ text: `Edit User`, class: `editButtons`, onClickFunc: editUser }),
             deleteButton = createButton({ text: `Delete User`, class: `deleteButtons`, onClickFunc: deleteUser }),
+            viewPostsButton = createButton({ text: `View Posts`, class: `postsButtons`, id: `user${user.id}`, onClickFunc: getPosts }),
             fNameInput = createInput({ type: `text`, class: `nameInputs`, pHolder: `New First Name`, name: `first_name` }),
             lNameInput = createInput({ type: `text`, class: `nameInputs`, pHolder: `New Last Name`, name: `last_name` }),
             dobInput = createInput({ type: `text`, class: `dobInputs`, pHolder: `New DoB YYYY-MM-DD`, name: `dob` }),
@@ -338,6 +424,7 @@ function displayUsers(users) { //* clear usersDiv, create: page heading, div1 =>
         displayDiv.appendChild(displayUiDiv);
         displayUiDiv.appendChild(editButton);
         displayUiDiv.appendChild(deleteButton);
+        displayDiv.appendChild(viewPostsButton);
 
         // appearance in a user edit mode
         editDiv.appendChild(fNameInput);
@@ -362,89 +449,6 @@ function displayUsers(users) { //* clear usersDiv, create: page heading, div1 =>
     genderFilter(checkedRadio);
 
     console.log(`Stored Pages`, storedData);
-};
-
-function genderFilter(button) { //* uses radio value to filter divs by the users gender
-
-    let userDivs = button.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1].childNodes,
-        users = Array.from({ length: userDivs.length }, (a, b) => userDivs[b]);
-
-    if (button.value == `male`) {
-
-        users.filter(user => {
-
-            if (user.childNodes[0].childNodes[1].innerText.toLowerCase() != `male`) { user.style.display = `none` }
-
-        });
-
-    } else if (button.value == `female`) {
-
-        users.filter(user => {
-
-            if (user.childNodes[0].childNodes[1].innerText.toLowerCase() != `female`) { user.style.display = `none` }
-
-        });
-
-    } else {
-
-        users.forEach(user => { user.style.display = `initial` });
-
-    }
-
-    ageFilter(); // ensures age range is kept when changing genders
-
-};
-
-function ageFilter() { //* uses input values to filter displayed users by age
-
-    let form = document.getElementById('ageForm'),
-        genderForm = Array.from({ length: document.getElementById('genderForm').childNodes.length }, (a, b) => document.getElementById('genderForm').childNodes[b]),
-        checkedGender = genderForm.filter(elm => elm.checked == true)[0], // needed to compare the users genders and ensure that only the selected gender appears if any
-        minAge = form.childNodes[1].value,
-        maxAge = form.childNodes[2].value,
-        usersDiv = form.parentNode.parentNode.parentNode.childNodes[12].childNodes[1],
-        users = Array.from({ length: usersDiv.childNodes.length }, (a, b) => usersDiv.childNodes[b]),
-        date = new Date(),
-        currentDate = Number(`${date.getFullYear()}${date.getMonth() >= 10 ? date.getMonth() : `0${date.getMonth()}`}${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}`), // converts to YYYYMMDD format
-        earliestYear = minAge != '' ? currentDate - Number(`${minAge}0000`) : currentDate,
-        oldestYear = maxAge != '' ? currentDate - Number(`${maxAge}0000`) : 0;
-        
-        if (minAge.value < 1 || minAge.value > 110 || maxAge.value < 1 || maxAge.value > 110) { 
-            
-            return alert(`Filter range is between 1 and 110, please adjust your filter ages`); 
-        
-        }
-
-        users.forEach(user => {
-
-            let userDoB = Number(user.childNodes[0].childNodes[2].innerText.replace(`DoB: `, ``).replace(/\-/g, ``)),
-                userGender = user.childNodes[0].childNodes[1].innerText.toLowerCase();
-
-            if (userDoB > earliestYear || userDoB < oldestYear) { 
-                console.log(`none`);
-                user.style.display = `none`;
-            
-            } else { 
-            console.log(`initial`);    
-                user.style.display = `initial`;
-            
-            }
-
-            if (checkedGender.value != '' && userGender != checkedGender.value) { user.style.display = `none`; }
-
-        });
-
-};
-
-function removeAgeFilter() { //* clears age inputs, removes sets age filters to current date and year 0 to remove filter
-
-    let formElms = Array.from({length: document.getElementById('ageForm').childNodes.length}, (a,b) => document.getElementById('ageForm').childNodes[b]),
-        ageInputs = formElms.filter(input => input.type == 'number');
-
-        ageInputs.forEach(input => { input.value = '' });
-
-        ageFilter();
-
 };
 
 function editUser() { //* display none => displayDiv, display initial => editDiv
@@ -647,6 +651,51 @@ function updateDOM(updated) { //* uses the object data from the PATCH request to
         }
 
     }
+
+};
+
+function getPosts() { //* gets the users posts via GET request to the API
+
+    let userID = this.id.replace('user', ''), // removes the string (user) before the digits (userID)
+        userName = `${this.parentNode.childNodes[0].childNodes[0].innerText} ${this.parentNode.childNodes[0].childNodes[1].innerText}`;
+        
+    getUserPosts(userID, userName);
+
+};
+
+function displayPosts(userName, posts) {
+
+    body.innerHTML = '';
+
+    let userHeading = createHeading({text: `${userName}'s Posts`, id: `userHeading`, size: 2}),
+        postsDiv = createDiv({id: `postsDiv`}),
+        goBackButton = createButton({text: `Return to Main Page`, id: `goBackButton`, onClickFunc: goBackToMain });
+
+    body.appendChild(userHeading);
+    body.appendChild(postsDiv);
+    body.appendChild(goBackButton);
+
+    posts.forEach(post => {
+        
+        let postDiv = createDiv({class: `postDivs`}),
+            postTitle = createHeading({text: post.title, size: 3, class: `postTitles`}),
+            postBody = createParagraph({ text: post.body, class: `postBodys`});
+
+            postDiv.appendChild(postTitle);
+            postDiv.appendChild(postBody);
+            postsDiv.appendChild(postDiv);
+
+    });
+
+};
+
+function goBackToMain() { //* clears the DOM, runs orginal function to have the main page redisplayed
+
+   console.log(this);
+
+   body.innerHTML = '';
+
+    createMainPage();
 
 };
 
