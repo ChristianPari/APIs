@@ -70,7 +70,7 @@ function createButton(buttonObj) { //* id, class, text, onClickFunc
 
 };
 
-function createHREF(hrefObj) { //* id, newTab (true or false), ref, display (wether text, image, ect.)
+function createHREF(hrefObj) { //* id, newTab (true or false), ref, display (wether text, image, ect.), onClickFunc
 
     let href = document.createElement(`a`);
 
@@ -81,6 +81,8 @@ function createHREF(hrefObj) { //* id, newTab (true or false), ref, display (wet
     href.href = hrefObj.ref != undefined ? hrefObj.ref : `>> No Referenece <<`;
 
     href.innerText = hrefObj.display != undefined ? hrefObj.display : `>> No Display <<`;
+
+    href.onclick = hrefObj.onClickFunc != undefined && typeof hrefObj.onClickFunc == `function` ? hrefObj.onClickFunc : ``;
 
     return href
 };
