@@ -118,16 +118,6 @@ button {
     justify-content: space-evenly;
 }
 
-.editButtons {
-    float: left;
-    margin-left: 5%;
-}
-
-.deleteButtons {
-    float: right;
-    margin-right: 5%;
-}
-
 
 /** ############### Edit Divs ############### */
 
@@ -139,14 +129,26 @@ button {
     margin-bottom: 1%;
 }
 
-.cancelButtons {
-    float: left;
-    margin: 10%;
+
+/* ######################### Posts Div ######################### */
+
+#postsDiv {
+    width: 50%;
+    margin: auto;
 }
 
-.confirmButtons {
-    float: right;
-    margin: 10%;
+
+/** ############### Posts ############### */
+
+.postDivs {
+    border-style: solid;
+    margin: 1%;
+}
+
+.postBodys {
+    width: 75%;
+    margin: auto;
+    padding: 1%;
 }
 
 
