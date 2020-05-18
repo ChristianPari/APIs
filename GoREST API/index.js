@@ -436,7 +436,7 @@ function ageFilter() { //* uses input values to filter displayed users by age
 
 };
 
-function removeAgeFilter() {
+function removeAgeFilter() { //* clears age inputs, removes sets age filters to current date and year 0 to remove filter
 
     let formElms = Array.from({length: document.getElementById('ageForm').childNodes.length}, (a,b) => document.getElementById('ageForm').childNodes[b]),
         ageInputs = formElms.filter(input => input.type == 'number');
