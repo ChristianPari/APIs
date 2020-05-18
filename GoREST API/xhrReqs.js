@@ -109,4 +109,26 @@ function createUser(body) { //* POST request for a new user
 
 };
 
+function getUserPosts(userID, userName) { //* GET request for all the posts made by the specified user
+
+    let postsXHR = new XMLHttpRequest(),
+        endpoint = `https://gorest.co.in/public-api/posts?_format=json&access-token=${apiKey}&user_id=${userID}`;
+
+    postsXHR.open('GET', endpoint);
+
+    postsXHR.onload = () => {
+
+        let res = JSON.parse(postsXHR.responseText),
+            posts = res.result;
+
+        if (posts.length == 0) { return alert('This user has no posts'); }
+
+        displayPosts(userName, posts);
+
+    };
+
+    postsXHR.send();
+
+};
+
 // vscode-fold=1
