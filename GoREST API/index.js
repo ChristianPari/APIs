@@ -87,15 +87,12 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
 
     //* ############### Age Filter ###############
     let ageFilterDiv = createDiv({ id: `ageFilterDiv` }),
-        // need two inputs min age max age
-        // need label, placeholders for each
-        // an arrow from left to right
-        // confirm button
         ageForm = createForm({ id: `ageForm` }),
         ageFilterHead = createLabel({ text: `Filter Age: ` }),
-        minAgeInput = createInput({ type: `number`, name: `min`, pHolder: `11 and up`, min: 11, max: 110 }),
-        maxAgeInput = createInput({ type: `number`, name: `max`, pHolder: `110 or less`, min: 11, max: 110 }),
-        ageRangeButton = createInput({ type: `button`, id: `ageRangeButton`, value: `Confrim Age Range`, onClickFunc: ageFilter });
+        minAgeInput = createInput({ type: `number`, name: `min`, pHolder: `1 and up`, min: 1, max: 110 }),
+        maxAgeInput = createInput({ type: `number`, name: `max`, pHolder: `110 or less`, min: 1, max: 110 }),
+        ageRangeButton = createInput({ type: `button`, id: `ageRangeButton`, value: `Confrim Age Range`, onClickFunc: ageFilter }),
+        removeAgeRange = createInput({ type: `button`, id: `removeAgeRangeButton`, value: `Remove Age Filter`, onClickFunc: removeAgeFilter });
 
     uiDiv.appendChild(filterDiv);
     filterDiv.appendChild(filterHead);
@@ -112,6 +109,7 @@ window.onload = () => { //* uiDiv, new userform, prevButton, nextButton, usersDi
     ageForm.appendChild(minAgeInput);
     ageForm.appendChild(maxAgeInput);
     ageForm.appendChild(ageRangeButton);
+    ageForm.appendChild(removeAgeRange);
 
     reqUsers(currentPage);
 
@@ -128,6 +126,11 @@ function nextPageFunc() { //* increments page, if last page goes to first page
 
     currentPage = currentPage == lastPage ? 1 : currentPage + 1;
     reqUsers(currentPage);
+
+    let ageFormChilds = Array.from({ length: document.getElementById('ageForm').childNodes.length }, (a, b) => document.getElementById('ageForm').childNodes[b]),
+        ageInputs = ageFormChilds.filter(input => input.type == `number`);
+
+    ageInputs.forEach(input => { input.value = '' });
 
 };
 
@@ -352,23 +355,17 @@ function displayUsers(users) { //* clear usersDiv, create: page heading, div1 =>
 
     });
 
-    // let ageButton = document.getElementById(`ageRangeButton`);
-    // ageFilter(ageButton);
-    // // console.log(document.getElementById(`ageRangeButton`));
-    //! can't get age to filter on page change
+    storedData[`page${currentPage}`] = pageData;
 
     let formElms = Array.from({ length: document.getElementById('genderForm').childNodes.length }, (a, b) => document.getElementById('genderForm').childNodes[b]),
         checkedRadio = formElms.filter(elm => elm.checked == true)[0];
-    // console.log(checkedRadio);
     genderFilter(checkedRadio);
-
-    storedData[`page${currentPage}`] = pageData;
 
     console.log(`Stored Pages`, storedData);
 };
 
 function genderFilter(button) { //* uses radio value to filter divs by the users gender
-    // console.log(button);
+
     let userDivs = button.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1].childNodes,
         users = Array.from({ length: userDivs.length }, (a, b) => userDivs[b]);
 
@@ -394,28 +391,34 @@ function genderFilter(button) { //* uses radio value to filter divs by the users
 
     }
 
+    ageFilter(); // ensures age range is kept when changing genders
+
 };
 
-function ageFilter(elm) { //* uses input values to filter displayed users by age
-    console.log(elm);
-    console.log(this);
-    let form = elm.type == `click` ? this.parentNode : elm.parentNode,
+function ageFilter() { //* uses input values to filter displayed users by age
+
+    let form = document.getElementById('ageForm'),
+        genderForm = Array.from({ length: document.getElementById('genderForm').childNodes.length }, (a, b) => document.getElementById('genderForm').childNodes[b]),
+        checkedGender = genderForm.filter(elm => elm.checked == true)[0], // needed to compare the users genders and ensure that only the selected gender appears if any
         minAge = form.childNodes[1].value,
         maxAge = form.childNodes[2].value,
-        usersDiv = elm.type == `click` ? this.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1] : elm.parentNode.parentNode.parentNode.parentNode.childNodes[12].childNodes[1],
+        usersDiv = form.parentNode.parentNode.parentNode.childNodes[12].childNodes[1],
         users = Array.from({ length: usersDiv.childNodes.length }, (a, b) => usersDiv.childNodes[b]),
         date = new Date(),
         currentDate = Number(`${date.getFullYear()}${date.getMonth() >= 10 ? date.getMonth() : `0${date.getMonth()}`}${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}`), // converts to YYYYMMDD format
-        earliestYear = minAge != '' ? currentDate - Number(`${minAge}0000`) : currentDate - 110000, // 110000 is 11 years, user must be at least 11 to have an account
-        oldestYear = maxAge != '' ? currentDate - Number(`${maxAge}0000`) : currentDate - currentDate ; // becomes year 0 due to no limit
-
-        if (minAge.value < 11) { return alert(`Minimum age must be 11 or older`); }
-        if (maxAge.value > 110) { return alert(`Maximum age must be 110 or less`); }
+        earliestYear = minAge != '' ? currentDate - Number(`${minAge}0000`) : currentDate,
+        oldestYear = maxAge != '' ? currentDate - Number(`${maxAge}0000`) : 0;
+        
+        if (minAge.value < 1 || minAge.value > 110 || maxAge.value < 1 || maxAge.value > 110) { 
+            
+            return alert(`Filter range is between 1 and 110, please adjust your filter ages`); 
+        
+        }
 
         users.forEach(user => {
 
-
-            userDoB = Number(user.childNodes[0].childNodes[2].innerText.replace(`DoB: `, ``).replace(/\-/g, ``));
+            let userDoB = Number(user.childNodes[0].childNodes[2].innerText.replace(`DoB: `, ``).replace(/\-/g, ``)),
+                userGender = user.childNodes[0].childNodes[1].innerText.toLowerCase();
 
             if (userDoB > earliestYear || userDoB < oldestYear) { 
                 console.log(`none`);
@@ -427,9 +430,20 @@ function ageFilter(elm) { //* uses input values to filter displayed users by age
             
             }
 
+            if (checkedGender.value != '' && userGender != checkedGender.value) { user.style.display = `none`; }
+
         });
 
+};
 
+function removeAgeFilter() {
+
+    let formElms = Array.from({length: document.getElementById('ageForm').childNodes.length}, (a,b) => document.getElementById('ageForm').childNodes[b]),
+        ageInputs = formElms.filter(input => input.type == 'number');
+
+        ageInputs.forEach(input => { input.value = '' });
+
+        ageFilter();
 
 };
 
