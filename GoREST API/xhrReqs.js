@@ -1,4 +1,4 @@
-const apiKey = `f7PTYxjCIzQYQ5qdmmemFKNBBSXq9XDaC2tw`;
+const apiKey = `ADD API KEY`;
 
 function reqUsers(pageNum) { //* GET request for all users data per specified page, call displayUsers()
 
